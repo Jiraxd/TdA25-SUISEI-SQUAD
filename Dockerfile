@@ -14,6 +14,7 @@ WORKDIR /app
 COPY BE/TdA25-BE/.mvn/ .mvn
 COPY BE/TdA25-BE/mvnw BE/TdA25-BE/pom.xml BE/TdA25-BE/start.sh ./
 
+RUN chmod +x ./mvnw
 RUN ./mvnw dependency:resolve
 
 
@@ -22,6 +23,6 @@ COPY BE/TdA25-BE/src ./src
 
 COPY --from=frontend-builder /app/FE/tda25-fe/out/. ./src/main/resources/static
 
-
+RUN chmod +x ./start.sh
 EXPOSE 8080
 CMD ["./start.sh"]
