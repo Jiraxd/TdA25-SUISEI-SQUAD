@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0070BB;
+  --foreground: #ededed;
+  --darkshade: #1A1A1A;
+  --black: #080808;
+  --purple: #724479;
+  --pink: #AB2E58;
+  --darkerblue:#395A9A;
+  --white:#FFFFFF;
+  --whitelessbright:#F6F6F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0070BB;
+    --foreground: #ededed;
+    --darkshade: #1A1A1A;
+    --black: #080808;
+    --purple: #724479;
+    --pink: #AB2E58;
+    --darkerblue:#395A9A;
+    --white:#FFFFFF;
+    --whitelessbright:#F6F6F6;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Dosis, Arial, sans-serif;
+}
