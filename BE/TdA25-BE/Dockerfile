@@ -1,20 +1,14 @@
-
-FROM maven:latest AS build
-
+FROM openjdk:20-jdk-buster
 
 WORKDIR /app
 
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
 
-COPY pom.xml .
+RUN ./mvnw dependency:resolve
+
 COPY src ./src
-RUN mvn clean package
 
-FROM openjdk:17-jdk-slim
+EXPOSE 80
 
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["./start.sh"]
