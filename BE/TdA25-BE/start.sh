@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=80
+./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8080
