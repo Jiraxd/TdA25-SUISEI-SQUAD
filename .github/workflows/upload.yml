@@ -19,7 +19,7 @@ jobs:
           context: ./BE/TdA25-BE
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: tda-backend:latest
+          tags: tda-suiseisquad-backend:latest
           outputs: type=docker,dest=/tmp/tda-suiseisquad-backend.tar
 
       - name: Build FE
@@ -28,7 +28,7 @@ jobs:
           context: ./FE/tda25-fe
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: tda-frontend:latest
+          tags: tda-suiseisquad-frontend:latest
           outputs: type=docker,dest=/tmp/tda-suiseisquad-frontend.tar
 
       - name: Upload Backend Image to TdA
