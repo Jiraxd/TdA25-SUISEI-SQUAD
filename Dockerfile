@@ -1,7 +1,11 @@
 FROM node:18 AS frontend-builder
 WORKDIR /app/FE/tda25-fe
 COPY FE/tda25-fe/package*.json ./
-RUN npm install
+RUN npm install --force
+
+# --force se používá kvůli react 19, jelikož ještě není plně podporován některými libraries
+
+
 COPY FE/tda25-fe/ ./
 RUN npm run build
 

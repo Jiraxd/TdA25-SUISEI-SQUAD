@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ButtonsNavBar } from "@/components/layout/ButtonsNavBar";
+import { LogoNavBar } from "@/components/layout/LogoNavBar";
 
 const dosisBold = localFont({
   src: "./fonts/Dosis-Bold.ttf",
@@ -40,6 +42,20 @@ export default function RootLayout({
       <body
         className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable} antialiased`}
       >
+        <div className="flex flex-row min-w-full justify-between">
+          <div
+            className="flex flex-row sticky top-0 max-h-32 items-center min-w-full"
+            style={{ backgroundColor: "var(--darkerblue)", minWidth: "50%" }}
+          >
+            <LogoNavBar />
+          </div>
+          <div
+            className="flex flex-row sticky top-0 max-h-32 items-center justify-end"
+            style={{ backgroundColor: "var(--defaultblue)", minWidth: "50%" }}
+          >
+            <ButtonsNavBar />
+          </div>
+        </div>
         {children}
       </body>
     </html>
