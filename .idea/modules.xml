@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/BE/TdA25-BE/TdA25-BE.iml" filepath="$PROJECT_DIR$/BE/TdA25-BE/TdA25-BE.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/TdA25-SUISEI-SQUAD.iml" filepath="$PROJECT_DIR$/.idea/TdA25-SUISEI-SQUAD.iml" />
-    </modules>
-  </component>
-</project>
