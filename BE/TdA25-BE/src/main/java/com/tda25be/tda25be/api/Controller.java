@@ -32,7 +32,8 @@ public class Controller {
                     NetError err = new NetError();
                     err.code = 422;
                     err.message = String.format("Hrací pole nesmí obsahovat %s, pouze x nebo o", cell);
-                    return err;
+                    //return err;
+
                 }
             }
 
