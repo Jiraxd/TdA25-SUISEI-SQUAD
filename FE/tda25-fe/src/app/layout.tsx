@@ -4,7 +4,7 @@ import "./globals.css";
 import { ButtonsNavBar } from "@/components/layout/ButtonsNavBar";
 import { LogoNavBar } from "@/components/layout/LogoNavBar";
 import LanguageDisplay from "@/components/layout/LanguageDisplay";
-import { language } from "@/lib/utils";
+import { LanguageProvider } from "@/components/languageContext";
 
 const dosisBold = localFont({
   src: "./fonts/Dosis-Bold.ttf",
@@ -45,22 +45,24 @@ export default function RootLayout({
       <body
         className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable} antialiased`}
       >
-        <div className="flex flex-row min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
-          <div
-            className="flex flex-row sticky top-0 max-h-20 items-center min-w-full"
-            style={{ backgroundColor: "var(--darkerblue)", minWidth: "50%" }}
-          >
-            <LogoNavBar />
+        <LanguageProvider>
+          <div className="flex flex-row min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
+            <div
+              className="flex flex-row sticky top-0 max-h-20 items-center min-w-full"
+              style={{ backgroundColor: "var(--darkerblue)", minWidth: "50%" }}
+            >
+              <LogoNavBar />
+            </div>
+            <div
+              className="flex flex-row sticky top-0 max-h-20 items-center justify-end "
+              style={{ backgroundColor: "var(--defaultblue)", minWidth: "50%" }}
+            >
+              <ButtonsNavBar />
+            </div>
           </div>
-          <div
-            className="flex flex-row sticky top-0 max-h-20 items-center justify-end "
-            style={{ backgroundColor: "var(--defaultblue)", minWidth: "50%" }}
-          >
-            <ButtonsNavBar />
-          </div>
-        </div>
-        {children}
-        <LanguageDisplay />
+          {children}
+          <LanguageDisplay />
+        </LanguageProvider>
       </body>
     </html>
   );
