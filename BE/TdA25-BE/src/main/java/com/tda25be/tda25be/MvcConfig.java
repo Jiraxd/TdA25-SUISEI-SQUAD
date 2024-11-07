@@ -13,11 +13,14 @@ public class MvcConfig implements WebMvcConfigurer {
         // Route to serve game.html for /game/{id} pattern
 
         // Kvůli limitacím v odevzdávání (aspon jsem nepřišel na to, jak nahrát 2 docker image aby byly funčkní :D )
-        // a našemu výberu tech-stacku jsem se rozhodli využít backend pro forwardování requestu
-        registry.addViewController("/game/{id:[\\d]+}")
+        // a našemu výberu tech-stacku jsme se rozhodli využít backend pro forwardování requestu
+        registry.addViewController("/game/{id:.*}")
                 .setViewName("forward:/game.html");
 
         registry.addViewController("/game")
+                .setViewName("forward:/game.html");
+
+        registry.addViewController("/game/")
                 .setViewName("forward:/game.html");
     }
 }
