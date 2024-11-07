@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { getCookie, language, TranslateText } from "@/lib/utils";
+import {  TranslateText } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useLanguage } from "../languageContext";
 
 export function Pagination({
   totalPages,
@@ -16,7 +17,7 @@ export function Pagination({
   const handlePageChange = (newPage: number) => {
     callback(newPage);
   };
-  const currentLanguage: language = getCookie("language") || "CZ";
+  const { language } = useLanguage();
   return (
     <div className="flex justify-center items-center space-x-2">
       <Button
@@ -36,11 +37,11 @@ export function Pagination({
           color: "var(--defaultred)",
         }}
       >
-        {TranslateText("PAGE", currentLanguage) +
+        {TranslateText("PAGE", language) +
           " " +
           currentPage +
           " " +
-          TranslateText("OF", currentLanguage) +
+          TranslateText("OF", language) +
           " " +
           totalPages}
       </span>

@@ -14,11 +14,13 @@ import {
 } from "@/components/ui/hover-card";
 
 import { useRouter } from "next/navigation";
-import { getCookie, language, TranslateText } from "@/lib/utils";
+import {  TranslateText } from "@/lib/utils";
 import DifficultyDislay from "./DifficultyDisplay";
+import { Game } from "@/models/Game";
+import { useLanguage } from "../languageContext";
 
-export function GameCard({ game }: { game: any }) {
-  const currentLanguage: language = getCookie("language") || "CZ";
+export function GameCard({ game }: { game: Game }) {
+  const { language } = useLanguage();
   const router = useRouter();
   return (
     <Card
@@ -40,7 +42,7 @@ export function GameCard({ game }: { game: any }) {
               <DifficultyDislay difficulty={game.difficulty} />
             </HoverCardTrigger>
             <HoverCardContent className="p-2 flex items-center justify-center whitespace-nowrap">
-              {TranslateText(game.difficulty, currentLanguage)}
+              {TranslateText(game.difficulty, language)}
             </HoverCardContent>
           </HoverCard>
 
@@ -54,7 +56,7 @@ export function GameCard({ game }: { game: any }) {
               router.push(`/game/${game.uuid}`);
             }}
           >
-            {TranslateText("PLAY", currentLanguage)}
+            {TranslateText("PLAY", language)}
           </Button>
         </div>
       </CardFooter>

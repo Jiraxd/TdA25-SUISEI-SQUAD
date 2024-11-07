@@ -1,12 +1,12 @@
 "use client";
 
-import { language, TranslateText } from "@/lib/utils";
+import {  TranslateText } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { getCookie } from "@/lib/utils";
+import { useLanguage } from "../languageContext";
 
 export const ButtonsNavBar = () => {
-  const currentLanguage: language = getCookie("language") || "CZ";
+  const { language } = useLanguage();
   const router = useRouter();
 
   const handleClickGames = () => {
@@ -31,7 +31,7 @@ export const ButtonsNavBar = () => {
           height={48}
         />
         <div className="text_bold ml-2">
-          {TranslateText("PUZZLES", currentLanguage)}
+          {TranslateText("PUZZLES", language)}
         </div>
       </button>
       <button
@@ -45,9 +45,7 @@ export const ButtonsNavBar = () => {
           width={48}
           height={48}
         />
-        <div className="text_bold ml-2">
-          {TranslateText("PLAY", currentLanguage)}
-        </div>
+        <div className="text_bold ml-2">{TranslateText("PLAY", language)}</div>
       </button>
     </>
   );

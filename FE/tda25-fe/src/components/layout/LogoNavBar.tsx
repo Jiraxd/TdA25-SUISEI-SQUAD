@@ -1,11 +1,13 @@
 "use client";
 
-import { getCookie, language, TranslateText } from "@/lib/utils";
+import { TranslateText } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "../languageContext";
 
 export const LogoNavBar = () => {
-  const currentLanguage: language = getCookie("language") || "CZ";
+  const { language } = useLanguage();
+
   const router = useRouter();
   const handleClick = () => {
     router.push("/");
@@ -23,7 +25,7 @@ export const LogoNavBar = () => {
           />
         </div>
         <div className="text-3xl font-bold">
-          {"| " + TranslateText("HOME", currentLanguage)}
+          {"| " + TranslateText("HOME", language)}
         </div>
       </button>
     </>
