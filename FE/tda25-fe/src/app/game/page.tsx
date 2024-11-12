@@ -81,14 +81,21 @@ export default function GamePage() {
     console.log(difficulty);
   }
 
-  function checkWinner() {
-    // temporary
-    setWinner(currentPlayer);
+  function checkWinner(): boolean {
+    return false;
   }
 
   function handleClick(row: number, col: number) {
-    console.log(row, col);
-    checkWinner(); // temporary
+    if (!game) return;
+    if (winner) return;
+
+    if (game.board[row][col] !== "") return;
+
+    const newGame = { ...game, board: game.board.map((r) => [...r]) };
+    newGame.board[row][col] = currentPlayer;
+
+    setGame(newGame);
+    if (checkWinner()) return;
     setPlayer(currentPlayer === "X" ? "O" : "X");
   }
 
