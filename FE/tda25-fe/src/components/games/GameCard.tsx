@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/hover-card";
 
 import { useRouter } from "next/navigation";
-import {  TranslateText } from "@/lib/utils";
+import { TranslateText } from "@/lib/utils";
 import DifficultyDislay from "./DifficultyDisplay";
 import { Game } from "@/models/Game";
 import { useLanguage } from "../languageContext";
@@ -42,7 +42,7 @@ export function GameCard({ game }: { game: Game }) {
               <DifficultyDislay difficulty={game.difficulty} />
             </HoverCardTrigger>
             <HoverCardContent className="p-2 flex items-center justify-center whitespace-nowrap">
-              {TranslateText(game.difficulty, language)}
+              {TranslateText(game.difficulty.toUpperCase(), language)}
             </HoverCardContent>
           </HoverCard>
 
