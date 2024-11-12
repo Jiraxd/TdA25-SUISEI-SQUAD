@@ -80,22 +80,59 @@ export default function GamePage() {
     // temporary
     console.log(difficulty);
   }
+  function checkWinner(board: string[][]): boolean {
+    const lines = [
+      // Horizontal lines
+      ...board,
+      // Vertical lines
+      ...board[0].map((_, colIndex) => board.map((row) => row[colIndex])),
+      // Diagonal lines
+      ...Array.from({ length: board.length * 2 - 1 }, (_, i) => {
+        const diagonal1 = [];
+        const diagonal2 = [];
+        for (let j = 0; j <= i; j++) {
+          const x = i - j;
+          const y = j;
+          if (x < board.length && y < board.length) {
+            diagonal1.push(board[x][y]);
+            diagonal2.push(board[y][x]);
+          }
+        }
+        return [diagonal1, diagonal2];
+      }).flat(),
+    ];
 
-  function checkWinner(): boolean {
+    for (const line of lines) {
+      for (let i = 0; i <= line.length - 5; i++) {
+        const segment = line.slice(i, i + 5);
+        if (
+          segment.every((cell) => cell === "X") ||
+          segment.every((cell) => cell === "O")
+        ) {
+          return true;
+        }
+      }
+    }
     return false;
   }
+  function handleClick(rowIndex: number, colIndex: number) {
+    if (!game || game.board[rowIndex][colIndex] !== "" || winner) {
+      return;
+    }
 
-  function handleClick(row: number, col: number) {
-    if (!game) return;
-    if (winner) return;
+    const newBoard = [...game.board];
+    newBoard[rowIndex][colIndex] = currentPlayer;
+    setGame({
+      ...game,
+      board: newBoard,
+    });
 
-    if (game.board[row][col] !== "") return;
+    const hasWinner = checkWinner(newBoard);
+    if (hasWinner) {
+      setWinner(currentPlayer);
+      return;
+    }
 
-    const newGame = { ...game, board: game.board.map((r) => [...r]) };
-    newGame.board[row][col] = currentPlayer;
-
-    setGame(newGame);
-    if (checkWinner()) return;
     setPlayer(currentPlayer === "X" ? "O" : "X");
   }
 
@@ -120,13 +157,13 @@ export default function GamePage() {
             <motion.div
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-3xl mb-4 p-4 bg-green-500 text-white rounded-lg shadow-lg"
+              className="text-2xl mb-8 p-2 bg-green-500 text-white rounded-lg shadow-lg"
             >
               {TranslateText("WINNER", language) + winner + "!"}
             </motion.div>
           ) : (
             <div
-              className="text-xl mb-8 "
+              className="text-2xl mb-8 "
               style={{
                 color:
                   currentPlayer === "O"
@@ -170,7 +207,7 @@ export default function GamePage() {
                 row.map((cell, colIndex) => (
                   <motion.button
                     key={`${rowIndex}-${colIndex}`}
-                    className="xl:h-14 xl:w-14 lg:w-10 lg:h-10 md:w-8 md:h-8 sm:h-6 sm:w-6 w-5 h-5 flex items-center justify-center text-4xl font-bold"
+                    className="w-5 h-5 sm:h-6 sm:w-6 md:w-8 md:h-8 lg:w-10 lg:h-10 xl:h-10 xl:w-10 2xl:h-11 2xl:w-11 3xl:h-14 3xl:w-14 flex items-center justify-center text-4xl font-bold"
                     style={{
                       backgroundColor: "var(--darkshade)",
                       color:
