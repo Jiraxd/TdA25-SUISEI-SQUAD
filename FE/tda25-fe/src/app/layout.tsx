@@ -43,18 +43,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable} antialiased`}
+        className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable} antialiased flex flex-col min-h-screen`}
       >
         <LanguageProvider>
-          <div className="flex flex-row min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
+          <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
             <div
-              className="flex flex-row sticky top-0 max-h-20 items-center min-w-full"
+              className="flex flex-row top-0 max-h-20 items-center min-w-full"
               style={{ backgroundColor: "var(--darkerblue)", minWidth: "50%" }}
             >
               <LogoNavBar />
             </div>
             <div
-              className="flex flex-row sticky top-0 max-h-20 items-center justify-end "
+              className="flex flex-row top-0 max-h-20 items-center justify-end "
               style={{ backgroundColor: "var(--defaultblue)", minWidth: "50%" }}
             >
               <ButtonsNavBar />
