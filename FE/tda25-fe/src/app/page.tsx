@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { X, Circle, Rocket } from "lucide-react";
+import { Rocket } from "lucide-react";
 import Image from "next/image";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
