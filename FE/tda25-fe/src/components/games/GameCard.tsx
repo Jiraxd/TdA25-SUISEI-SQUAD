@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/hover-card";
 
 import { useRouter } from "next/navigation";
-import {  TranslateText } from "@/lib/utils";
-import DifficultyDislay from "./DifficultyDisplay";
+import { TranslateText } from "@/lib/utils";
+import DifficultyDisplay from "./DifficultyDisplay";
 import { Game } from "@/models/Game";
 import { useLanguage } from "../languageContext";
 
@@ -32,17 +32,17 @@ export function GameCard({ game }: { game: Game }) {
       <CardHeader>
         <CardTitle className="text-lg truncate">{game.name}</CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent className="justify-center align-middle items-center w-full flex">
         <GamePreview board={game.board} />
       </CardContent>
       <CardFooter>
         <div className="flex flex-row items-center w-full gap-2 justify-center">
           <HoverCard openDelay={100} closeDelay={100}>
             <HoverCardTrigger>
-              <DifficultyDislay difficulty={game.difficulty} />
+              <DifficultyDisplay difficulty={game.difficulty} />
             </HoverCardTrigger>
             <HoverCardContent className="p-2 flex items-center justify-center whitespace-nowrap">
-              {TranslateText(game.difficulty, language)}
+              {TranslateText(game.difficulty.toUpperCase(), language)}
             </HoverCardContent>
           </HoverCard>
 

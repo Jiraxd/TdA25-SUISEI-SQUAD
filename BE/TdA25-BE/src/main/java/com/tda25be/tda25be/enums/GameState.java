@@ -1,8 +1,9 @@
-package com.tda25be.tda25be.Enums;
+package com.tda25be.tda25be.enums;
 
 public enum GameState {
-    earlygame,
+    opening,
     midgame,
-    endgame
+    endgame,
+    unknown
 }
 

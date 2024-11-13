@@ -28,7 +28,7 @@ export default function Home() {
   });
 
   return (
-    <div className=" h-[calc(100vh-5rem)] overflow-y-scroll snap-y snap-mandatory min-w-full max-w-screen">
+    <div className=" h-[calc(100vh-5rem)] overflow-y-scroll snap-y snap-mandatory min-w-full max-w-screen font-[family-name:var(--font-dosis-bold)]">
       <section
         className=" h-[calc(100vh-5rem)] snap-start flex flex-col justify-center gap-16 items-center relative bg-[#F6F6F6] text-[#1A1A1A] "
         ref={firstSectionRef}

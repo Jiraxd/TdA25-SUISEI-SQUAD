@@ -1,4 +1,4 @@
-package com.tda25be.tda25be.exceptions;
+package com.tda25be.tda25be.error;
 
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,11 @@ public class AdviceController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> handleBadRequestException(BadRequestException ex){
-        return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+        return ResponseEntity.badRequest().build();
+    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotFound.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFound ex){
+        return ResponseEntity.notFound().build();
     }
 }
