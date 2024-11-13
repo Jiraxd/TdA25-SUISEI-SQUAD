@@ -5,26 +5,27 @@ interface GamePreviewProps {
 export function GamePreview({ board }: GamePreviewProps) {
   return (
     <div
-      className="grid grid-cols-15 gap-px  w-full aspect-square max-w-[240px]"
+      className="grid grid-cols-15 gap-px aspect-square border-2 max-w-[240px] max-h-[240px] w-full"
       style={{
-        backgroundColor: "var(--whitelessbright)",
+        backgroundColor: "var(--darkshade)",
+        borderColor: "var(--darkshade)",
       }}
     >
       {board.flat().map((cell, index) => (
         <div
           key={index}
-          className=" flex items-center justify-center aspect-square max-w-[15px] min-w-[15px]  max-h-[145x] min-h-[15px]"
+          className="flex items-center justify-center aspect-square w-[14px] h-[14px] overflow-hidden"
           style={{
-            backgroundColor: "var(--darkshade)",
+            backgroundColor: "var(--whitelessbright)",
           }}
         >
           {cell && (
             <span
-              className={`text-[0.6rem] font-bold `}
+              className="text-[0.6rem] font-bold"
               style={{
                 color:
                   cell === "X" ? "var(--defaultred)" : "var(--defaultblue)",
-                backgroundColor: "var(--darkshade)",
+                backgroundColor: "var(--whitelessbright)",
               }}
             >
               {cell}

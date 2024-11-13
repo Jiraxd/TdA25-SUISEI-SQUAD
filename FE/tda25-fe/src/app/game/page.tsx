@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { v4 as uuidv4 } from "uuid";
 import { Game } from "@/models/Game";
 import {
   Select,
@@ -60,7 +58,7 @@ export default function GamePage() {
       const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
 
       setGame({
-        uuid: uuidv4(),
+        uuid: "none",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         name: language === "EN" ? "Untitled Game" : "Neuložená hra",
@@ -137,9 +135,11 @@ export default function GamePage() {
   }
 
   return (
-    <div
+    <motion.div
       className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-12"
       style={{ backgroundColor: "var(--whitelessbright)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
     >
       {!game ? (
         <div>
@@ -175,12 +175,13 @@ export default function GamePage() {
             </div>
           )}
           <div className="flex flex-row justify-center w-full">
-            <div className="text-center text-black w-1/6 mr-8">
-              <h2 className="text-2xl mb-2">
+            <div className="text-center text-black w-1/6 mr-8 text-xl">
+              <h2 className="text-4xl mb-2">
                 {TranslateText("GAME_INFO", language)}
               </h2>
               <p>
-                {TranslateText("STATE", language)} {game.gameState}
+                {TranslateText("STATE", language)}{" "}
+                {TranslateText(game.gameState.toUpperCase(), language)}
               </p>
               <p>
                 {TranslateText("CREATED", language)}
@@ -192,7 +193,11 @@ export default function GamePage() {
               </p>
             </div>
             <motion.div
-              className="grid grid-cols-15 gap-1 mb-4 "
+              className="grid grid-cols-15 gap-1 mb-4 border-4"
+              style={{
+                backgroundColor: "var(--darkshade)",
+                borderColor: "var(--darkshade)",
+              }}
               initial="hidden"
               animate={controls}
               variants={{
@@ -207,9 +212,10 @@ export default function GamePage() {
                 row.map((cell, colIndex) => (
                   <motion.button
                     key={`${rowIndex}-${colIndex}`}
-                    className="w-5 h-5 sm:h-6 sm:w-6 md:w-8 md:h-8 lg:w-10 lg:h-10 xl:h-10 xl:w-10 2xl:h-11 2xl:w-11 3xl:h-14 3xl:w-14 flex items-center justify-center text-4xl font-bold"
+                    className="w-5 h-5 sm:h-6 sm:w-6 md:w-8 md:h-8 lg:w-10 lg:h-10 xl:h-10 xl:w-10 2xl:h-11 2xl:w-11 3xl:h-14 3xl:w-14
+                     flex items-center justify-center 3xl:text-4xl font-bold"
                     style={{
-                      backgroundColor: "var(--darkshade)",
+                      backgroundColor: "var(--whitelessbright)",
                       color:
                         cell === "X"
                           ? "var(--defaultred)"
@@ -218,8 +224,8 @@ export default function GamePage() {
                     onClick={() => {
                       handleClick(rowIndex, colIndex);
                     }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 0.95 }}
+                    whileTap={{ scale: 0.85 }}
                   >
                     {cell}
                   </motion.button>
@@ -327,6 +333,6 @@ export default function GamePage() {
           </div>
         </>
       )}
-    </div>
+    </motion.div>
   );
 }

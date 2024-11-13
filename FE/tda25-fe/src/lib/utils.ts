@@ -50,6 +50,10 @@ const translationsCZ: Record<string, string> = {
   NEW_GAME: "Nová hra",
   NAME: "Jméno hry",
   DIFFICULTY: "Obtížnost",
+  UNKNOWN: "Neznámý",
+  OPENING: "Zahájení",
+  MIDGAME: "Rozehráno",
+  ENDGAME: "Koncovka",
 };
 
 const translationsEN: Record<string, string> = {
@@ -85,4 +89,8 @@ const translationsEN: Record<string, string> = {
   NEW_GAME: "New Game",
   NAME: "Game Name",
   DIFFICULTY: "Difficulty",
+  UNKNOWN: "Unknown",
+  OPENING: "Opening",
+  MIDGAME: "Mid-game",
+  ENDGAME: "End-game",
 };

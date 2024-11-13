@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function DifficultyDislay({
+export default function DifficultyDisplay({
   difficulty,
 }: {
   difficulty: string;
