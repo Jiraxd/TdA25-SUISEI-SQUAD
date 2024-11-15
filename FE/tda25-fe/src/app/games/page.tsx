@@ -18,8 +18,12 @@ export default function Games() {
 
   useEffect(() => {
     async function getGames() {
+      const isDev = process.env.NODE_ENV === "development";
+
       const res = await fetch(
-        `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/`
+        isDev
+          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/`
+          : `/api/v1/games/`
       );
       if (!res.ok) throw new Error("Failed to fetch games");
       return res.json();
