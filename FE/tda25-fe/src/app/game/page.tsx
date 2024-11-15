@@ -39,10 +39,14 @@ export default function GamePage() {
 
   const fetchGame = async (id: string) => {
     try {
-      const response = await fetch(
-        `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${id}`
+      const isDev = process.env.NODE_ENV === "development";
+
+      const res = await fetch(
+        isDev
+          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${id}`
+          : `/api/v1/games/${id}`
       );
-      const data: Game = await response.json();
+      const data: Game = await res.json();
 
       setGame(data);
     } catch (error) {
