@@ -22,9 +22,10 @@ export default function Games() {
 
       const res = await fetch(
         isDev
-          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/`
-          : `/api/v1/games/`
+          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
+          : `/api/v1/games`
       );
+
       if (!res.ok) throw new Error("Failed to fetch games");
       return res.json();
     }
