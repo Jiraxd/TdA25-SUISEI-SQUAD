@@ -87,6 +87,8 @@ export default function GamePage() {
     // temporary
     console.log(difficulty);
   }
+  function checkWinner(board: string[][]): {
+    winner: boolean;
     winningLine: number[][];
   } {
     const lines = [
