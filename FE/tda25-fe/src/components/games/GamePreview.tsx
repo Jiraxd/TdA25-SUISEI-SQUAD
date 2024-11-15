@@ -21,7 +21,7 @@ export function GamePreview({ board }: GamePreviewProps) {
         >
           {cell && (
             <span
-              className="text-[0.6rem] font-bold"
+              className="text-sm font-bold"
               style={{
                 color:
                   cell === "X" ? "var(--defaultred)" : "var(--defaultblue)",

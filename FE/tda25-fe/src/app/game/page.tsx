@@ -33,6 +33,7 @@ export default function GamePage() {
   const controls = useAnimation();
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   const [isNewGame, setIsNewGame] = useState(true);
+  const [winLane, setWinningLine] = useState<number[][]>([]);
 
   const { language } = useLanguage();
 
@@ -54,20 +55,28 @@ export default function GamePage() {
       fetchGame(gameId);
       setIsNewGame(false);
     } else {
-      setIsNewGame(true);
-      const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
-
-      setGame({
-        uuid: "none",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        name: language === "EN" ? "Untitled Game" : "Neuložená hra",
-        difficulty: "medium",
-        gameState: "unknown",
-        board: emptyBoard,
-      });
+      startNewGame();
     }
   }, [gameId]);
+
+  function startNewGame() {
+    setWinningLine([]);
+    setPlayer("X");
+    setWinner(null);
+
+    setIsNewGame(true);
+    const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
+
+    setGame({
+      uuid: "none",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      name: language === "EN" ? "Untitled Game" : "Neuložená hra",
+      difficulty: "medium",
+      gameState: "unknown",
+      board: emptyBoard,
+    });
+  }
 
   function setGameName(name: string) {
     // temporary
@@ -78,22 +87,33 @@ export default function GamePage() {
     // temporary
     console.log(difficulty);
   }
-  function checkWinner(board: string[][]): boolean {
+  function checkWinner(board: string[][]): {
+    winner: boolean;
+    winningLine: number[][];
+  } {
     const lines = [
       // Horizontal lines
-      ...board,
+      ...board.map((row, rowIndex) =>
+        row.map((_, colIndex) => [rowIndex, colIndex])
+      ),
       // Vertical lines
-      ...board[0].map((_, colIndex) => board.map((row) => row[colIndex])),
+      ...board[0].map((_, colIndex) =>
+        board.map((_, rowIndex) => [rowIndex, colIndex])
+      ),
       // Diagonal lines
       ...Array.from({ length: board.length * 2 - 1 }, (_, i) => {
         const diagonal1 = [];
         const diagonal2 = [];
         for (let j = 0; j <= i; j++) {
-          const x = i - j;
-          const y = j;
-          if (x < board.length && y < board.length) {
-            diagonal1.push(board[x][y]);
-            diagonal2.push(board[y][x]);
+          const x1 = i - j;
+          const y1 = j;
+          const x2 = board.length - 1 - (i - j);
+          const y2 = j;
+          if (x1 < board.length && y1 < board.length) {
+            diagonal1.push([x1, y1]);
+          }
+          if (x2 >= 0 && y2 < board.length) {
+            diagonal2.push([x2, y2]);
           }
         }
         return [diagonal1, diagonal2];
@@ -103,15 +123,18 @@ export default function GamePage() {
     for (const line of lines) {
       for (let i = 0; i <= line.length - 5; i++) {
         const segment = line.slice(i, i + 5);
+        const cells = segment.map(
+          ([rowIndex, colIndex]) => board[rowIndex][colIndex]
+        );
         if (
-          segment.every((cell) => cell === "X") ||
-          segment.every((cell) => cell === "O")
+          cells.every((cell) => cell === "X") ||
+          cells.every((cell) => cell === "O")
         ) {
-          return true;
+          return { winner: true, winningLine: segment };
         }
       }
     }
-    return false;
+    return { winner: false, winningLine: [] };
   }
   function handleClick(rowIndex: number, colIndex: number) {
     if (!game || game.board[rowIndex][colIndex] !== "" || winner) {
@@ -125,9 +148,10 @@ export default function GamePage() {
       board: newBoard,
     });
 
-    const hasWinner = checkWinner(newBoard);
+    const { winner: hasWinner, winningLine } = checkWinner(newBoard);
     if (hasWinner) {
       setWinner(currentPlayer);
+      setWinningLine(winningLine);
       return;
     }
 
@@ -163,7 +187,7 @@ export default function GamePage() {
             </motion.div>
           ) : (
             <div
-              className="text-2xl mb-8 "
+              className="text-2xl mb-8 p-2"
               style={{
                 color:
                   currentPlayer === "O"
@@ -212,10 +236,14 @@ export default function GamePage() {
                 row.map((cell, colIndex) => (
                   <motion.button
                     key={`${rowIndex}-${colIndex}`}
-                    className="w-5 h-5 sm:h-6 sm:w-6 md:w-8 md:h-8 lg:w-10 lg:h-10 xl:h-10 xl:w-10 2xl:h-11 2xl:w-11 3xl:h-14 3xl:w-14
-                     flex items-center justify-center 3xl:text-4xl font-bold"
+                    className="h-[1.5vh] w-[1.5vh] sm:h-[2vh] sm:w-[2vh] md:h-[2.5vh] md:w-[2.5vh] lg:h-[3vh] lg:w-[3vh] xl:h-[3.5vh] xl:w-[3.5vh] 3xl:h-[4vh] 3xl:w-[4vh]
+                     flex items-center justify-center  md:text-xl lg:text-2xl xl:text-3xl 3xl:text-4xl font-bold "
                     style={{
-                      backgroundColor: "var(--whitelessbright)",
+                      backgroundColor: winLane.some(
+                        ([r, c]) => r === rowIndex && c === colIndex
+                      )
+                        ? "#22c55e"
+                        : "var(--whitelessbright)",
                       color:
                         cell === "X"
                           ? "var(--defaultred)"
@@ -240,7 +268,9 @@ export default function GamePage() {
             </div>
           </div>
           <div className="flex flex-row space-x-4 ">
-            <Button>{TranslateText("NEW_GAME", language)}</Button>
+            <Button onClick={startNewGame}>
+              {TranslateText("NEW_GAME", language)}
+            </Button>
             <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
@@ -326,8 +356,10 @@ export default function GamePage() {
             </Dialog>
             {!isNewGame && (
               <>
-                <Button>Save as New Game</Button>
-                <Button variant="destructive">Delete Game</Button>
+                <Button>{TranslateText("SAVE_GAME", language)}</Button>
+                <Button variant="destructive">
+                  {TranslateText("DELETE_GAME", language)}
+                </Button>
               </>
             )}
           </div>
