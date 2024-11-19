@@ -7,7 +7,6 @@ import com.tda25be.tda25be.models.Game;
 import com.tda25be.tda25be.models.OrganizationResponse;
 import com.tda25be.tda25be.entities.GameEntity;
 import com.tda25be.tda25be.repositories.GameRepository;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,26 +31,16 @@ public class GameController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path="/games")
     public Game createGame(@RequestBody Game game) throws BadRequestException {
-        if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         List<List<String>> board = game.getBoard();
+        if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (board == null) throw new BadRequestException("Board wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
+        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
         game.setGameState(GameState.opening);  //TODO calculate gamestate
-        System.out.println(board);
-        for (int i = 0; i < board.size(); i++) {
-            List<String> row = board.get(i);
-            for (int j = 0; j < row.size(); j++) {
-                String cell = row.get(j).toLowerCase();
-                if (!cell.equals("") && !cell.equals("x") && !cell.equals("o")) {
-                    throw new SemanticErrorException(cell);
-                }
-                row.set(j, cell);
-            }
-        }
-        gameRepository.saveAndFlush(GameEntity.fromGame(game));
-        return game;
+        parseBoardArray(board);
+        return Game.fromEntity(gameRepository.saveAndFlush(GameEntity.fromGame(game)));
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path="/games" )
@@ -81,20 +70,41 @@ public class GameController {
             throw new ResourceNotFound();
         }
     }
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK) //test this more, if parse works and semantic error is blocking
     @PutMapping(path="/games/{uuid}")
-    public void updateGame(@PathVariable String uuid, @RequestBody Game game){
+    public void updateGame(@PathVariable String uuid, @RequestBody Game game) throws BadRequestException {
+        GameEntity entity = GameEntity.fromGame(game);
+        if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
+        if (game.getBoard() == null) throw new BadRequestException("Board wasn't specified");
+        if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
         try
         {
-            GameEntity entity = GameEntity.fromGame(game);
             GameEntity oldEntity = gameRepository.findById(uuid).get();
+
+            List<List<String>> board = entity.getBoard();
+            parseBoardArray(board);
+
+            oldEntity.setBoard(board);
             oldEntity.setName(entity.getName());
             oldEntity.setDifficulty(entity.getDifficulty());
-            oldEntity.setBoard(entity.getBoard());
             oldEntity.setUpdatedAt(LocalDateTime.now().toString());
+
             gameRepository.saveAndFlush(oldEntity);
         }catch (NoSuchElementException exception){
             throw new ResourceNotFound();
+        }
+    }
+
+    private void parseBoardArray(List<List<String>> board) {
+        for (List<String> row : board) {
+            for (int j = 0; j < 15; j++) {
+                if(row.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
+                String cell = row.get(j).toLowerCase();
+                if (!cell.isEmpty() && !cell.equals("x") && !cell.equals("o")) {
+                    throw new SemanticErrorException(String.format("Semantic error: board can only contain x's and o's, yours contains %s", cell));
+                }
+                row.set(j, cell);
+            }
         }
     }
 

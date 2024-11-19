@@ -1,7 +1,7 @@
 package com.tda25be.tda25be.entities;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.tda25be.tda25be.Enums.Difficulty;
+import com.tda25be.tda25be.enums.Difficulty;
 import com.tda25be.tda25be.enums.GameState;
 import com.tda25be.tda25be.deserializers.DifficultyDeserializer;
 import com.tda25be.tda25be.models.Game;
