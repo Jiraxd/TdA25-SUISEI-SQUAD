@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class DifficultyDeserializer extends JsonDeserializer {
     @Override
-    public com.tda25be.tda25be.Enums.Difficulty deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public com.tda25be.tda25be.enums.Difficulty deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String value = p.getText().toLowerCase();
-        return com.tda25be.tda25be.Enums.Difficulty.valueOf(value);
+        return com.tda25be.tda25be.enums.Difficulty.valueOf(value);
     }
 
 }

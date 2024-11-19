@@ -32,26 +32,26 @@ public class GameController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path="/games")
     public Game createGame(@RequestBody Game game) throws BadRequestException {
-        if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         List<List<String>> board = game.getBoard();
+        if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (board == null) throw new BadRequestException("Board wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
+        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
         game.setGameState(GameState.opening);  //TODO calculate gamestate
         System.out.println(board);
-        for (int i = 0; i < board.size(); i++) {
-            List<String> row = board.get(i);
-            for (int j = 0; j < row.size(); j++) {
+        for (List<String> row : board) {
+            for (int j = 0; j < 15; j++) {
+                if(row.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
                 String cell = row.get(j).toLowerCase();
-                if (!cell.equals("") && !cell.equals("x") && !cell.equals("o")) {
-                    throw new SemanticErrorException(cell);
+                if (!cell.isEmpty() && !cell.equals("x") && !cell.equals("o")) {
+                    throw new SemanticErrorException(String.format("Semantic error: board can only contain x's and o's, yours contains %s", cell));
                 }
                 row.set(j, cell);
             }
         }
-        gameRepository.saveAndFlush(GameEntity.fromGame(game));
-        return game;
+        return Game.fromEntity(gameRepository.saveAndFlush(GameEntity.fromGame(game)));
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path="/games" )
