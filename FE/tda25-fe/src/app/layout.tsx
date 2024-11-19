@@ -5,6 +5,8 @@ import { ButtonsNavBar } from "@/components/layout/ButtonsNavBar";
 import { LogoNavBar } from "@/components/layout/LogoNavBar";
 import LanguageDisplay from "@/components/layout/LanguageDisplay";
 import { LanguageProvider } from "@/components/languageContext";
+import { ErrorProvider } from "@/components/errorContext";
+import ErrorDisplay from "@/components/layout/ErrorDisplay";
 
 const dosisBold = localFont({
   src: "./fonts/Dosis-Bold.ttf",
@@ -45,24 +47,33 @@ export default function RootLayout({
       <body
         className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable} antialiased flex flex-col min-h-screen`}
       >
-        <LanguageProvider>
-          <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
-            <div
-              className="flex flex-row top-0 max-h-20 items-center min-w-full"
-              style={{ backgroundColor: "var(--darkerblue)", minWidth: "50%" }}
-            >
-              <LogoNavBar />
+        <ErrorProvider>
+          <LanguageProvider>
+            <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
+              <div
+                className="flex flex-row top-0 max-h-20 items-center min-w-full"
+                style={{
+                  backgroundColor: "var(--darkerblue)",
+                  minWidth: "50%",
+                }}
+              >
+                <LogoNavBar />
+              </div>
+              <div
+                className="flex flex-row top-0 max-h-20 items-center justify-end "
+                style={{
+                  backgroundColor: "var(--defaultblue)",
+                  minWidth: "50%",
+                }}
+              >
+                <ButtonsNavBar />
+              </div>
             </div>
-            <div
-              className="flex flex-row top-0 max-h-20 items-center justify-end "
-              style={{ backgroundColor: "var(--defaultblue)", minWidth: "50%" }}
-            >
-              <ButtonsNavBar />
-            </div>
-          </div>
-          {children}
-          <LanguageDisplay />
-        </LanguageProvider>
+            {children}
+            <LanguageDisplay />
+            <ErrorDisplay />
+          </LanguageProvider>
+        </ErrorProvider>
       </body>
     </html>
   );

@@ -54,6 +54,13 @@ const translationsCZ: Record<string, string> = {
   OPENING: "Zahájení",
   MIDGAME: "Rozehráno",
   ENDGAME: "Koncovka",
+  UPDATE_GAME: "Upravit hru",
+  DELETE_GAME: "Smazat hru",
+  SAVE_GAME_NEW: "Uložit jako novou hru",
+  ERROR_FETCH: "Chyba při načítání her, zkuste to znovu",
+  ERROR_SAVE: "Chyba při ukládání hry, zkontrolujte zadané hodnoty",
+  ERROR_UPDATE: "Chyba při aktualizaci hry, zkontrolujte zadané hodnoty",
+  ERROR_DELETE: "Chyba při mazání hry, zkuste to znovu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -93,4 +100,11 @@ const translationsEN: Record<string, string> = {
   OPENING: "Opening",
   MIDGAME: "Mid-game",
   ENDGAME: "End-game",
+  UPDATE_GAME: "Update Game",
+  DELETE_GAME: "Delete Game",
+  SAVE_GAME_NEW: "Save Game as New",
+  ERROR_FETCH: "Error fetching games, please try again",
+  ERROR_SAVE: "Error saving game, check the entered values and try again",
+  ERROR_UPDATE: "Error updating game, check the entered values and try again",
+  ERROR_DELETE: "Error deleting game, please try again",
 };

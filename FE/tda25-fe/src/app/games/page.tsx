@@ -9,7 +9,7 @@ import { Game } from "@/models/Game";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-const ITEMS_PER_PAGE = 15;
+const ITEMS_PER_PAGE = 10;
 
 export default function Games() {
   const [page, setPage] = useState<number>(1);
@@ -41,6 +41,9 @@ export default function Games() {
   };
 
   const totalPages = games ? Math.ceil(games.length / ITEMS_PER_PAGE) : 1;
+  const startIdx = (page - 1) * ITEMS_PER_PAGE;
+  const endIdx = startIdx + ITEMS_PER_PAGE;
+  const currentGames = games ? games.slice(startIdx, endIdx) : [];
 
   return (
     <div className="container mx-auto pb-8 font-[family-name:var(--font-dosis-bold)]">
@@ -66,12 +69,9 @@ export default function Games() {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          {
-            /*TODO make this work with pages */
-            games.map((game: Game) => (
-              <GameCard key={game.uuid} game={game} />
-            ))
-          }
+          {currentGames.map((game: Game) => (
+            <GameCard key={game.uuid} game={game} />
+          ))}
         </motion.div>
       )}
       <motion.div

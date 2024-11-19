@@ -23,8 +23,12 @@ import {
 import { LoadingCircle } from "@/components/loadingCircle";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
+import { GameCreateUpdate } from "@/models/GameCreateUpdate";
+import { useErrorMessage } from "@/components/errorContext";
+import { useRouter } from "next/navigation";
 
 export default function GamePage() {
+  const isDev = process.env.NODE_ENV === "development";
   const pathName = usePathname();
   const gameId = pathName.split("/").pop();
   const [game, setGame] = useState<Game | null>(null);
@@ -32,15 +36,18 @@ export default function GamePage() {
   const [currentPlayer, setPlayer] = useState<"X" | "O">("X");
   const controls = useAnimation();
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+  const [dialogNewGameFromExisting, setDialogNewGameFromExisting] =
+    useState(false);
   const [isNewGame, setIsNewGame] = useState(true);
   const [winLane, setWinningLine] = useState<number[][]>([]);
+  const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
+  const { updateErrorMessage } = useErrorMessage();
+  const router = useRouter();
 
   const { language } = useLanguage();
 
   const fetchGame = async (id: string) => {
     try {
-      const isDev = process.env.NODE_ENV === "development";
-
       const res = await fetch(
         isDev
           ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${id}`
@@ -50,7 +57,8 @@ export default function GamePage() {
 
       setGame(data);
     } catch (error) {
-      console.error("Error fetching game:", error);
+      console.log("Error message:" + error);
+      updateErrorMessage(TranslateText("ERROR_FETCH", language));
     }
   };
 
@@ -69,7 +77,6 @@ export default function GamePage() {
     setWinner(null);
 
     setIsNewGame(true);
-    const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
 
     setGame({
       uuid: "none",
@@ -82,14 +89,89 @@ export default function GamePage() {
     });
   }
 
-  function setGameName(name: string) {
-    // temporary
-    console.log(name);
+  function setGameName(gameName: string) {
+    if (!game) {
+      return;
+    }
+
+    setGame({
+      ...game,
+      name: gameName,
+    });
   }
 
-  function setDifficulty(difficulty: string) {
-    // temporary
-    console.log(difficulty);
+  function setDifficulty(
+    dif: "beginner" | "easy" | "medium" | "hard" | "extreme"
+  ) {
+    if (!game) {
+      return;
+    }
+
+    setGame({
+      ...game,
+      difficulty: dif,
+    });
+  }
+
+  async function saveUpdateGame() {
+    const gamePayload: GameCreateUpdate = {
+      name: game?.name ?? "Name",
+      difficulty: game?.difficulty ?? "medium",
+      board: game?.board ?? emptyBoard,
+    };
+    if (dialogNewGameFromExisting || isNewGame) {
+      const res = await fetch(
+        isDev
+          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
+          : `/api/v1/games`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(gamePayload),
+        }
+      );
+      if (res.ok) {
+        const data: Game = await res.json();
+        await router.push(`/game/${data.uuid}`);
+      } else {
+        updateErrorMessage(TranslateText("ERROR_SAVE", language));
+      }
+    } else {
+      const res = await fetch(
+        isDev
+          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${game?.uuid}`
+          : `/api/v1/games/${game?.uuid}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(gamePayload),
+        }
+      );
+      if (!res.ok) {
+        updateErrorMessage(TranslateText("ERROR_UPDATE", language));
+      }
+    }
+  }
+
+  function deleteGame() {
+    fetch(
+      isDev
+        ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${game?.uuid}`
+        : `/api/v1/games/${game?.uuid}`,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {
+      if (res.ok) {
+        router.push("/games");
+      } else {
+        updateErrorMessage(TranslateText("ERROR_DELETE", language));
+      }
+    });
   }
   function checkWinner(board: string[][]): {
     winner: boolean;
@@ -179,7 +261,7 @@ export default function GamePage() {
             className="text-4xl mb-4 text-center"
             style={{ color: "var(--darkshade)" }}
           >
-            {game.name}
+            {game.name === "" ? "-" : game.name}
           </h1>
           {winner ? (
             <motion.div
@@ -275,23 +357,40 @@ export default function GamePage() {
             <Button onClick={startNewGame}>
               {TranslateText("NEW_GAME", language)}
             </Button>
-            <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
+            <Dialog
+              open={isSaveDialogOpen}
+              onOpenChange={(open: boolean) => {
+                setIsSaveDialogOpen(!isSaveDialogOpen);
+                if (open === false) setDialogNewGameFromExisting(false);
+              }}
+            >
               <DialogTrigger asChild>
-                <Button>
-                  {isNewGame
-                    ? TranslateText("SAVE_GAME", language)
-                    : TranslateText("UPDATE_GAME", language)}
-                </Button>
+                <div className="flex flex-row space-x-4 ">
+                  <Button>
+                    {isNewGame
+                      ? TranslateText("SAVE_GAME", language)
+                      : TranslateText("UPDATE_GAME", language)}
+                  </Button>
+                  {!isNewGame && (
+                    <Button onClick={() => setDialogNewGameFromExisting(true)}>
+                      {TranslateText("SAVE_GAME_NEW", language)}
+                    </Button>
+                  )}
+                </div>
               </DialogTrigger>
               <DialogContent
                 style={{
                   backgroundColor: "var(--darkshade)",
-                  borderColor: "var(--defaultred)",
+                  borderColor: "var(--purple)",
                 }}
               >
                 <DialogHeader>
                   <DialogTitle>
-                    {isNewGame ? "Save Game" : "Update Game"}
+                    {dialogNewGameFromExisting
+                      ? TranslateText("SAVE_GAME_NEW", language)
+                      : isNewGame
+                      ? TranslateText("SAVE_GAME", language)
+                      : TranslateText("UPDATE_GAME", language)}
                   </DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
@@ -303,7 +402,7 @@ export default function GamePage() {
                       id="name"
                       value={game?.name ?? "Name"}
                       style={{
-                        borderColor: "var(--defaultred)",
+                        borderColor: "var(--purple)",
                       }}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
                         setGameName(e.target.value)
@@ -324,25 +423,25 @@ export default function GamePage() {
                       <SelectTrigger
                         className="col-span-3"
                         style={{
-                          borderColor: "var(--defaultred)",
+                          borderColor: "var(--purple)",
                         }}
                       >
                         <SelectValue placeholder="Select difficulty" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="beginner">
+                        <SelectItem value="beginner" className="cursor-pointer">
                           {TranslateText("BEGINNER", language)}
                         </SelectItem>
-                        <SelectItem value="easy">
+                        <SelectItem value="easy" className="cursor-pointer">
                           {TranslateText("EASY", language)}
                         </SelectItem>
-                        <SelectItem value="medium">
+                        <SelectItem value="medium" className="cursor-pointer">
                           {TranslateText("MEDIUM", language)}
                         </SelectItem>
-                        <SelectItem value="hard">
+                        <SelectItem value="hard" className="cursor-pointer">
                           {TranslateText("HARD", language)}
                         </SelectItem>
-                        <SelectItem value="extreme">
+                        <SelectItem value="extreme" className="cursor-pointer">
                           {TranslateText("EXTREME", language)}
                         </SelectItem>
                       </SelectContent>
@@ -350,8 +449,13 @@ export default function GamePage() {
                   </div>
                 </div>
                 <div className="flex justify-end">
-                  <Button style={{ backgroundColor: "var(--darkerblue)" }}>
-                    {isNewGame
+                  <Button
+                    style={{ backgroundColor: "var(--darkerblue)" }}
+                    onClick={saveUpdateGame}
+                  >
+                    {dialogNewGameFromExisting
+                      ? TranslateText("SAVE_GAME_NEW", language)
+                      : isNewGame
                       ? TranslateText("SAVE_GAME", language)
                       : TranslateText("UPDATE_GAME", language)}
                   </Button>
@@ -359,12 +463,9 @@ export default function GamePage() {
               </DialogContent>
             </Dialog>
             {!isNewGame && (
-              <>
-                <Button>{TranslateText("SAVE_GAME", language)}</Button>
-                <Button variant="destructive">
-                  {TranslateText("DELETE_GAME", language)}
-                </Button>
-              </>
+              <Button onClick={deleteGame} variant="destructive">
+                {TranslateText("DELETE_GAME", language)}
+              </Button>
             )}
           </div>
         </>
