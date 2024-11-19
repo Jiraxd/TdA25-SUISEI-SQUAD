@@ -213,8 +213,8 @@ export default function GamePage() {
           ([rowIndex, colIndex]) => board[rowIndex][colIndex]
         );
         if (
-          cells.every((cell) => cell === "X") ||
-          cells.every((cell) => cell === "O")
+          cells.every((cell) => cell.toUpperCase() === "X") ||
+          cells.every((cell) => cell.toUpperCase() === "O")
         ) {
           return { winner: true, winningLine: segment };
         }
@@ -331,7 +331,7 @@ export default function GamePage() {
                         ? "#22c55e"
                         : "var(--whitelessbright)",
                       color:
-                        cell === "X"
+                        cell.toUpperCase() === "X"
                           ? "var(--defaultred)"
                           : "var(--defaultblue)",
                     }}
@@ -341,7 +341,7 @@ export default function GamePage() {
                     whileHover={{ scale: 0.95 }}
                     whileTap={{ scale: 0.85 }}
                   >
-                    {cell}
+                    {cell.toUpperCase()}
                   </motion.button>
                 ))
               )}

@@ -24,11 +24,13 @@ export function GamePreview({ board }: GamePreviewProps) {
               className="text-sm font-bold"
               style={{
                 color:
-                  cell === "X" ? "var(--defaultred)" : "var(--defaultblue)",
+                  cell.toUpperCase() === "X"
+                    ? "var(--defaultred)"
+                    : "var(--defaultblue)",
                 backgroundColor: "var(--whitelessbright)",
               }}
             >
-              {cell}
+              {cell.toUpperCase()}
             </span>
           )}
         </div>
