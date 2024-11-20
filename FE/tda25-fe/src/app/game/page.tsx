@@ -1,25 +1,9 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useAnimation } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Game } from "@/models/Game";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { LoadingCircle } from "@/components/loadingCircle";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
@@ -27,6 +11,8 @@ import { GameCreateUpdate } from "@/models/GameCreateUpdate";
 import { useErrorMessage } from "@/components/errorContext";
 import { useRouter } from "next/navigation";
 import { GameControls } from "@/components/game/DialogControls";
+import { DesktopGame } from "@/components/game/DesktopGame";
+import { MobileGame } from "@/components/game/MobileGame";
 
 export default function GamePage() {
   const isDev = process.env.NODE_ENV === "development";
@@ -247,7 +233,7 @@ export default function GamePage() {
 
   return (
     <motion.div
-      className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-12"
+      className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-4"
       style={{ backgroundColor: "var(--whitelessbright)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -258,116 +244,56 @@ export default function GamePage() {
         </div>
       ) : (
         <>
-          <h1
-            className="text-4xl mb-4 text-center"
-            style={{ color: "var(--darkshade)" }}
-          >
-            {game.name === "" ? "-" : game.name}
-          </h1>
-          {winner ? (
-            <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-2xl mb-8 p-2 bg-green-500 text-white rounded-lg shadow-lg"
-            >
-              {TranslateText("WINNER", language) + winner + "!"}
-            </motion.div>
-          ) : (
-            <div
-              className="text-2xl mb-8 p-2"
-              style={{
-                color:
-                  currentPlayer === "O"
-                    ? "var(--defaultblue)"
-                    : "var(--defaultred)",
-              }}
-            >
-              {TranslateText("TURN", language) + currentPlayer}
-            </div>
-          )}
-          <div className="flex flex-row justify-center w-full">
-            <div className="text-center text-black w-1/6 mr-8 text-xl">
-              <h2 className="text-4xl mb-2">
-                {TranslateText("GAME_INFO", language)}
-              </h2>
-              <p>
-                {TranslateText("STATE", language)}{" "}
-                {TranslateText(game.gameState.toUpperCase(), language)}
-              </p>
-              <p>
-                {TranslateText("CREATED", language)}
-                {new Date(game.createdAt).toLocaleString()}
-              </p>
-              <p>
-                {TranslateText("LAST_UPDATE", language)}
-                {new Date(game.updatedAt).toLocaleString()}
-              </p>
-            </div>
-            <motion.div
-              className="grid grid-cols-15 gap-1 mb-4 border-4"
-              style={{
-                backgroundColor: "var(--darkshade)",
-                borderColor: "var(--darkshade)",
-              }}
-              initial="hidden"
-              animate={controls}
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.01,
-                  },
-                },
-              }}
-            >
-              {game.board.map((row, rowIndex) =>
-                row.map((cell, colIndex) => (
-                  <motion.button
-                    key={`${rowIndex}-${colIndex}`}
-                    className="h-[1.5vh] w-[1.5vh] sm:h-[2vh] sm:w-[2vh] md:h-[2.5vh] md:w-[2.5vh] lg:h-[3vh] lg:w-[3vh] xl:h-[3.5vh] xl:w-[3.5vh] 3xl:h-[4vh] 3xl:w-[4vh]
-                     flex items-center justify-center  md:text-xl lg:text-2xl xl:text-3xl 3xl:text-4xl font-bold "
-                    style={{
-                      backgroundColor: winLane.some(
-                        ([r, c]) => r === rowIndex && c === colIndex
-                      )
-                        ? "#22c55e"
-                        : "var(--whitelessbright)",
-                      color:
-                        cell.toUpperCase() === "X"
-                          ? "var(--defaultred)"
-                          : "var(--defaultblue)",
-                    }}
-                    onClick={() => {
-                      handleClick(rowIndex, colIndex);
-                    }}
-                    whileHover={{ scale: 0.95 }}
-                    whileTap={{ scale: 0.85 }}
-                  >
-                    {cell.toUpperCase()}
-                  </motion.button>
-                ))
-              )}
-            </motion.div>
-            <div className="text-center text-black w-1/6 ml-8">
-              <h2 className="text-2xl mb-2">
-                {TranslateText("HISTORY", language)}
-              </h2>
-              <p>TODO</p>
-            </div>
+          <div className="block lg:hidden w-full">
+            <MobileGame
+              game={game}
+              winner={winner}
+              currentPlayer={currentPlayer}
+              winLane={winLane}
+              language={language}
+              handleClick={handleClick}
+              controls={controls}
+            />
           </div>
-          <GameControls
-            isNewGame={isNewGame}
-            isSaveDialogOpen={isSaveDialogOpen}
-            setIsSaveDialogOpen={setIsSaveDialogOpen}
-            dialogNewGameFromExisting={dialogNewGameFromExisting}
-            setDialogNewGameFromExisting={setDialogNewGameFromExisting}
-            game={game}
-            language={language}
-            setGameName={setGameName}
-            setDifficulty={setDifficulty}
-            startNewGame={startNewGame}
-            saveUpdateGame={saveUpdateGame}
-            deleteGame={deleteGame}
-          />
+
+          <div className="hidden lg:block w-full">
+            <DesktopGame
+              game={game}
+              winner={winner}
+              currentPlayer={currentPlayer}
+              winLane={winLane}
+              language={language}
+              handleClick={handleClick}
+              controls={controls}
+              isNewGame={isNewGame}
+              isSaveDialogOpen={isSaveDialogOpen}
+              setIsSaveDialogOpen={setIsSaveDialogOpen}
+              dialogNewGameFromExisting={dialogNewGameFromExisting}
+              setDialogNewGameFromExisting={setDialogNewGameFromExisting}
+              setGameName={setGameName}
+              setDifficulty={setDifficulty}
+              startNewGame={startNewGame}
+              saveUpdateGame={saveUpdateGame}
+              deleteGame={deleteGame}
+            />
+          </div>
+          <div className="block lg:hidden">
+            <GameControls
+              isNewGame={isNewGame}
+              isSaveDialogOpen={isSaveDialogOpen}
+              setIsSaveDialogOpen={setIsSaveDialogOpen}
+              dialogNewGameFromExisting={dialogNewGameFromExisting}
+              setDialogNewGameFromExisting={setDialogNewGameFromExisting}
+              game={game}
+              language={language}
+              setGameName={setGameName}
+              setDifficulty={setDifficulty}
+              startNewGame={startNewGame}
+              saveUpdateGame={saveUpdateGame}
+              deleteGame={deleteGame}
+              vertical={false}
+            />
+          </div>
         </>
       )}
     </motion.div>

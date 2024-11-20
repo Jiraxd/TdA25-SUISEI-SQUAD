@@ -9,6 +9,7 @@ import Image from "next/image";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "../languageContext";
 import { useRouter } from "next/navigation";
+import LanguageDisplay from "./LanguageDisplay";
 
 export const MobileNav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -66,6 +67,8 @@ export const MobileNav = () => {
                 </div>
               </button>
               <ButtonsNavBar orientation="vertical" />
+
+              <LanguageDisplay />
             </div>
           </motion.div>
         )}

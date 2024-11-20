@@ -31,6 +31,7 @@ interface GameControlsProps {
   startNewGame: () => void;
   saveUpdateGame: () => void;
   deleteGame: () => void;
+  vertical: boolean;
 }
 
 export function GameControls({
@@ -46,9 +47,14 @@ export function GameControls({
   startNewGame,
   saveUpdateGame,
   deleteGame,
+  vertical,
 }: GameControlsProps) {
   return (
-    <div className="flex flex-row space-x-4">
+    <div
+      className={`flex ${
+        vertical ? "flex-col space-y-4" : "flex-row space-x-4"
+      } p-4`}
+    >
       <Button onClick={startNewGame}>
         {TranslateText("NEW_GAME", language)}
       </Button>

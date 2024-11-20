@@ -62,6 +62,7 @@ const config: Config = {
       screens: {
         "2xl": "1600px",
         "3xl": "2000px",
+        mobile_special: "850px",
       },
     },
   },

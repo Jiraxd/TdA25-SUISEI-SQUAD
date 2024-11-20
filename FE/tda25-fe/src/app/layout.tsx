@@ -72,7 +72,9 @@ export default function RootLayout({
               <MobileNav />
             </div>
             {children}
-            <LanguageDisplay />
+            <div className="hidden lg:block">
+              <LanguageDisplay />
+            </div>
             <ErrorDisplay />
           </LanguageProvider>
         </ErrorProvider>
