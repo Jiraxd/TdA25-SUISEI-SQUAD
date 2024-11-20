@@ -26,6 +26,7 @@ import { useLanguage } from "@/components/languageContext";
 import { GameCreateUpdate } from "@/models/GameCreateUpdate";
 import { useErrorMessage } from "@/components/errorContext";
 import { useRouter } from "next/navigation";
+import { GameControls } from "@/components/game/DialogControls";
 
 export default function GamePage() {
   const isDev = process.env.NODE_ENV === "development";
@@ -353,121 +354,20 @@ export default function GamePage() {
               <p>TODO</p>
             </div>
           </div>
-          <div className="flex flex-row space-x-4 ">
-            <Button onClick={startNewGame}>
-              {TranslateText("NEW_GAME", language)}
-            </Button>
-            <Dialog
-              open={isSaveDialogOpen}
-              onOpenChange={(open: boolean) => {
-                setIsSaveDialogOpen(!isSaveDialogOpen);
-                if (open === false) setDialogNewGameFromExisting(false);
-              }}
-            >
-              <DialogTrigger asChild>
-                <div className="flex flex-row space-x-4 ">
-                  <Button>
-                    {isNewGame
-                      ? TranslateText("SAVE_GAME", language)
-                      : TranslateText("UPDATE_GAME", language)}
-                  </Button>
-                  {!isNewGame && (
-                    <Button onClick={() => setDialogNewGameFromExisting(true)}>
-                      {TranslateText("SAVE_GAME_NEW", language)}
-                    </Button>
-                  )}
-                </div>
-              </DialogTrigger>
-              <DialogContent
-                style={{
-                  backgroundColor: "var(--darkshade)",
-                  borderColor: "var(--purple)",
-                }}
-              >
-                <DialogHeader>
-                  <DialogTitle>
-                    {dialogNewGameFromExisting
-                      ? TranslateText("SAVE_GAME_NEW", language)
-                      : isNewGame
-                      ? TranslateText("SAVE_GAME", language)
-                      : TranslateText("UPDATE_GAME", language)}
-                  </DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <label htmlFor="name" className="text-right">
-                      {TranslateText("NAME", language)}
-                    </label>
-                    <Input
-                      id="name"
-                      value={game?.name ?? "Name"}
-                      style={{
-                        borderColor: "var(--purple)",
-                      }}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setGameName(e.target.value)
-                      }
-                      className="col-span-3"
-                    />
-                  </div>
-                  <div className="grid grid-cols-4 items-center gap-4 ">
-                    <label htmlFor="difficulty" className="text-right">
-                      {TranslateText("DIFFICULTY", language)}
-                    </label>
-                    <Select
-                      value={game?.difficulty ?? "Medium"}
-                      onValueChange={(value: Game["difficulty"]) =>
-                        setDifficulty(value)
-                      }
-                    >
-                      <SelectTrigger
-                        className="col-span-3"
-                        style={{
-                          borderColor: "var(--purple)",
-                        }}
-                      >
-                        <SelectValue placeholder="Select difficulty" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="beginner" className="cursor-pointer">
-                          {TranslateText("BEGINNER", language)}
-                        </SelectItem>
-                        <SelectItem value="easy" className="cursor-pointer">
-                          {TranslateText("EASY", language)}
-                        </SelectItem>
-                        <SelectItem value="medium" className="cursor-pointer">
-                          {TranslateText("MEDIUM", language)}
-                        </SelectItem>
-                        <SelectItem value="hard" className="cursor-pointer">
-                          {TranslateText("HARD", language)}
-                        </SelectItem>
-                        <SelectItem value="extreme" className="cursor-pointer">
-                          {TranslateText("EXTREME", language)}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="flex justify-end">
-                  <Button
-                    style={{ backgroundColor: "var(--darkerblue)" }}
-                    onClick={saveUpdateGame}
-                  >
-                    {dialogNewGameFromExisting
-                      ? TranslateText("SAVE_GAME_NEW", language)
-                      : isNewGame
-                      ? TranslateText("SAVE_GAME", language)
-                      : TranslateText("UPDATE_GAME", language)}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-            {!isNewGame && (
-              <Button onClick={deleteGame} variant="destructive">
-                {TranslateText("DELETE_GAME", language)}
-              </Button>
-            )}
-          </div>
+          <GameControls
+            isNewGame={isNewGame}
+            isSaveDialogOpen={isSaveDialogOpen}
+            setIsSaveDialogOpen={setIsSaveDialogOpen}
+            dialogNewGameFromExisting={dialogNewGameFromExisting}
+            setDialogNewGameFromExisting={setDialogNewGameFromExisting}
+            game={game}
+            language={language}
+            setGameName={setGameName}
+            setDifficulty={setDifficulty}
+            startNewGame={startNewGame}
+            saveUpdateGame={saveUpdateGame}
+            deleteGame={deleteGame}
+          />
         </>
       )}
     </motion.div>
