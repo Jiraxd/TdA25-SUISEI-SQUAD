@@ -7,12 +7,14 @@ import LanguageDisplay from "@/components/layout/LanguageDisplay";
 import { LanguageProvider } from "@/components/languageContext";
 import { ErrorProvider } from "@/components/errorContext";
 import ErrorDisplay from "@/components/layout/ErrorDisplay";
+import { MobileNav } from "@/components/layout/MobileNav";
 
 const dosisBold = localFont({
   src: "./fonts/Dosis-Bold.ttf",
   variable: "--font-dosis-bold",
   weight: "100 900",
 });
+
 const dosisLight = localFont({
   src: "./fonts/Dosis-Light.ttf",
   variable: "--font-dosis-light",
@@ -41,7 +43,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // TODO Cookie pop-up
   return (
     <html lang="en">
       <body
@@ -49,7 +50,7 @@ export default function RootLayout({
       >
         <ErrorProvider>
           <LanguageProvider>
-            <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)]">
+            <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)] z-50">
               <div
                 className="flex flex-row top-0 max-h-20 items-center min-w-full"
                 style={{
@@ -60,7 +61,7 @@ export default function RootLayout({
                 <LogoNavBar />
               </div>
               <div
-                className="flex flex-row top-0 max-h-20 items-center justify-end "
+                className="lg:flex flex-row top-0 max-h-20 items-center justify-end hidden"
                 style={{
                   backgroundColor: "var(--defaultblue)",
                   minWidth: "50%",
@@ -68,9 +69,12 @@ export default function RootLayout({
               >
                 <ButtonsNavBar />
               </div>
+              <MobileNav />
             </div>
             {children}
-            <LanguageDisplay />
+            <div className="hidden lg:block">
+              <LanguageDisplay />
+            </div>
             <ErrorDisplay />
           </LanguageProvider>
         </ErrorProvider>

@@ -14,17 +14,21 @@ export const LogoNavBar = () => {
   };
   return (
     <>
-      <button className="flex flex-row p-6 items-center" onClick={handleClick}>
+      <button
+        className="flex flex-row p-2 lg:p-6 items-center"
+        onClick={handleClick}
+      >
         <div>
           <Image
             src="/logos/Think-different-Academy_LOGO_oficialni-bile.svg"
             alt="Logo"
-            className="w-60 h-28 p-6"
+            className="w-48 h-20 lg:w-60 lg:h-28 p-2 lg:p-6"
             width={240}
             height={112}
+            priority
           />
         </div>
-        <div className="text-3xl font-bold">
+        <div className="text-2xl lg:text-3xl lg:flex hidden">
           {"| " + TranslateText("HOME", language)}
         </div>
       </button>
