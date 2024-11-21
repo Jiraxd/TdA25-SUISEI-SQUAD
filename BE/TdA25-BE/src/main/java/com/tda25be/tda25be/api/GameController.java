@@ -99,7 +99,7 @@ public class GameController {
         for (List<String> row : board) {
             for (int j = 0; j < 15; j++) {
                 if(row.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
-                String cell = row.get(j).toLowerCase();
+                String cell = row.get(j).toUpperCase();
                 if (!cell.isEmpty() && !cell.equals("x") && !cell.equals("o")) {
                     throw new SemanticErrorException(String.format("Semantic error: board can only contain x's and o's, yours contains %s", cell));
                 }
