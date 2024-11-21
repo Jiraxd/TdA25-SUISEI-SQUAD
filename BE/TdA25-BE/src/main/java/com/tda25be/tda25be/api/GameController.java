@@ -72,7 +72,7 @@ public class GameController {
     }
     @ResponseStatus(HttpStatus.OK) //test this more, if parse works and semantic error is blocking
     @PutMapping(path="/games/{uuid}")
-    public void updateGame(@PathVariable String uuid, @RequestBody Game game) throws BadRequestException {
+    public Game updateGame(@PathVariable String uuid, @RequestBody Game game) throws BadRequestException {
         GameEntity entity = GameEntity.fromGame(game);
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (game.getBoard() == null) throw new BadRequestException("Board wasn't specified");
@@ -89,7 +89,7 @@ public class GameController {
             oldEntity.setDifficulty(entity.getDifficulty());
             oldEntity.setUpdatedAt(LocalDateTime.now().toString());
 
-            gameRepository.saveAndFlush(oldEntity);
+            return Game.fromEntity(gameRepository.saveAndFlush(oldEntity));
         }catch (NoSuchElementException exception){
             throw new ResourceNotFound();
         }
