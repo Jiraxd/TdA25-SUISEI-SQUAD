@@ -5,7 +5,7 @@ import { ButtonsNavBar } from "@/components/layout/ButtonsNavBar";
 import { LogoNavBar } from "@/components/layout/LogoNavBar";
 import LanguageDisplay from "@/components/layout/LanguageDisplay";
 import { LanguageProvider } from "@/components/languageContext";
-import { ErrorProvider } from "@/components/errorContext";
+import { AlertProvider } from "@/components/alertContext";
 import ErrorDisplay from "@/components/layout/ErrorDisplay";
 import { MobileNav } from "@/components/layout/MobileNav";
 
@@ -48,7 +48,7 @@ export default function RootLayout({
       <body
         className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable} antialiased flex flex-col min-h-screen`}
       >
-        <ErrorProvider>
+        <AlertProvider>
           <LanguageProvider>
             <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)] z-50">
               <div
@@ -77,7 +77,7 @@ export default function RootLayout({
             </div>
             <ErrorDisplay />
           </LanguageProvider>
-        </ErrorProvider>
+        </AlertProvider>
       </body>
     </html>
   );

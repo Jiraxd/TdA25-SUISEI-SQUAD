@@ -8,7 +8,7 @@ import { LoadingCircle } from "@/components/loadingCircle";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
 import { GameCreateUpdate } from "@/models/GameCreateUpdate";
-import { useErrorMessage } from "@/components/errorContext";
+import { useErrorMessage } from "@/components/alertContext";
 import { useRouter } from "next/navigation";
 import { GameControls } from "@/components/game/DialogControls";
 import { DesktopGame } from "@/components/game/DesktopGame";
@@ -28,7 +28,7 @@ export default function GamePage() {
   const [isNewGame, setIsNewGame] = useState(true);
   const [winLane, setWinningLine] = useState<number[][]>([]);
   const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
-  const { updateErrorMessage } = useErrorMessage();
+  const { updateErrorMessage, updateSuccessMessage } = useErrorMessage();
   const router = useRouter();
 
   const { language } = useLanguage();
@@ -43,6 +43,26 @@ export default function GamePage() {
       const data: Game = await res.json();
 
       setGame(data);
+
+      const counts = data.board.flat().reduce(
+        (acc, cell) => {
+          if (cell.toUpperCase() === "X") acc.x++;
+          if (cell.toUpperCase() === "O") acc.o++;
+          return acc;
+        },
+        { x: 0, o: 0 }
+      );
+
+      // Set next player based on counts
+      setPlayer(counts.x === counts.o ? "X" : "O");
+
+      const { winner: hasWinner, winningLine } = checkWinner(data.board);
+      if (hasWinner) {
+        // We need to change the winner to the last player who played
+        setWinner(currentPlayer === "X" ? "O" : "X");
+
+        setWinningLine(winningLine);
+      }
     } catch (error) {
       console.log("Error message:" + error);
       updateErrorMessage(TranslateText("ERROR_FETCH", language));
@@ -140,6 +160,9 @@ export default function GamePage() {
       );
       if (!res.ok) {
         updateErrorMessage(TranslateText("ERROR_UPDATE", language));
+      } else {
+        setIsSaveDialogOpen(false);
+        updateSuccessMessage(TranslateText("SUCCESS_UPDATE", language));
       }
     }
   }
