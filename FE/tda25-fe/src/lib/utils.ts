@@ -62,6 +62,7 @@ const translationsCZ: Record<string, string> = {
   ERROR_UPDATE: "Chyba při aktualizaci hry, zkontrolujte zadané hodnoty",
   ERROR_DELETE: "Chyba při mazání hry, zkuste to znovu",
   HOME_PAGE: "Domovská stránka",
+  SUCCESS_UPDATE: "Hra byla úspěšně aktualizována",
 };
 
 const translationsEN: Record<string, string> = {
@@ -109,4 +110,5 @@ const translationsEN: Record<string, string> = {
   ERROR_UPDATE: "Error updating game, check the entered values and try again",
   ERROR_DELETE: "Error deleting game, please try again",
   HOME_PAGE: "Home",
+  SUCCESS_UPDATE: "Game was successfully updated",
 };

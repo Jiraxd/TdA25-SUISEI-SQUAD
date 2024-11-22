@@ -32,24 +32,32 @@ export function DesktopGame({
       </h1>
 
       {winner ? (
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-2xl mb-8 p-2 bg-green-500 text-white rounded-lg shadow-lg"
-        >
-          {TranslateText("WINNER", language) + winner + "!"}
-        </motion.div>
+        <div className="w-full flex items-center justify-center align-middle">
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-2xl mb-8 py-2 px-4 bg-green-500 text-white rounded-lg shadow-lg text-center flex w-fit"
+          >
+            {TranslateText("WINNER", language) + winner + "!"}
+          </motion.div>
+        </div>
       ) : (
-        <div
-          className="text-2xl mb-8 p-2 text-center"
-          style={{
-            color:
-              currentPlayer === "O"
-                ? "var(--defaultblue)"
-                : "var(--defaultred)",
-          }}
-        >
-          {TranslateText("TURN", language) + currentPlayer}
+        <div className="w-full flex items-center justify-center align-middle">
+          <motion.div
+            key={currentPlayer}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="text-2xl mb-8 py-2 px-4 text-center"
+            style={{
+              color:
+                currentPlayer === "O"
+                  ? "var(--defaultblue)"
+                  : "var(--defaultred)",
+            }}
+          >
+            {TranslateText("TURN", language) + currentPlayer}
+          </motion.div>
         </div>
       )}
 
