@@ -43,10 +43,10 @@ export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
   );
 };
 
-export const useErrorMessage = (): AlertContextType => {
+export const useAlertContext = (): AlertContextType => {
   const context = useContext(AlertContext);
   if (!context) {
-    throw new Error("useErrorMessage must be used within a ErrorProvider");
+    throw new Error("useAlertContext must be used within a ErrorProvider");
   }
   return context;
 };

@@ -8,7 +8,7 @@ import { LoadingCircle } from "@/components/loadingCircle";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
 import { GameCreateUpdate } from "@/models/GameCreateUpdate";
-import { useErrorMessage } from "@/components/alertContext";
+import { useAlertContext } from "@/components/alertContext";
 import { useRouter } from "next/navigation";
 import { GameControls } from "@/components/game/DialogControls";
 import { DesktopGame } from "@/components/game/DesktopGame";
@@ -23,13 +23,16 @@ export default function GamePage() {
   const [currentPlayer, setPlayer] = useState<"X" | "O">("X");
   const controls = useAnimation();
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
-  const [dialogNewGameFromExisting, setDialogNewGameFromExisting] =
-    useState(false);
   const [isNewGame, setIsNewGame] = useState(true);
   const [winLane, setWinningLine] = useState<number[][]>([]);
-  const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
-  const { updateErrorMessage, updateSuccessMessage } = useErrorMessage();
+  const { updateErrorMessage } = useAlertContext();
   const router = useRouter();
+
+  const emptyBoard = Array.from({ length: 15 }, () => Array(15).fill(""));
+  const [baseBoard, setBaseBoard] =
+    useState<Array<Array<"X" | "O" | "">>>(emptyBoard);
+  const [basePlayer, setBasePlayer] = useState<"X" | "O">("X");
+  const [hasBaseWinner, setHasBaseWinner] = useState<boolean>(false);
 
   const { language } = useLanguage();
 
@@ -44,6 +47,9 @@ export default function GamePage() {
 
       setGame(data);
 
+      const boardCopy = data.board.map((row) => [...row]);
+      setBaseBoard(boardCopy);
+
       const counts = data.board.flat().reduce(
         (acc, cell) => {
           if (cell.toUpperCase() === "X") acc.x++;
@@ -55,6 +61,7 @@ export default function GamePage() {
 
       // Set next player based on counts
       setPlayer(counts.x === counts.o ? "X" : "O");
+      setBasePlayer(counts.x === counts.o ? "X" : "O");
 
       const { winner: hasWinner, winningLine } = checkWinner(data.board);
       if (hasWinner) {
@@ -62,6 +69,7 @@ export default function GamePage() {
         setWinner(currentPlayer === "X" ? "O" : "X");
 
         setWinningLine(winningLine);
+        setHasBaseWinner(true);
       }
     } catch (error) {
       console.log("Error message:" + error);
@@ -74,11 +82,21 @@ export default function GamePage() {
       fetchGame(gameId);
       setIsNewGame(false);
     } else {
+      setIsNewGame(true);
       startNewGame();
     }
   }, [gameId]);
 
-  function startNewGame() {
+  async function startNewGame() {
+    if (isNewGame) {
+      setNewGame();
+    } else {
+      router.push("/game");
+      setNewGame();
+    }
+  }
+
+  function setNewGame() {
     setWinningLine([]);
     setPlayer("X");
     setWinner(null);
@@ -94,6 +112,21 @@ export default function GamePage() {
       gameState: "unknown",
       board: emptyBoard,
     });
+  }
+
+  function startNewGameFromExisting() {
+    if (hasBaseWinner) {
+      updateErrorMessage(TranslateText("ERROR_START_NEW_GAME", language));
+      return;
+    }
+    setWinningLine([]);
+    setPlayer(basePlayer);
+    setWinner(null);
+
+    setIsNewGame(false);
+
+    // Jako chápu že mám povolenou i null hodnotu, ale zbytečný if :D
+    if (game) setGame({ ...game, board: structuredClone(baseBoard) });
   }
 
   function setGameName(gameName: string) {
@@ -120,13 +153,13 @@ export default function GamePage() {
     });
   }
 
-  async function saveUpdateGame() {
+  async function saveGame() {
     const gamePayload: GameCreateUpdate = {
       name: game?.name ?? "Name",
       difficulty: game?.difficulty ?? "medium",
       board: game?.board ?? emptyBoard,
     };
-    if (dialogNewGameFromExisting || isNewGame) {
+    if (isNewGame) {
       const res = await fetch(
         isDev
           ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
@@ -146,43 +179,10 @@ export default function GamePage() {
         updateErrorMessage(TranslateText("ERROR_SAVE", language));
       }
     } else {
-      const res = await fetch(
-        isDev
-          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${game?.uuid}`
-          : `/api/v1/games/${game?.uuid}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(gamePayload),
-        }
-      );
-      if (!res.ok) {
-        updateErrorMessage(TranslateText("ERROR_UPDATE", language));
-      } else {
-        setIsSaveDialogOpen(false);
-        updateSuccessMessage(TranslateText("SUCCESS_UPDATE", language));
-      }
+      updateErrorMessage(TranslateText("ERROR_SAVE", language));
     }
   }
 
-  function deleteGame() {
-    fetch(
-      isDev
-        ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games/${game?.uuid}`
-        : `/api/v1/games/${game?.uuid}`,
-      {
-        method: "DELETE",
-      }
-    ).then((res) => {
-      if (res.ok) {
-        router.push("/games");
-      } else {
-        updateErrorMessage(TranslateText("ERROR_DELETE", language));
-      }
-    });
-  }
   function checkWinner(board: string[][]): {
     winner: boolean;
     winningLine: number[][];
@@ -291,13 +291,11 @@ export default function GamePage() {
               isNewGame={isNewGame}
               isSaveDialogOpen={isSaveDialogOpen}
               setIsSaveDialogOpen={setIsSaveDialogOpen}
-              dialogNewGameFromExisting={dialogNewGameFromExisting}
-              setDialogNewGameFromExisting={setDialogNewGameFromExisting}
               setGameName={setGameName}
               setDifficulty={setDifficulty}
               startNewGame={startNewGame}
-              saveUpdateGame={saveUpdateGame}
-              deleteGame={deleteGame}
+              saveGame={saveGame}
+              startNewGameFromExisting={startNewGameFromExisting}
             />
           </div>
           <div className="block lg:hidden">
@@ -305,16 +303,14 @@ export default function GamePage() {
               isNewGame={isNewGame}
               isSaveDialogOpen={isSaveDialogOpen}
               setIsSaveDialogOpen={setIsSaveDialogOpen}
-              dialogNewGameFromExisting={dialogNewGameFromExisting}
-              setDialogNewGameFromExisting={setDialogNewGameFromExisting}
               game={game}
               language={language}
               setGameName={setGameName}
               setDifficulty={setDifficulty}
               startNewGame={startNewGame}
-              saveUpdateGame={saveUpdateGame}
-              deleteGame={deleteGame}
+              saveGame={saveGame}
               vertical={false}
+              startNewGameFromExisting={startNewGameFromExisting}
             />
           </div>
         </>

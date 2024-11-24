@@ -11,9 +11,9 @@ export default function DifficultyDisplay({
         <Image
           src="/icons/zarivka_beginner_modre.svg"
           alt="beginner_difficulty"
-          className="w-12 h-12"
-          width={48}
-          height={48}
+          className="w-20 h-14"
+          width={80}
+          height={56}
         />
       );
     case "easy":
@@ -21,9 +21,9 @@ export default function DifficultyDisplay({
         <Image
           src="/icons/zarivka_easy_modre.svg"
           alt="easy_difficulty"
-          className="w-12 h-12"
-          width={48}
-          height={48}
+          className="w-20 h-14"
+          width={80}
+          height={56}
         />
       );
     case "medium":
@@ -31,9 +31,9 @@ export default function DifficultyDisplay({
         <Image
           src="/icons/zarivka_medium_modre.svg"
           alt="medium_difficulty"
-          className="w-12 h-12"
-          width={48}
-          height={48}
+          className="w-20 h-14"
+          width={80}
+          height={56}
         />
       );
     case "hard":
@@ -41,9 +41,9 @@ export default function DifficultyDisplay({
         <Image
           src="/icons/zarivka_hard_modra.svg"
           alt="hard_difficulty"
-          className="w-12 h-12"
-          width={48}
-          height={48}
+          className="w-20 h-14"
+          width={80}
+          height={56}
         />
       );
     case "extreme":
@@ -51,11 +51,10 @@ export default function DifficultyDisplay({
         <Image
           src="/icons/zarivka_extreme_modre.svg"
           alt="extreme_difficulty"
-          className="w-12 h-12"
-          width={48}
-          height={48}
+          className="w-20 h-14"
+          width={80}
+          height={56}
         />
       );
   }
-  return <></>;
 }
