@@ -2,11 +2,11 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
-import { useErrorMessage } from "../alertContext";
+import { useAlertContext } from "../alertContext";
 import { useEffect } from "react";
 
 export default function ErrorDisplay() {
-  const { alertMessage, updateErrorMessage, alertType } = useErrorMessage();
+  const { alertMessage, updateErrorMessage, alertType } = useAlertContext();
 
   useEffect(() => {
     if (alertMessage) {

@@ -23,13 +23,11 @@ export interface GameLayoutPropsDesktop {
   isNewGame: boolean;
   isSaveDialogOpen: boolean;
   setIsSaveDialogOpen: (open: boolean) => void;
-  dialogNewGameFromExisting: boolean;
-  setDialogNewGameFromExisting: (open: boolean) => void;
   setGameName: (name: string) => void;
   setDifficulty: (
     difficulty: "beginner" | "easy" | "medium" | "hard" | "extreme"
   ) => void;
   startNewGame: () => void;
-  saveUpdateGame: () => void;
-  deleteGame: () => void;
+  saveGame: () => void;
+  startNewGameFromExisting: () => void;
 }

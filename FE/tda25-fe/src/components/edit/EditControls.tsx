@@ -1,3 +1,4 @@
+import { EditGameControlProps } from "@/models/EditGameControls";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,51 +15,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { language, TranslateText } from "@/lib/utils";
+import { TranslateText } from "@/lib/utils";
 import { Game } from "@/models/Game";
 import { ChangeEvent } from "react";
 
-interface GameControlsProps {
-  isNewGame: boolean;
-  isSaveDialogOpen: boolean;
-  setIsSaveDialogOpen: (open: boolean) => void;
-  game: Game | null;
-  language: language;
-  setGameName: (name: string) => void;
-  setDifficulty: (difficulty: Game["difficulty"]) => void;
-  startNewGame: () => void;
-  saveGame: () => void;
-  startNewGameFromExisting: () => void;
-  vertical: boolean;
-}
-
-export function GameControls({
-  isNewGame,
+export function EditControls({
+  language,
+  saveGameNewOrUpdate,
+  saveNew,
+  setDifficulty,
+  setGameName,
+  deleteGame,
   isSaveDialogOpen,
   setIsSaveDialogOpen,
-  game,
-  language,
-  setGameName,
-  setDifficulty,
-  startNewGame,
-  startNewGameFromExisting,
-  saveGame,
   vertical,
-}: GameControlsProps) {
+  game,
+  updateSaveNew,
+}: EditGameControlProps) {
   return (
     <div
       className={`flex ${
         vertical ? "flex-col space-y-4" : "flex-row space-x-4"
       } p-4`}
     >
-      <Button onClick={startNewGame}>
-        {TranslateText("NEW_GAME", language)}
-      </Button>
-      {!isNewGame && (
-        <Button onClick={startNewGameFromExisting}>
-          {TranslateText("NEW_GAME_EXISTING", language)}
-        </Button>
-      )}
       <Dialog
         open={isSaveDialogOpen}
         onOpenChange={() => {
@@ -66,11 +45,16 @@ export function GameControls({
         }}
       >
         <DialogTrigger asChild>
-          <div className="flex flex-row space-x-4">
-            <Button>
-              {isNewGame
-                ? TranslateText("SAVE_GAME", language)
-                : TranslateText("SAVE_GAME_NEW", language)}
+          <div
+            className={`flex ${
+              vertical ? "flex-col space-y-4" : "flex-row space-x-4"
+            }`}
+          >
+            <Button onClick={() => updateSaveNew("update")}>
+              {TranslateText("UPDATE_GAME", language)}
+            </Button>
+            <Button onClick={() => updateSaveNew("new")}>
+              {TranslateText("SAVE_GAME_NEW", language)}
             </Button>
           </div>
         </DialogTrigger>
@@ -82,9 +66,9 @@ export function GameControls({
         >
           <DialogHeader>
             <DialogTitle>
-              {isNewGame
-                ? TranslateText("SAVE_GAME", language)
-                : TranslateText("SAVE_GAME_NEW", language)}
+              {saveNew === "new"
+                ? TranslateText("SAVE_GAME_NEW", language)
+                : TranslateText("UPDATE_GAME", language)}
             </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -141,15 +125,21 @@ export function GameControls({
           <div className="flex justify-end">
             <Button
               style={{ backgroundColor: "var(--darkerblue)" }}
-              onClick={saveGame}
+              onClick={saveGameNewOrUpdate}
             >
-              {isNewGame
-                ? TranslateText("SAVE_GAME", language)
-                : TranslateText("SAVE_GAME_NEW", language)}
+              {saveNew === "new"
+                ? TranslateText("SAVE_GAME_NEW", language)
+                : TranslateText("UPDATE_GAME", language)}
             </Button>
           </div>
         </DialogContent>
       </Dialog>
+      <Button
+        style={{ backgroundColor: "var(--defaultred)" }}
+        onClick={deleteGame}
+      >
+        {TranslateText("DELETE_GAME", language)}
+      </Button>
     </div>
   );
 }

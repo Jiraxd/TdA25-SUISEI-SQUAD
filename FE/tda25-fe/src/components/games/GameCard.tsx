@@ -45,9 +45,20 @@ export function GameCard({ game }: { game: Game }) {
               {TranslateText(game.difficulty.toUpperCase(), language)}
             </HoverCardContent>
           </HoverCard>
-
           <Button
-            className="w-full"
+            className="flex w-1/2 xl:py-5 py-6"
+            style={{
+              color: "var(--whitelessbright)",
+              backgroundColor: "var(--pink)",
+            }}
+            onClick={() => {
+              router.push(`/edit/${game.uuid}`);
+            }}
+          >
+            {TranslateText("UPDATE_GAME", language)}
+          </Button>
+          <Button
+            className="flex w-1/2 xl:py-5 py-6"
             style={{
               color: "var(--whitelessbright)",
               backgroundColor: "var(--darkerblue)",
