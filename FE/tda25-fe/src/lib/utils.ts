@@ -17,6 +17,10 @@ export function TranslateText(text: string, lang: language): string {
   }
 }
 
+export const Difficulties = ["BEGINNER", "EASY", "MEDIUM", "HARD", "EXTREME"];
+
+export const DateModifiedSearchOptions = ["NONE", "24h", "7d", "1mo", "3mo"];
+
 const translationsCZ: Record<string, string> = {
   BEGINNER: "Začátečnická",
   MEDIUM: "Střední",
@@ -32,7 +36,7 @@ const translationsCZ: Record<string, string> = {
   OF: "z",
   PUZZLES_TO_SOLVE: "Úlohy k vyřešení",
   SCROLL_LEARN: "↓ Scrollni dolů pro více infomací ↓",
-  WELCOME: "Vítej na Píškvorkách!",
+  WELCOME: "Vítej na Piškvorkách!",
   HOW_TO_PLAY:
     "Piškvorky jsou jednoduchá hra, ve které se dva hráči střídají v označování X a O na mřížce 15x15 (standartně 3x3). První hráč, který získá pět (standartně tři) svých označení v řadě (horizontálně, vertikálně nebo diagonálně), vyhrává hru.",
   HOW_TO_PLAY_TITLE: "Jak hrát?",
@@ -67,6 +71,15 @@ const translationsCZ: Record<string, string> = {
   CHANGE_PLAYER: "Změnit hráče",
   TURN_EDIT: "Vybraný hráč: ",
   EMPTY: "Prázdné",
+  SEARCH: "Zadejte název hry...",
+  SEARCH_BTN: "Vyhledej hru",
+  SEARCH_OPTIONS_DIFFICULTY: "Vyhledej hru podle obtížnosti",
+  SEARCH_OPTIONS_DATE: "Vyhledej hru podle data poslední úpravy",
+  NONE: "Žádné",
+  "24h": "Posledních 24 hodin",
+  "7d": "Posledních 7 dní",
+  "1mo": "Poslední měsíc",
+  "3mo": "Poslední 3 měsíce",
 };
 
 const translationsEN: Record<string, string> = {
@@ -119,4 +132,13 @@ const translationsEN: Record<string, string> = {
   CHANGE_PLAYER: "Change player",
   TURN_EDIT: "Selected player: ",
   EMPTY: "Empty",
+  SEARCH: "Enter game name...",
+  SEARCH_BTN: "Search for game",
+  SEARCH_OPTIONS_DIFFICULTY: "Search by difficulty",
+  SEARCH_OPTIONS_DATE: "Search by date modified",
+  NONE: "None",
+  "24h": "Last 24 hours",
+  "7d": "Last 7 days",
+  "1mo": "Last month",
+  "3mo": "Last 3 months",
 };
