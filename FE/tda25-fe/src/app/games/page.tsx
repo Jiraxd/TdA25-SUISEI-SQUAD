@@ -77,15 +77,20 @@ export default function Games() {
     });
   }, [page]);
 
-  const totalPages = games ? Math.ceil(games.length / ITEMS_PER_PAGE) : 1;
+  const totalPages = currentGames
+    ? Math.ceil(currentGames.length / ITEMS_PER_PAGE)
+    : 1;
 
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
   function filterGames() {
-    const startIdx = (page - 1) * ITEMS_PER_PAGE;
-    const endIdx = startIdx + ITEMS_PER_PAGE;
+    // filter should always start from page 1
+    setPage(1);
+    const startIdx = 0;
+    const endIdx = ITEMS_PER_PAGE;
+
     const filtered = doFilterOnGames(games || []);
     const paged = (filtered ? filtered.slice(startIdx, endIdx) : []).sort(
       (a, b) =>
