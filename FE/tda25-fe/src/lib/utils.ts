@@ -80,6 +80,7 @@ const translationsCZ: Record<string, string> = {
   "7d": "Posledních 7 dní",
   "1mo": "Poslední měsíc",
   "3mo": "Poslední 3 měsíce",
+  ERROR_SEARCH: "Nepodařilo se najít žádné hry podle zadaných kritérií",
 };
 
 const translationsEN: Record<string, string> = {
@@ -141,4 +142,5 @@ const translationsEN: Record<string, string> = {
   "7d": "Last 7 days",
   "1mo": "Last month",
   "3mo": "Last 3 months",
+  ERROR_SEARCH: "Could not find any games according to the entered criteria",
 };

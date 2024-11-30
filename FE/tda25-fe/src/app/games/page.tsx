@@ -1,5 +1,6 @@
 "use client";
 
+import { useAlertContext } from "@/components/alertContext";
 import { GameCard } from "@/components/games/GameCard";
 import { Pagination } from "@/components/games/Pagination";
 import { useLanguage } from "@/components/languageContext";
@@ -31,6 +32,22 @@ export default function Games() {
   const [search, setSearch] = useState<string>("");
   const [dateSearch, setDateSearch] = useState<string>("NONE");
   const [difficultySearch, setDifficultySearch] = useState<string[]>([]);
+  const [currentGames, setCurrentGames] = useState<Game[]>([]);
+
+  const { updateErrorMessage } = useAlertContext();
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        filterGames();
+      }
+    };
+
+    document.addEventListener("keypress", handleKeyPress);
+    return () => {
+      document.removeEventListener("keypress", handleKeyPress);
+    };
+  }, [search, difficultySearch, dateSearch]);
 
   useEffect(() => {
     async function getGames() {
@@ -46,25 +63,79 @@ export default function Games() {
       return res.json();
     }
 
-    getGames().then((res) => {
+    getGames().then((res: Game[]) => {
       setGames(res);
-      console.log(res);
+
+      const startIdx = (page - 1) * ITEMS_PER_PAGE;
+      const endIdx = startIdx + ITEMS_PER_PAGE;
+      const filtered = doFilterOnGames(res);
+      const paged = (filtered ? filtered.slice(startIdx, endIdx) : []).sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setCurrentGames(paged);
     });
   }, [page]);
+
+  const totalPages = games ? Math.ceil(games.length / ITEMS_PER_PAGE) : 1;
 
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const totalPages = games ? Math.ceil(games.length / ITEMS_PER_PAGE) : 1;
-  const startIdx = (page - 1) * ITEMS_PER_PAGE;
-  const endIdx = startIdx + ITEMS_PER_PAGE;
-  const currentGames = games ? games.slice(startIdx, endIdx) : [];
-
   function filterGames() {
-    console.log(search);
-    console.log(difficultySearch);
-    console.log(dateSearch);
+    const startIdx = (page - 1) * ITEMS_PER_PAGE;
+    const endIdx = startIdx + ITEMS_PER_PAGE;
+    const filtered = doFilterOnGames(games || []);
+    const paged = (filtered ? filtered.slice(startIdx, endIdx) : []).sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    setCurrentGames(paged);
+  }
+
+  function doFilterOnGames(input: Game[]): Game[] {
+    let filtered = structuredClone(input);
+    if (search) {
+      filtered = filtered.filter((game) =>
+        game.name.toLowerCase().startsWith(search.toLowerCase())
+      );
+    }
+    if (dateSearch !== "NONE") {
+      const now = new Date();
+      let filteredDate = new Date(0);
+
+      switch (dateSearch) {
+        case "24h":
+          filteredDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        case "7d":
+          filteredDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        case "1mo":
+          filteredDate = new Date(now.setMonth(now.getMonth() - 1));
+          break;
+        case "3mo":
+          filteredDate = new Date(now.setMonth(now.getMonth() - 3));
+          break;
+      }
+
+      filtered = filtered.filter(
+        (game) => new Date(game.createdAt) >= filteredDate
+      );
+    }
+
+    if (difficultySearch.length > 0) {
+      filtered = filtered.filter((game) =>
+        difficultySearch.includes(game.difficulty.toUpperCase())
+      );
+    }
+
+    console.log(filtered);
+    if (filtered.length === 0) {
+      updateErrorMessage(TranslateText("ERROR_SEARCH", language));
+    }
+    return filtered;
   }
 
   return (
