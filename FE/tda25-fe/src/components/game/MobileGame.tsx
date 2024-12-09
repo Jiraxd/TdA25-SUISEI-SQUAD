@@ -25,7 +25,11 @@ export function MobileGame({
           <motion.div
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-2xl mb-8 py-2 px-4 bg-green-500 text-white rounded-lg shadow-lg text-center flex w-fit"
+            className="text-2xl mb-8 py-2 px-4  text-white rounded-lg shadow-lg text-center flex w-fit"
+            style={{
+              backgroundColor:
+                winner === "O" ? "var(--defaultblue)" : "var(--defaultred)",
+            }}
           >
             {TranslateText("WINNER", language) + winner + "!"}
           </motion.div>
