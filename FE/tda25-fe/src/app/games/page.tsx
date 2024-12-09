@@ -33,6 +33,7 @@ export default function Games() {
   const [dateSearch, setDateSearch] = useState<string>("NONE");
   const [difficultySearch, setDifficultySearch] = useState<string[]>([]);
   const [currentGames, setCurrentGames] = useState<Game[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   const { updateErrorMessage } = useAlertContext();
 
@@ -73,13 +74,10 @@ export default function Games() {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
+      setTotalPages(paged ? Math.ceil(paged.length / ITEMS_PER_PAGE) : 1);
       setCurrentGames(paged);
     });
   }, [page]);
-
-  const totalPages = currentGames
-    ? Math.ceil(currentGames.length / ITEMS_PER_PAGE)
-    : 1;
 
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
@@ -96,6 +94,7 @@ export default function Games() {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
+    setTotalPages(paged ? Math.ceil(paged.length / ITEMS_PER_PAGE) : 1);
     setCurrentGames(paged);
   }
 
