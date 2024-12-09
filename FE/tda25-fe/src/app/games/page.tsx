@@ -74,7 +74,7 @@ export default function Games() {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
-      setTotalPages(paged ? Math.ceil(paged.length / ITEMS_PER_PAGE) : 1);
+      setTotalPages(filtered ? Math.ceil(filtered.length / ITEMS_PER_PAGE) : 1);
       setCurrentGames(paged);
     });
   }, [page]);
@@ -94,7 +94,7 @@ export default function Games() {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
-    setTotalPages(paged ? Math.ceil(paged.length / ITEMS_PER_PAGE) : 1);
+    setTotalPages(filtered ? Math.ceil(filtered.length / ITEMS_PER_PAGE) : 1);
     setCurrentGames(paged);
   }
 
