@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {  TranslateText } from "@/lib/utils";
+import { TranslateText } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "../languageContext";
 
@@ -52,7 +52,7 @@ export function Pagination({
           color: "var(--defaultred)",
         }}
         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-        disabled={currentPage === totalPages}
+        disabled={currentPage >= totalPages}
       >
         <ChevronRight className="h-4 w-4" />
       </Button>

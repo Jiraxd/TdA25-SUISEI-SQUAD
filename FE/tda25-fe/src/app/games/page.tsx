@@ -27,7 +27,7 @@ const ITEMS_PER_PAGE = 10;
 
 export default function Games() {
   const [page, setPage] = useState<number>(1);
-  const [games, setGames] = useState<Game[] | null>(null);
+  const [games, setGames] = useState<Game[]>([]);
   const { language } = useLanguage();
   const [search, setSearch] = useState<string>("");
   const [dateSearch, setDateSearch] = useState<string>("NONE");
@@ -36,6 +36,53 @@ export default function Games() {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const { updateErrorMessage } = useAlertContext();
+
+  useEffect(() => {
+    async function getGames() {
+      const isDev = process.env.NODE_ENV === "development";
+      const url = isDev
+        ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
+        : `/api/v1/games`;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Failed to fetch games");
+        const data: Game[] = await res.json();
+        setGames(data);
+        updateDisplayedGames(data, 1);
+      } catch (error) {
+        console.error("Error fetching games:", error);
+      }
+    }
+
+    getGames();
+  }, []);
+
+  const updateDisplayedGames = (allGames: Game[], currentPage: number) => {
+    const filtered = doFilterOnGames(allGames);
+    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIdx = startIdx + ITEMS_PER_PAGE;
+
+    const paged = filtered
+      .slice(startIdx, endIdx)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+    setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
+    setCurrentGames(paged);
+  };
+
+  const handleChangePage = (newPage: number) => {
+    setPage(newPage);
+    updateDisplayedGames(games, newPage);
+  };
+
+  const filterGames = () => {
+    updateDisplayedGames(games, 1);
+    setPage(1);
+  };
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -48,55 +95,7 @@ export default function Games() {
     return () => {
       document.removeEventListener("keypress", handleKeyPress);
     };
-  }, [search, difficultySearch, dateSearch]);
-
-  useEffect(() => {
-    async function getGames() {
-      const isDev = process.env.NODE_ENV === "development";
-
-      const res = await fetch(
-        isDev
-          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
-          : `/api/v1/games`
-      );
-
-      if (!res.ok) throw new Error("Failed to fetch games");
-      return res.json();
-    }
-
-    getGames().then((res: Game[]) => {
-      setGames(res);
-
-      const startIdx = (page - 1) * ITEMS_PER_PAGE;
-      const endIdx = startIdx + ITEMS_PER_PAGE;
-      const filtered = doFilterOnGames(res);
-      const paged = (filtered ? filtered.slice(startIdx, endIdx) : []).sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-      setTotalPages(filtered ? Math.ceil(filtered.length / ITEMS_PER_PAGE) : 1);
-      setCurrentGames(paged);
-    });
-  }, [page]);
-
-  const handleChangePage = (newPage: number) => {
-    setPage(newPage);
-  };
-
-  function filterGames() {
-    // filter should always start from page 1
-    setPage(1);
-    const startIdx = 0;
-    const endIdx = ITEMS_PER_PAGE;
-
-    const filtered = doFilterOnGames(games || []);
-    const paged = (filtered ? filtered.slice(startIdx, endIdx) : []).sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    setTotalPages(filtered ? Math.ceil(filtered.length / ITEMS_PER_PAGE) : 1);
-    setCurrentGames(paged);
-  }
+  }, [filterGames]);
 
   function doFilterOnGames(input: Game[]): Game[] {
     let filtered = structuredClone(input);
@@ -135,7 +134,6 @@ export default function Games() {
       );
     }
 
-    console.log(filtered);
     if (filtered.length === 0) {
       updateErrorMessage(TranslateText("ERROR_SEARCH", language));
     }
