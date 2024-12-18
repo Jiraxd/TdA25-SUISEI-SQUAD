@@ -64,11 +64,11 @@ export default function Games() {
     const endIdx = startIdx + ITEMS_PER_PAGE;
 
     const paged = filtered
-      .slice(startIdx, endIdx)
       .sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      )
+      .slice(startIdx, endIdx);
 
     setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
     setCurrentGames(paged);

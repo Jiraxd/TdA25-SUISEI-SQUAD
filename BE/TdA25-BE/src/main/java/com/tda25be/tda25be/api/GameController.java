@@ -3,6 +3,7 @@ package com.tda25be.tda25be.api;
 import com.tda25be.tda25be.enums.GameState;
 import com.tda25be.tda25be.error.ResourceNotFound;
 import com.tda25be.tda25be.error.SemanticErrorException;
+import com.tda25be.tda25be.models.Board;
 import com.tda25be.tda25be.models.Game;
 import com.tda25be.tda25be.models.OrganizationResponse;
 import com.tda25be.tda25be.entities.GameEntity;
@@ -38,7 +39,7 @@ public class GameController {
         if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
-        game.setGameState(GameState.opening);  //TODO calculate gamestate
+        game.setGameState(new Board(board).getState());  //TODO calculate gamestate
         parseBoardArray(board);
         return Game.fromEntity(gameRepository.saveAndFlush(GameEntity.fromGame(game)));
     }
