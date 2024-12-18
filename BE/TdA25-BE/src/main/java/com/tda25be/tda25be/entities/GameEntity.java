@@ -1,19 +1,14 @@
 package com.tda25be.tda25be.entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.tda25be.tda25be.enums.Difficulty;
 import com.tda25be.tda25be.enums.GameState;
-import com.tda25be.tda25be.deserializers.DifficultyDeserializer;
 import com.tda25be.tda25be.models.Game;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 import org.modelmapper.ModelMapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "games")
