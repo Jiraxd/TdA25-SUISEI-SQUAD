@@ -1,6 +1,7 @@
 package com.tda25be.tda25be.models;
 
 import com.tda25be.tda25be.enums.GameState;
+import com.tda25be.tda25be.error.SemanticErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Board {
                 else if (Objects.equals(symbol, "O")) oAmount++;
             }
         }
+        if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
         for (int y = 0; y < board.size(); y++) {
             List<String> row = board.get(y);
             for (int x = 0; x < row.size(); x++) {
@@ -56,12 +58,9 @@ public class Board {
         return false;
     }
     public int step(int x, int y, int nextX, int nextY,int streak, Boolean placed){
-        if(x == 1 && y == 4 && nextX == 2 && nextY == 4){
-            System.out.println("XD");
-        }
         if(streak == 5) return streak;
-        if(nextY<0 || nextX<0){
-            System.out.println("XD");
+        if(nextY >= 15 || nextX >= 15){
+            return streak;
         }
         String cell1 = board.get(y).get(x);
         String cell2 = board.get(nextY).get(nextX);
@@ -70,15 +69,15 @@ public class Board {
             placed = true;
         }
         if (!placed && !cell1.equals(cell2)) {
-        if (cell1.equals("")) {
+        if (cell1.isEmpty()) {
             cell1 = cell2;
             placed = true;
-        } else if(cell2.equals("")) {
+        } else if(cell2.isEmpty()) {
             cell2 = cell1;
         }
         }
 
-        if(cell1.equals(cell2) && !cell1.equals("")) {
+        if(cell1.equals(cell2) && !cell1.isEmpty()) {
             int xStep = nextX - x;
             int yStep = nextY -y;
             if(nextY + yStep < 0 || nextX + xStep < 0) return streak;
