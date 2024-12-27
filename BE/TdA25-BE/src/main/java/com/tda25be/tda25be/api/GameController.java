@@ -34,9 +34,8 @@ public class GameController {
     public Game createGame(@RequestBody Game game) throws BadRequestException {
         List<List<String>> board = game.getBoard();
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
-        if (board == null) throw new BadRequestException("Board wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
-        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
+
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
         game.setGameState(new Board(board).getState());  //TODO calculate gamestate
