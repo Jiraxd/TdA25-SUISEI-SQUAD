@@ -64,7 +64,7 @@ public class Board {
     }
     public int step(int x, int y, int nextX, int nextY,int streak, Boolean placed){
         if(streak == 5) {
-            return streak
+            return streak;
         };
         if(nextY >= 15 || nextX >= 15){
             return streak;
