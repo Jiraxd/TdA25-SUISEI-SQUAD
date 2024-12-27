@@ -49,7 +49,7 @@
 
 - Ve složce `TdA25-SUISEI-SQUAD\BE\TdA25-BE\` spustit příkaz v CMD `mvnw clean install`
 
-- Ve složce `TdA25-SUISEI-SQUAD\BE\TdA25-BE\` spustit příkaz v CMD `mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8080`
+- Ve složce `TdA25-SUISEI-SQUAD\BE\TdA25-BE\` spustit příkaz v CMD `mvnw spring-boot:run -D spring-boot.run.arguments=--server.port=8080`
 
 *Po spuštění BE bude dostupný i FE na [localhost:8080](http://localhost:8080)*
 
