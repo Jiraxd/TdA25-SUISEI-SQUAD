@@ -34,13 +34,10 @@ public class GameController {
     public Game createGame(@RequestBody Game game) throws BadRequestException {
         List<List<String>> board = game.getBoard();
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
-        if (board == null) throw new BadRequestException("Board wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
-        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
-        game.setGameState(new Board(board).getState());  //TODO calculate gamestate
-        parseBoardArray(board);
+        game.setGameState(new Board(board).getState());
         return Game.fromEntity(gameRepository.saveAndFlush(GameEntity.fromGame(game)));
     }
     @ResponseStatus(HttpStatus.OK)
@@ -75,38 +72,22 @@ public class GameController {
     @PutMapping(path="/games/{uuid}")
     public Game updateGame(@PathVariable String uuid, @RequestBody Game game) throws BadRequestException {
         GameEntity entity = GameEntity.fromGame(game);
+
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (game.getBoard() == null) throw new BadRequestException("Board wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
         try
         {
             GameEntity oldEntity = gameRepository.findById(uuid).get();
-
             List<List<String>> board = entity.getBoard();
-            parseBoardArray(board);
-
             oldEntity.setBoard(board);
             oldEntity.setName(entity.getName());
             oldEntity.setDifficulty(entity.getDifficulty());
+            oldEntity.setGameState(new Board(board).getState());
             oldEntity.setUpdatedAt(LocalDateTime.now().toString());
-
             return Game.fromEntity(gameRepository.saveAndFlush(oldEntity));
         }catch (NoSuchElementException exception){
             throw new ResourceNotFound();
         }
     }
-
-    private void parseBoardArray(List<List<String>> board) {
-        for (List<String> row : board) {
-            for (int j = 0; j < 15; j++) {
-                if(row.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
-                String cell = row.get(j).toUpperCase();
-                if (!cell.isEmpty() && !cell.equals("X") && !cell.equals("O")) {
-                    throw new SemanticErrorException(String.format("Semantic error: board can only contain X's and O's, yours contains %s", cell));
-                }
-                row.set(j, cell);
-            }
-        }
-    }
-
 }

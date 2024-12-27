@@ -2,6 +2,7 @@ package com.tda25be.tda25be.models;
 
 import com.tda25be.tda25be.enums.GameState;
 import com.tda25be.tda25be.error.SemanticErrorException;
+import org.apache.coyote.BadRequestException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,21 +10,22 @@ import java.util.Objects;
 
 public class Board {
     public List<List<String>> board;
-    public Board(List<List<String>> board){
+    public Board(List<List<String>> board) throws BadRequestException {
+        if (board == null) throw new BadRequestException("Board wasn't specified");
+        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
         this.board = board;
     }
 
 
     public GameState getState(){
         GameState state;
-
-
         int xAmount = 0;
         int oAmount = 0;
         for (List<String> row : board) {
             for (String symbol: row) {
                 if(Objects.equals(symbol, "X")) xAmount++;
                 else if (Objects.equals(symbol, "O")) oAmount++;
+                else throw new SemanticErrorException("Invalid symbol");
             }
         }
         if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
