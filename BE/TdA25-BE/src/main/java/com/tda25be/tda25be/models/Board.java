@@ -26,11 +26,11 @@ public class Board {
             for (String symbol: row) {
                 if(Objects.equals(symbol, "X")) xAmount++;
                 else if (Objects.equals(symbol, "O")) oAmount++;
-                else throw new SemanticErrorException("Invalid symbol");
+                else if (!symbol.isEmpty()) throw new SemanticErrorException("Invalid symbol");
             }
         }
         if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
-        if(xAmount == oAmount) oTurn = false;
+        if(xAmount > oAmount) oTurn = true;
         for (int y = 0; y < board.size(); y++) {
             List<String> row = board.get(y);
             for (int x = 0; x < row.size(); x++) {
@@ -47,7 +47,7 @@ public class Board {
         return state;
     }
     public boolean checkNeighbours(int x, int y){
-        Boolean nextWin = false;
+        boolean nextWin = false;
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;
@@ -55,7 +55,7 @@ public class Board {
                 int nextY = y+dy;
                 if(nextY < 0 || nextX < 0 || nextY > 14 || nextX >14) continue;
                 if(step(x,y, nextX, nextY, 1, false) == 5) {
-                    if(((board.get(x).get(y) == "O" && oTurn) || (board.get(x).get(y) == "X" && !oTurn )) || nextWin) return true;
+                    if(((board.get(y).get(x).equals("O") && oTurn) || (board.get(y).get(x).equals("X") && !oTurn )) || nextWin) return true;
                     else nextWin = true;
                 }
             }
@@ -64,7 +64,7 @@ public class Board {
     }
     public int step(int x, int y, int nextX, int nextY,int streak, Boolean placed){
         if(streak == 5) {
-            return streak
+            return streak;
         };
         if(nextY >= 15 || nextX >= 15){
             return streak;
