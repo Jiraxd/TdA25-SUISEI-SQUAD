@@ -37,6 +37,8 @@ const translationsCZ: Record<string, string> = {
   PUZZLES_TO_SOLVE: "Úlohy k vyřešení",
   SCROLL_LEARN: "↓ Scrollni dolů pro více infomací ↓",
   WELCOME: "Vítej na Piškvorkách!",
+  WHO_ARE_WE:
+    "Think different Academy je nezisková organizace zaměřená na rozvoj myšlení studentů i široké veřejnosti.\n\nV současnosti vyvíjíme piškvorkovou platformu, která má digitalizovat piškvorky a poskytnout uživatelům atraktivní herní zážitek. Platforma nabídne prostor pro hraní klasických piškvorek ve formátu lokálního multiplayeru a také piškvorkové úlohy pro trénink a zlepšení herních dovedností.\n\nDo budoucna se plánujeme rozšířit do dalších logických her.",
   HOW_TO_PLAY:
     "Piškvorky jsou jednoduchá hra, ve které se dva hráči střídají v označování X a O na mřížce 15x15 (standartně 3x3). První hráč, který získá pět (standartně tři) svých označení v řadě (horizontálně, vertikálně nebo diagonálně), vyhrává hru.",
   HOW_TO_PLAY_TITLE: "Jak hrát?",
@@ -99,6 +101,8 @@ const translationsEN: Record<string, string> = {
   PUZZLES_TO_SOLVE: "Puzzles to solve",
   SCROLL_LEARN: "↓ Scroll to learn more ↓",
   WELCOME: "Welcome to Tic Tac Toe!",
+  WHO_ARE_WE:
+    "Think Different Academy is a non-profit organization focused on developing thinking skills of students and the general public.\n\nCurrently, we are developing a Tic Tac Toe platform that aims to digitalize the game and provide users with an engaging gaming experience. The platform will offer space for playing classic Tic Tac Toe in local multiplayer format as well as Tic Tac Toe puzzles for training and improving gaming skills.\n\nIn the future, we plan to expand into other logic games.",
   HOW_TO_PLAY:
     " Tic Tac Toe is a simple game where two players take turns marking X and O on a 15x15 (standard 3x3) grid. The first player to get five (standard three) of their marks in a row (horizontally, vertically, or diagonally) wins the game.",
   HOW_TO_PLAY_TITLE: "How to play?",
