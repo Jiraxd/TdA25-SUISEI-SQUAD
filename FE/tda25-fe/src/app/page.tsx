@@ -114,7 +114,7 @@ export default function Home() {
 
       <section
         ref={ref2}
-        className="h-[calc(100vh-5rem)]  snap-start flex flex-col justify-center items-center p-8 bg-[--pink] text-[--whitelessbright] whitespace-pre-line"
+        className="h-[calc(100vh-5rem)]  snap-start flex flex-col justify-center items-center p-8 bg-[--darkshade] text-[--whitelessbright] whitespace-pre-line"
       >
         <motion.div
           initial={{ opacity: 0, x: 100 }}
