@@ -25,6 +25,7 @@ export function Pagination({
         size="icon"
         style={{
           color: "var(--defaultred)",
+          borderColor: "var(--defaultred)",
         }}
         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
@@ -50,8 +51,7 @@ export function Pagination({
         size="icon"
         style={{
           color: "var(--defaultred)",
-          borderColor: "var(--defaultred)"
-
+          borderColor: "var(--defaultred)",
         }}
         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage >= totalPages}
