@@ -14,7 +14,7 @@ export function GamePreview({ board }: GamePreviewProps) {
       {board.flat().map((cell, index) => (
         <div
           key={index}
-          className="flex items-center justify-center text-center aspect-square w-[14px] h-[14px] overflow-hidden"
+          className="flex items-center justify-center text-center aspect-square w-[16px] h-[16px] overflow-hidden"
           style={{
             backgroundColor: "var(--whitelessbright)",
             borderColor: "var(--darkshade)",
