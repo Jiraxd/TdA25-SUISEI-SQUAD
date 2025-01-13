@@ -19,7 +19,7 @@ export function Pagination({
   };
   const { language } = useLanguage();
   return (
-    <div className="flex justify-center items-center space-x-2">
+    <div className="flex justify-center items-center space-x-2 font-[family-name:var(--font-dosis-bold)]">
       <Button
         variant="outline"
         size="icon"
@@ -50,6 +50,8 @@ export function Pagination({
         size="icon"
         style={{
           color: "var(--defaultred)",
+          borderColor: "var(--defaultred)"
+
         }}
         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage >= totalPages}
