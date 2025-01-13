@@ -9,6 +9,7 @@ export function GamePreview({ board }: GamePreviewProps) {
       style={{
         backgroundColor: "var(--whitelessbright)",
         borderColor: "var(--darkshade)",
+        fontFamily: "var(--font-dosis-bold)",
       }}
     >
       {board.flat().map((cell, index) => (
@@ -18,12 +19,12 @@ export function GamePreview({ board }: GamePreviewProps) {
           style={{
             backgroundColor: "var(--whitelessbright)",
             borderColor: "var(--darkshade)",
-            borderWidth: "1px"
+            borderWidth: "1px",
           }}
         >
           {cell && (
             <span
-              className="text-sm font-[family-name:var(--font-dosis-bold)]"
+              className="text-sm"
               style={{
                 color:
                   cell.toUpperCase() === "X"
