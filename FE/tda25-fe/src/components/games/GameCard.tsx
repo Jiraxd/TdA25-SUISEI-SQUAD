@@ -30,7 +30,7 @@ export function GameCard({ game }: { game: Game }) {
       }}
     >
       <CardHeader>
-        <CardTitle className="text-lg truncate">{game.name}</CardTitle>
+        <CardTitle className="text-lg truncate font-[var(--font-dosis-bold)]">{game.name}</CardTitle>
       </CardHeader>
       <CardContent className="justify-center align-middle items-center w-full flex">
         <GamePreview board={game.board} />
