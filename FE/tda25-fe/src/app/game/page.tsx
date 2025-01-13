@@ -159,7 +159,6 @@ export default function GamePage() {
       difficulty: game?.difficulty ?? "medium",
       board: game?.board ?? emptyBoard,
     };
-    if (isNewGame) {
       const res = await fetch(
         isDev
           ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
@@ -178,9 +177,6 @@ export default function GamePage() {
       } else {
         updateErrorMessage(TranslateText("ERROR_SAVE", language));
       }
-    } else {
-      updateErrorMessage(TranslateText("ERROR_SAVE", language));
-    }
   }
 
   function checkWinner(board: string[][]): {
