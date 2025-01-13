@@ -82,7 +82,7 @@ export function DesktopGame({
           </p>
         </div>
         <motion.div
-          className="grid grid-cols-15 gap-1 mb-4 border-4"
+          className="grid grid-cols-15 mb-4 border-4"
           style={{
             backgroundColor: "var(--darkshade)",
             borderColor: "var(--darkshade)",
@@ -113,6 +113,8 @@ export function DesktopGame({
                     cell.toUpperCase() === "X"
                       ? "var(--defaultred)"
                       : "var(--defaultblue)",
+                      borderColor: "var(--darkshade)",
+                      borderWidth: "1px"
                 }}
                 onClick={() => handleClick(rowIndex, colIndex)}
                 whileHover={{ scale: 0.95 }}
