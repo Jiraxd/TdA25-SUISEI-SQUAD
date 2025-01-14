@@ -11,6 +11,7 @@ import java.util.Objects;
 public class Board {
     public List<List<String>> board;
     public boolean oTurn = false;
+    private boolean nextWin = false;
     public Board(List<List<String>> board) throws BadRequestException {
         if (board == null) throw new BadRequestException("Board wasn't specified");
         if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
@@ -19,6 +20,7 @@ public class Board {
 
 
     public GameState getState(){
+        nextWin = false;
         GameState state;
         int xAmount = 0;
         int oAmount = 0;
@@ -31,6 +33,7 @@ public class Board {
         }
         if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
         if(xAmount > oAmount) oTurn = true;
+        nextWin = false;
         for (int y = 0; y < board.size(); y++) {
             List<String> row = board.get(y);
             for (int x = 0; x < row.size(); x++) {
@@ -47,7 +50,6 @@ public class Board {
         return state;
     }
     public boolean checkNeighbours(int x, int y){
-        boolean nextWin = false;
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;
@@ -55,7 +57,7 @@ public class Board {
                 int nextY = y+dy;
                 if(nextY < 0 || nextX < 0 || nextY > 14 || nextX >14) continue;
                 if(step(x,y, nextX, nextY, 1, false) == 5) {
-                    if(((board.get(y).get(x).equals("O") && oTurn) || (board.get(y).get(x).equals("X") && !oTurn )) || nextWin) return true;
+                    if ((board.get(y).get(x).equals("O") && oTurn) || (board.get(y).get(x).equals("X") && !oTurn) || nextWin) return true;
                     else nextWin = true;
                 }
             }
