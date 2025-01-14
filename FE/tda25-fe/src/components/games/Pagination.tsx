@@ -19,12 +19,14 @@ export function Pagination({
   };
   const { language } = useLanguage();
   return (
-    <div className="flex justify-center items-center space-x-2 font-[family-name:var(--font-dosis-bold)]">
+    <div className="flex justify-center items-center space-x-2">
       <Button
         variant="outline"
         size="icon"
         style={{
           color: "var(--defaultred)",
+          borderColor: "var(--defaultred)",
+          borderWidth: "3px",
         }}
         onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
@@ -32,7 +34,7 @@ export function Pagination({
         <ChevronLeft className="h-4 w-4" />
       </Button>
       <span
-        className="text-sm "
+        className="text-sm"
         style={{
           color: "var(--defaultred)",
         }}
@@ -50,8 +52,8 @@ export function Pagination({
         size="icon"
         style={{
           color: "var(--defaultred)",
-          borderColor: "var(--defaultred)"
-
+          borderColor: "var(--defaultred)",
+          borderWidth: "3px",
         }}
         onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage >= totalPages}

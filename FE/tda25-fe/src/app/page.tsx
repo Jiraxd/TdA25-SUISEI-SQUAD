@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <div className=" h-[calc(100vh-5rem)] overflow-y-scroll snap-y snap-mandatory min-w-full max-w-screen font-[family-name:var(--font-dosis-bold)]">
       <section
-        className=" h-[calc(100vh-5rem)] snap-start flex flex-col justify-center gap-16 items-center relative bg-[---whitelessbright] text-[--darkshade] "
+        className=" h-[calc(100vh-5rem)] snap-start flex flex-col justify-center gap-8 md:gap-16 items-center relative bg-[---whitelessbright] text-[--darkshade] "
         ref={firstSectionRef}
       >
         <motion.h1
@@ -55,7 +55,7 @@ export default function Home() {
           <Image
             src="/logos/Think-different-Academy_LOGO_oficialni-cerne2.svg"
             alt="Logo"
-            className="w-72 h-72 p-6"
+            className="w-56 h-56 md:w-72 md:h-72 p-6"
             width={288}
             height={288}
           />
@@ -79,17 +79,17 @@ export default function Home() {
           initial={{ opacity: 0, y: -100 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1 }}
-          className="flex flex-col items-center h-full mb-32 justify-center"
+          className="flex flex-col items-center mb-36 h-full md:mb-32 justify-center"
         >
           <Image
             src="/logos/Think-different-Academy_LOGO_oficialni.svg"
             alt="Logo"
-            className="w-72 h-72 p-6"
+            className=" w-48 h-48 md:w-72 md:h-72 p-6"
             width={288}
             height={288}
           />
 
-          <p className="text-xl md:text-2xl text-center max-w-2xl">
+          <p className="text-lg md:text-2xl text-center max-w-2xl">
             {TranslateText("WHO_ARE_WE", language)}
           </p>
         </motion.div>
@@ -114,7 +114,7 @@ export default function Home() {
 
       <section
         ref={ref2}
-        className="h-[calc(100vh-5rem)]  snap-start flex flex-col justify-center items-center p-8 bg-[--pink] text-[--whitelessbright] whitespace-pre-line"
+        className="h-[calc(100vh-5rem)]  snap-start flex flex-col justify-center items-center p-8 bg-[--darkshade] text-[--whitelessbright] whitespace-pre-line"
       >
         <motion.div
           initial={{ opacity: 0, x: 100 }}
