@@ -21,6 +21,8 @@ jobs:
           cache-to: type=gha,mode=max
           tags: tda-suiseisquad-app:latest
           outputs: type=docker,dest=/tmp/tda-suiseisquad-app.tar
+          build-args: |
+            DATABASE_TOKEN=${{ secrets.DATABASE_TOKEN }}
 
       - name: Upload App Image to TdA
         uses: Tour-de-App/upload-app@tda-25
