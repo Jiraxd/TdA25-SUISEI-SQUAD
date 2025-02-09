@@ -87,6 +87,11 @@ const translationsCZ: Record<string, string> = {
   ONLINE_PLAY: "Hrát online",
   PAGE_NOT_FOUND: "Tato stránka neexistuje :(",
   BACK_HOME: "Zpět na domovskou stránku",
+  HOME_PAGE_TITLE: "Piškvorky",
+  PAGE_NOT_FOUND_TITLE: "Piškvorky | 404",
+  GAMES_PAGE_TITLE: "Piškvorky | Úlohy",
+  GAME_PAGE_TITLE: "Piškvorky | Hra",
+  EDIT_PAGE_TITLE: "Piškvorky | Úprava hry",
 };
 
 const translationsEN: Record<string, string> = {
@@ -155,4 +160,9 @@ const translationsEN: Record<string, string> = {
   ONLINE_PLAY: "Play online",
   PAGE_NOT_FOUND: "This page does not exist :(",
   BACK_HOME: "Back to home page",
+  HOME_PAGE_TITLE: "Tic Tac Toe",
+  PAGE_NOT_FOUND_TITLE: "Tic Tac Toe | 404",
+  GAMES_PAGE_TITLE: "Tic Tac Toe | Puzzles",
+  GAME_PAGE_TITLE: "Tic Tac Toe | Game",
+  EDIT_PAGE_TITLE: "Tic Tac Toe | Edit Game",
 };

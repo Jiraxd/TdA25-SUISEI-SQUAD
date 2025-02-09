@@ -33,6 +33,10 @@ export default function EditPage() {
     if (currentPlayer === "") setCurrentPlayer("X");
   }
 
+  useEffect(() => {
+    document.title = TranslateText("EDIT_PAGE_TITLE", language);
+  }, [language]);
+
   const router = useRouter();
 
   const fetchGame = async (id: string) => {

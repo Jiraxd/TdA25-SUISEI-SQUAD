@@ -4,10 +4,15 @@ import React from "react";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function NotFound() {
   const router = useRouter();
   const { language } = useLanguage();
+
+  useEffect(() => {
+    document.title = TranslateText("PAGE_NOT_FOUND", language);
+  }, [language]);
 
   return (
     <div className="flex flex-col h-[calc(100vh-5rem)] items-center justify-center text-center p-4 font-dosis-bold">

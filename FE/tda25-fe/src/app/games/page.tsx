@@ -38,6 +38,9 @@ export default function Games() {
   const { updateErrorMessage } = useAlertContext();
 
   useEffect(() => {
+    document.title = TranslateText("GAMES_PAGE_TITLE", language);
+  }, [language]);
+  useEffect(() => {
     async function getGames() {
       const isDev = process.env.NODE_ENV === "development";
       const url = isDev

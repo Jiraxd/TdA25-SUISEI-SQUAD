@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Rocket } from "lucide-react";
@@ -16,6 +16,10 @@ export default function Home() {
       firstSectionRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    document.title = TranslateText("HOME_PAGE_TITLE", language);
+  }, [language]);
 
   const [ref, inView] = useInView({
     triggerOnce: false,
