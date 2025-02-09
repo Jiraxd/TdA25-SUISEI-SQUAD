@@ -99,7 +99,7 @@ const translationsCZ: Record<string, string> = {
   COPYRIGHT_TEXT:
     "© 2024 Think different Academy. Všechna práva vyhrazena. Tato platforma pro hraní piškvorek je chráněna autorským právem. Jakékoliv kopírování nebo reprodukce bez předchozího písemného souhlasu je zakázána.",
   CONTACT_TEXT:
-    "Pro jakékoliv dotazy nás můžete kontaktovat na emailové adrese: info@tda.cz\n\nAdresa:\nThink different Academy\nKřenová 89/19\n612 00 Brno",
+    "Pro jakékoliv dotazy nás můžete kontaktovat na emailové adrese: tda@scg.cz\n\nAdresa:\nThink different Academy\nKřenová 89/19\n612 00 Brno",
   TERMS_OF_USE_TEXT:
     "1. Souhlas s podmínkami\n" +
     "Používáním této aplikace souhlasíte s těmito podmínkami.\n\n" +
