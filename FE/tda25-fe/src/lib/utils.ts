@@ -115,6 +115,19 @@ const translationsCZ: Record<string, string> = {
     "Vyhrazujeme si právo na změny podmínek.",
   PRIVACY_POLICY_TEXT:
     "Ochrana vašich osobních údajů je pro nás prioritou. Shromažďujeme pouze nezbytné údaje pro fungování aplikace. Vaše data nejsou sdílena s třetími stranami a jsou zpracovávána v souladu s GDPR.",
+  CREATE_ACCOUNT: "Vytvořit účet",
+  PROFILE: "Profil",
+  ACCOUNT_SETTINGS: "Nastavení účtu",
+  GAME_HISTORY: "Historie her",
+  LOG_OUT: "Odhlásit se",
+  LOG_IN: "Přihlásit se",
+  WELCOME_ONLINE: "Vítej v Online režimu!",
+  ELO_RATING: "Tvé ELO hodnocení",
+  NEXT_RANK: "Další úroveň",
+  POINTS_NEEDED: "bodů potřebných do další úrovně",
+  RANDOM_GAME: "Normální hra",
+  RANKED_RANDOM_GAME: "Hodnocená hra",
+  PRIVATE_GAME: "Soukromá hra",
 };
 
 const translationsEN: Record<string, string> = {
@@ -211,4 +224,17 @@ const translationsEN: Record<string, string> = {
     "We reserve the right to modify these terms.",
   PRIVACY_POLICY_TEXT:
     "Protecting your personal data is our priority. We only collect necessary data for the application to function. Your data is not shared with third parties and is processed in accordance with GDPR.",
+  CREATE_ACCOUNT: "Create Account",
+  PROFILE: "Profile",
+  ACCOUNT_SETTINGS: "Account Settings",
+  GAME_HISTORY: "Game History",
+  LOG_OUT: "Log Out",
+  LOG_IN: "Log In",
+  WELCOME_ONLINE: "Welcome to Online Mode!",
+  ELO_RATING: "Your ELO Rating",
+  NEXT_RANK: "Next Rank",
+  POINTS_NEEDED: "points needed for next rank",
+  RANDOM_GAME: "Normal Game",
+  RANKED_RANDOM_GAME: "Ranked Game",
+  PRIVATE_GAME: "Private Game",
 };

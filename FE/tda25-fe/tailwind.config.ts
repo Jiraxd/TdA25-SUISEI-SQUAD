@@ -13,6 +13,15 @@ const config: Config = {
         "15": "repeat(15, minmax(0, 1fr))",
       },
       colors: {
+        darkshade: "var(--darkshade)",
+        black: "var(--black)",
+        purple: "var(--purple)",
+        pink: "var(--pink)",
+        darkerblue: "var(--darkerblue)",
+        white: "var(--white)",
+        whitelessbright: "var(--whitelessbright)",
+        defaultblue: "var(--defaultblue)",
+        defaultred: "var(--defaultred)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
