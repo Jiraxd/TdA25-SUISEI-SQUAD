@@ -83,7 +83,10 @@ const translationsCZ: Record<string, string> = {
   "1mo": "Poslední měsíc",
   "3mo": "Poslední 3 měsíce",
   ERROR_SEARCH: "Nepodařilo se najít žádné hry podle zadaných kritérií",
-  ERROR_START_NEW_GAME: "Hra je vyhraná!"
+  ERROR_START_NEW_GAME: "Hra je vyhraná!",
+  ONLINE_PLAY: "Hrát online",
+  PAGE_NOT_FOUND: "Tato stránka neexistuje :(",
+  BACK_HOME: "Zpět na domovskou stránku",
 };
 
 const translationsEN: Record<string, string> = {
@@ -148,5 +151,8 @@ const translationsEN: Record<string, string> = {
   "1mo": "Last month",
   "3mo": "Last 3 months",
   ERROR_SEARCH: "Could not find any games according to the entered criteria",
-  ERROR_START_NEW_GAME: "Game is already won!"
+  ERROR_START_NEW_GAME: "Game is already won!",
+  ONLINE_PLAY: "Play online",
+  PAGE_NOT_FOUND: "This page does not exist :(",
+  BACK_HOME: "Back to home page",
 };

@@ -54,6 +54,12 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
       },
+      fontFamily: {
+        "dosis-bold": ["var(--font-dosis-bold)"],
+        "dosis-light": ["var(--font-dosis-light)"],
+        "dosis-regular": ["var(--font-dosis-regular)"],
+        "dosis-medium": ["var(--font-dosis-medium)"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
