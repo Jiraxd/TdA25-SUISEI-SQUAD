@@ -92,6 +92,29 @@ const translationsCZ: Record<string, string> = {
   GAMES_PAGE_TITLE: "Piškvorky | Úlohy",
   GAME_PAGE_TITLE: "Piškvorky | Hra",
   EDIT_PAGE_TITLE: "Piškvorky | Úprava hry",
+  COPYRIGHT: "Copyright",
+  CONTACT: "Kontakt",
+  TERMS_OF_USE: "Podmínky použití",
+  PRIVACY_POLICY: "Ochrana osobních údajů",
+  COPYRIGHT_TEXT:
+    "© 2024 Think different Academy. Všechna práva vyhrazena. Tato platforma pro hraní piškvorek je chráněna autorským právem. Jakékoliv kopírování nebo reprodukce bez předchozího písemného souhlasu je zakázána.",
+  CONTACT_TEXT:
+    "Pro jakékoliv dotazy nás můžete kontaktovat na emailové adrese: info@tda.cz\n\nAdresa:\nThink different Academy\nKřenová 89/19\n612 00 Brno",
+  TERMS_OF_USE_TEXT:
+    "1. Souhlas s podmínkami\n" +
+    "Používáním této aplikace souhlasíte s těmito podmínkami.\n\n" +
+    "2. Pravidla použití\n" +
+    "- Aplikaci používejte pouze k hraní piškvorek\n" +
+    "- Nenarušujte bezpečnost aplikace\n" +
+    "- Nepoužívejte automatizované systémy\n\n" +
+    "3. Autorská práva\n" +
+    "Obsah je chráněn autorským právem Think different Academy.\n\n" +
+    "4. Odpovědnost\n" +
+    "Aplikace je poskytována bez záruk.\n\n" +
+    "5. Změny\n" +
+    "Vyhrazujeme si právo na změny podmínek.",
+  PRIVACY_POLICY_TEXT:
+    "Ochrana vašich osobních údajů je pro nás prioritou. Shromažďujeme pouze nezbytné údaje pro fungování aplikace. Vaše data nejsou sdílena s třetími stranami a jsou zpracovávána v souladu s GDPR.",
 };
 
 const translationsEN: Record<string, string> = {
@@ -165,4 +188,27 @@ const translationsEN: Record<string, string> = {
   GAMES_PAGE_TITLE: "Tic Tac Toe | Puzzles",
   GAME_PAGE_TITLE: "Tic Tac Toe | Game",
   EDIT_PAGE_TITLE: "Tic Tac Toe | Edit Game",
+  COPYRIGHT: "Copyright",
+  CONTACT: "Contact",
+  TERMS_OF_USE: "Terms of Use",
+  PRIVACY_POLICY: "Privacy Policy",
+  COPYRIGHT_TEXT:
+    "© 2024 Think different Academy. All rights reserved. This Tic Tac Toe game is protected by copyright. Any copying or reproduction without prior written consent is prohibited.",
+  CONTACT_TEXT:
+    "For any inquiries, you can contact us at: tda@scg.cz\n\nAddress:\nThink different Academy\nKřenová 89/19\n612 00 Brno",
+  TERMS_OF_USE_TEXT:
+    "1. Agreement\n" +
+    "By using this application, you agree to these terms.\n\n" +
+    "2. Usage Rules\n" +
+    "- Use the app only for playing Tic Tac Toe\n" +
+    "- Do not breach application security\n" +
+    "- Do not use automated systems\n\n" +
+    "3. Copyright\n" +
+    "Content is protected by Think different Academy copyright.\n\n" +
+    "4. Liability\n" +
+    "The application is provided without warranties.\n\n" +
+    "5. Changes\n" +
+    "We reserve the right to modify these terms.",
+  PRIVACY_POLICY_TEXT:
+    "Protecting your personal data is our priority. We only collect necessary data for the application to function. Your data is not shared with third parties and is processed in accordance with GDPR.",
 };

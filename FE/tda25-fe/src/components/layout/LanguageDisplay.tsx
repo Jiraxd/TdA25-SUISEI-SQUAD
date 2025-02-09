@@ -10,7 +10,7 @@ export default function LanguageDisplay() {
   const { language, toggleLanguage } = useLanguage();
   return (
     <Button
-      className="flex flex-row fixed bottom-4 left-0 items-center w-fit font-[family-name:var(--font-dosis-bold)] bg-transparent"
+      className="flex flex-row fixed bottom-4 left-0 items-center w-fit font-dosis-bold bg-transparent"
       onClick={() => {
         toggleLanguage();
       }}

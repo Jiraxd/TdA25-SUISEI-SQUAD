@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/components/languageContext";
 import { AlertProvider } from "@/components/alertContext";
 import ErrorDisplay from "@/components/layout/ErrorDisplay";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { Footer } from "@/components/layout/Footer";
 
 const dosisBold = localFont({
   src: "./fonts/Dosis-Bold.ttf",
@@ -74,7 +75,9 @@ export default function RootLayout({
             {children}
             <div className="hidden lg:block">
               <LanguageDisplay />
+              <Footer />
             </div>
+
             <ErrorDisplay />
           </LanguageProvider>
         </AlertProvider>
