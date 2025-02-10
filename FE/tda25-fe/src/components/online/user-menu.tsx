@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, User, Settings, History, LogOut } from "lucide-react";
+import { ChevronDown, User, LogOut } from "lucide-react";
 import { useLanguage } from "../languageContext";
 import { TranslateText } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -11,11 +11,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
-export default function UserMenu() {
+type ProfileProps = {
+  // userProfile: UserProfile; TODO create profile
+};
+
+export default function UserMenu(/*{ userProfile }: ProfileProps*/) {
+  const uuid = "testUUID";
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { language } = useLanguage();
+  const router = useRouter();
   const toggleLogin = () => setIsLoggedIn(!isLoggedIn);
   if (!isLoggedIn) {
     return (
@@ -56,7 +62,7 @@ export default function UserMenu() {
       >
         <DropdownMenuItem
           className="flex items-center space-x-2 text-white hover:bg-darkerblue cursor-pointer"
-          onClick={() => console.log("Profile clicked")}
+          onClick={() => router.push(`/profile/${uuid}`)}
         >
           <User className="h-4 w-4" />
           <span>{TranslateText("PROFILE", language)}</span>
