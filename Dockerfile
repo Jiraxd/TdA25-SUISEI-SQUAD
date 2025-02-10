@@ -28,7 +28,7 @@ COPY BE/TdA25-BE/src ./src
 COPY --from=frontend-builder /app/FE/tda25-fe/out/. ./src/main/resources/static
 
 ARG DATABASE_TOKEN
-RUN echo "DATABASE_TOKEN=${DATABASE_TOKEN}" > .env
+ENV DATABASE_TOKEN=${DATABASE_TOKEN}
 
 
 RUN chmod +x ./start.sh
