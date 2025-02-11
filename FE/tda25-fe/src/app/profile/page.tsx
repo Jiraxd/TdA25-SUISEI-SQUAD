@@ -55,11 +55,14 @@ export default function ProfilePage() {
     <div className="bg-whitelessbright min-w-full max-w-screen min-h-screen text-white font-dosis-medium p-4 sm:p-6 md:p-8">
       <Card className="max-w-4xl mx-auto mt-4 sm:mt-6 bg-darkshade border-none">
         <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-          <CardTitle className="text-2xl sm:text-3xl lg:text-4xl text-pink font-dosis-bold text-center sm:text-left">
+          <CardTitle className="text-2xl sm:text-3xl lg:text-4xl text-whitelessbright font-dosis-bold text-center sm:text-left">
             {loading ? (
               <Skeleton className="h-10 w-64 bg-gray-700" />
             ) : (
-              TranslateText("PROFILE_PLAYER", language) + user?.username
+              <span>
+                {TranslateText("PROFILE_PLAYER", language)}
+                <span className="text-pink">{user?.username}</span>
+              </span>
             )}
           </CardTitle>
           {isCurrentUser && !loading && (

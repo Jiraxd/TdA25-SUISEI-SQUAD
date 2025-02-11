@@ -79,8 +79,9 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
               {TranslateText("STATS", language)}
             </p>
             <p className="text-xl font-dosis-bold">
-              <span className="text-green-500">{user.wins}W</span> -
-              <span className="text-yellow-500">{user.draws}D</span> -
+              <span className="text-green-500">{user.wins}W</span> {" - "}
+              <span className="text-yellow-500">{user.draws}D</span>
+              {" - "}
               <span className="text-defaultred">{user.losses}L</span>
             </p>
             <p className="text-lg text-whitelessbright">
