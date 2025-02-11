@@ -128,6 +128,9 @@ const translationsCZ: Record<string, string> = {
   RANDOM_GAME: "Normální hra",
   RANKED_RANDOM_GAME: "Hodnocená hra",
   PRIVATE_GAME: "Soukromá hra",
+  PROFILE_PLAYER: "Profil uživatele: ",
+  SETTINGS: "Nastavení",
+  LOGOUT: "Odhlásit se",
 };
 
 const translationsEN: Record<string, string> = {
@@ -237,4 +240,7 @@ const translationsEN: Record<string, string> = {
   RANDOM_GAME: "Normal Game",
   RANKED_RANDOM_GAME: "Ranked Game",
   PRIVATE_GAME: "Private Game",
+  PROFILE_PLAYER: "Profile of player: ",
+  SETTINGS: "Settings",
+  LOGOUT: "Logout",
 };
