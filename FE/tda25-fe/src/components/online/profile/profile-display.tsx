@@ -1,4 +1,4 @@
-import { type User, getProfilePicture } from "@/models/User"; // Adjust the import path as needed
+import { type User, getNameColor, getProfilePicture } from "@/models/User"; // Adjust the import path as needed
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/components/languageContext";
@@ -31,7 +31,10 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
             <AvatarImage src={getProfilePicture(user)} alt={user.username} />
           </Avatar>
           <div>
-            <CardTitle className="text-2xl font-dosis-bold text-pink">
+            <CardTitle
+              className="text-2xl font-dosis-bold"
+              style={{ color: getNameColor(user) }}
+            >
               {user.username}
             </CardTitle>
             <p className="text-sm text-whitelessbright">

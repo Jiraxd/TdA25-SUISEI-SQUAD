@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import SettingsProfile from "@/components/online/profile/settings-display";
 import GameHistory from "@/components/online/profile/game-history";
 import ProfileDisplay from "@/components/online/profile/profile-display";
-import type { User } from "@/models/User";
+import { getNameColor, type User } from "@/models/User";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -37,6 +37,7 @@ export default function ProfilePage() {
         wins: 34,
         draws: 5,
         losses: 22,
+        nameColor: "#0284A6",
       });
       if (userId && userId === "profile") {
         // TODO: fetch current user based on cookies and redirect to /profile/UUID
@@ -61,7 +62,9 @@ export default function ProfilePage() {
             ) : (
               <span>
                 {TranslateText("PROFILE_PLAYER", language)}
-                <span className="text-pink">{user?.username}</span>
+                <span style={{ color: getNameColor(user) }}>
+                  {user?.username}
+                </span>
               </span>
             )}
           </CardTitle>
