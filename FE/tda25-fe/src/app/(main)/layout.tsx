@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
 import { ButtonsNavBar } from "@/components/layout/ButtonsNavBar";
 import { LogoNavBar } from "@/components/layout/LogoNavBar";
 import LanguageDisplay from "@/components/layout/LanguageDisplay";
@@ -11,25 +11,25 @@ import { MobileNav } from "@/components/layout/MobileNav";
 import { Footer } from "@/components/layout/Footer";
 
 const dosisBold = localFont({
-  src: "./fonts/Dosis-Bold.ttf",
+  src: "../fonts/Dosis-Bold.ttf",
   variable: "--font-dosis-bold",
   weight: "100 900",
 });
 
 const dosisLight = localFont({
-  src: "./fonts/Dosis-Light.ttf",
+  src: "../fonts/Dosis-Light.ttf",
   variable: "--font-dosis-light",
   weight: "100 900",
 });
 
 const dosisRegular = localFont({
-  src: "./fonts/Dosis-Regular.ttf",
+  src: "../fonts/Dosis-Regular.ttf",
   variable: "--font-dosis-regular",
   weight: "100 900",
 });
 
 const dosisMedium = localFont({
-  src: "./fonts/Dosis-Medium.ttf",
+  src: "../fonts/Dosis-Medium.ttf",
   variable: "--font-dosis-medium",
   weight: "100 900",
 });
