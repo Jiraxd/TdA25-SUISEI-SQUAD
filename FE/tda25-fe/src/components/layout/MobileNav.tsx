@@ -5,7 +5,6 @@ import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ButtonsNavBar } from "./ButtonsNavBar";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "../languageContext";
 import { useRouter } from "next/navigation";

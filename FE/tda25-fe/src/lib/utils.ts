@@ -137,6 +137,23 @@ const translationsCZ: Record<string, string> = {
   GAMES_PLAYED: "Odehrané hry",
   WINRATE: "Poměr výher",
   CURRENT_RANK: "Aktuální úroveň",
+  LOGIN_TITLE: "Přihlášení",
+  REGISTER_TITLE: "Registrace",
+  LOGIN: "Přihlásit se",
+  EMAIL: "Email",
+  PASSWORD: "Heslo",
+  NO_ACCOUNT: "Nemáš ještě účet?",
+  REGISTER: "Registrovat se",
+  LOGIN_FAILED: "Přihlášení selhalo",
+  GO_BACK: "Jít zpět",
+  REGISTER_FAILED: "Registrace selhala",
+  ONLINE_PAGE_TITLE: "Piškvorky | Online",
+  USERNAME: "Uživatelské jméno",
+  USERNAME_REQUIRED: "Uživatelské jméno je povinné.",
+  USERNAME_TOO_LONG: "Uživatelské jméno musí mít maximálně 32 znaků.",
+  PASSWORD_REQUIRED: "Heslo je povinné (Minimálně 8 znaků). ",
+  INVALID_EMAIL: "Prosím zadej platnou emailovou adresu.",
+  REGISTER_PAGE_TITLE: "Piškvorky | Registrace",
 };
 
 const translationsEN: Record<string, string> = {
@@ -255,4 +272,39 @@ const translationsEN: Record<string, string> = {
   JOINED: "Account created",
   GAMES_PLAYED: "Games played",
   WINRATE: "Winrate",
+  LOGIN: "Login",
+  EMAIL: "Email",
+  PASSWORD: "Password",
+  NO_ACCOUNT: "Don't have an account?",
+  REGISTER: "Register",
+  LOGIN_FAILED: "Login failed",
+  LOGIN_TITLE: "Login",
+  REGISTER_TITLE: "Registration",
+  GO_BACK: "Go back",
+  REGISTER_FAILED: "Error registering",
+  ONLINE_PAGE_TITLE: "Tic Tac Toe | Online",
+  USERNAME: "Username",
+  USERNAME_REQUIRED: "Username is required.",
+  USERNAME_TOO_LONG: "Username must be less than 33 characters.",
+  PASSWORD_REQUIRED: "Password is required (Min 8 characters).",
+  INVALID_EMAIL: "Please enter a valid email address.",
+  REGISTER_PAGE_TITLE: "Tic Tac Toe | Register",
 };
+
+export function ClearLoginCookie() {
+  document.cookie =
+    "logintoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+export function SetLoginCookie(token: string) {
+  document.cookie = `logintoken=${token}; path=/;`;
+}
+
+export function GetLoginCookie(): string | null {
+  return (
+    document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("logintoken="))
+      ?.split("=")[1] || null
+  );
+}

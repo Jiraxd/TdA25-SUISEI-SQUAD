@@ -1,4 +1,8 @@
-import { type User, getNameColor, getProfilePicture } from "@/models/User"; // Adjust the import path as needed
+import {
+  type UserProfile,
+  getNameColor,
+  getProfilePicture,
+} from "@/models/UserProfile"; // Adjust the import path as needed
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/components/languageContext";
@@ -6,11 +10,12 @@ import { TranslateText } from "@/lib/utils";
 import { getNextRank, getRankByElo } from "@/models/Rank";
 
 type ProfileDisplayProps = {
-  user: User;
+  user: UserProfile;
 };
 
 export default function ProfileDisplay({ user }: ProfileDisplayProps) {
   const { language } = useLanguage();
+  if (!user) return null;
   const totalWonLostGames = user.wins + user.losses;
   const winrate =
     totalWonLostGames > 0
