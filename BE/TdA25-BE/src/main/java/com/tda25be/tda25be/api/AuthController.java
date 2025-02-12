@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -48,5 +49,31 @@ public class AuthController {
         User user = new User().setUsername(username).setEmail(email).setPasswordHash(Hashing.hash(password));
         userRepo.save(user);
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("verify")
+    public ResponseEntity<User> verify(@RequestHeader("Authorization") String token) {
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        User user = sessionRepo.findById(token)
+                .map(Session::getUser)
+                .orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(user);
+    }
+    @GetMapping("logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+        if (token == null || token.isEmpty()) {return ResponseEntity.badRequest().build();}
+        if (!sessionRepo.existsById(token)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        sessionRepo.deleteById(token);
+        return ResponseEntity.ok("Session deleted successfully");
+
     }
 }
