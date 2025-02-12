@@ -1,4 +1,4 @@
-export type User = {
+export type UserProfile = {
   uuid: string;
   createdAt: Date;
   username: string;
@@ -13,10 +13,10 @@ export type User = {
 
 export const DEFAULT_PROFILE_PICTURE = "/images/placeholder-avatar.png";
 
-export function getNameColor(user: User | null): string {
+export function getNameColor(user: UserProfile | null): string {
   return user?.nameColor || "#AB2E58";
 }
 
-export function getProfilePicture(user: User): string {
+export function getProfilePicture(user: UserProfile): string {
   return user.profilePicture || DEFAULT_PROFILE_PICTURE;
 }

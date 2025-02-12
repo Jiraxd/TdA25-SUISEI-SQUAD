@@ -256,3 +256,21 @@ const translationsEN: Record<string, string> = {
   GAMES_PLAYED: "Games played",
   WINRATE: "Winrate",
 };
+
+export function ClearLoginCookie() {
+  document.cookie =
+    "logintoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+export function SetLoginCookie(token: string) {
+  document.cookie = `logintoken=${token}; path=/;`;
+}
+
+export function GetLoginCookie(): string | null {
+  return (
+    document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("logintoken="))
+      ?.split("=")[1] || null
+  );
+}

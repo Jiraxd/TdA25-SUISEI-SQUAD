@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, User, LogOut } from "lucide-react";
 import { useLanguage } from "../languageContext";
-import { TranslateText } from "@/lib/utils";
+import { ClearLoginCookie, TranslateText } from "@/lib/utils";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -12,33 +12,41 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { UserProfile } from "@/models/UserProfile";
 
 type ProfileProps = {
-  // userProfile: UserProfile; TODO create profile
+  userProfile: UserProfile | null;
 };
 
-export default function UserMenu(/*{ userProfile }: ProfileProps*/) {
-  const uuid = "testUUID";
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+export default function UserMenu({ userProfile }: ProfileProps) {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const { language } = useLanguage();
   const router = useRouter();
-  const toggleLogin = () => setIsLoggedIn(!isLoggedIn);
+  useEffect(() => {
+    setIsLoggedIn(userProfile !== null);
+  }, [userProfile]);
   if (!isLoggedIn) {
     return (
       <div className="space-x-2">
         <Button
-          onClick={toggleLogin}
+          onClick={() => router.push("/login?redirect=/profile")}
           className="px-4 py-2 bg-darkerblue text-white rounded-lg text-xl hover:bg-defaultblue"
         >
           {TranslateText("LOG_IN", language)}
         </Button>
-        <Button className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-pink">
+        <Button
+          onClick={() => router.push("/register?redirect=/profile")}
+          className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-pink"
+        >
           {TranslateText("CREATE_ACCOUNT", language)}
         </Button>
       </div>
     );
   }
-
+  function handleLogOut() {
+    ClearLoginCookie();
+    router.refresh();
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -62,14 +70,14 @@ export default function UserMenu(/*{ userProfile }: ProfileProps*/) {
       >
         <DropdownMenuItem
           className="flex items-center space-x-2 text-white hover:bg-darkerblue cursor-pointer"
-          onClick={() => router.push(`/profile/${uuid}`)}
+          onClick={() => router.push(`/profile/${userProfile?.uuid || ""}`)}
         >
           <User className="h-4 w-4" />
           <span>{TranslateText("PROFILE", language)}</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="flex items-center space-x-2 text-white hover:bg-darkerblue cursor-pointer"
-          onClick={toggleLogin}
+          onClick={handleLogOut}
         >
           <LogOut className="h-4 w-4" />
           <span>{TranslateText("LOG_OUT", language)}</span>

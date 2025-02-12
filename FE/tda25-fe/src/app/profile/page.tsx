@@ -11,10 +11,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import SettingsProfile from "@/components/online/profile/settings-display";
 import GameHistory from "@/components/online/profile/game-history";
 import ProfileDisplay from "@/components/online/profile/profile-display";
-import { getNameColor, type User } from "@/models/User";
+import { getNameColor, type UserProfile } from "@/models/UserProfile";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   const pathName = usePathname();
