@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -15,11 +16,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/languageContext";
 import { TranslateText } from "@/lib/utils";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { language } = useLanguage();
@@ -171,7 +171,7 @@ export default function RegisterPage() {
           {TranslateText("NO_ACCOUNT", language)}{" "}
           <Link
             href={
-              "/login" + ("?redirect=" + searchParams.get("redirect") || "")
+              "/login" + ("?redirect=" + (searchParams.get("redirect") || ""))
             }
             className="text-defaultblue hover:text-pink font-dosis-bold"
           >
@@ -186,5 +186,13 @@ export default function RegisterPage() {
         </Button>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<></>}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }
