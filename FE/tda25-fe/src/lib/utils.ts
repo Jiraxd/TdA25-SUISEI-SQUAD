@@ -153,6 +153,7 @@ const translationsCZ: Record<string, string> = {
   USERNAME_TOO_LONG: "Uživatelské jméno musí mít maximálně 32 znaků.",
   PASSWORD_REQUIRED: "Heslo je povinné (Minimálně 8 znaků). ",
   INVALID_EMAIL: "Prosím zadej platnou emailovou adresu.",
+  REGISTER_PAGE_TITLE: "Piškvorky | Registrace",
 };
 
 const translationsEN: Record<string, string> = {
@@ -287,6 +288,7 @@ const translationsEN: Record<string, string> = {
   USERNAME_TOO_LONG: "Username must be less than 33 characters.",
   PASSWORD_REQUIRED: "Password is required (Min 8 characters).",
   INVALID_EMAIL: "Please enter a valid email address.",
+  REGISTER_PAGE_TITLE: "Tic Tac Toe | Register",
 };
 
 export function ClearLoginCookie() {
