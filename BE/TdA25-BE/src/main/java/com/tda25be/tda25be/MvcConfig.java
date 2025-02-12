@@ -19,8 +19,13 @@ public class MvcConfig implements WebMvcConfigurer {
         registerRoutes(registry, "profile");
         registerRoutes(registry, "login");
         registerRoutes(registry, "register");
+        registerRoutes(registry, "privacy");
+        registerRoutes(registry, "copyright");
+        registerRoutes(registry, "contact");
+        registerRoutes(registry, "terms");
 
         // Special cases with dynamic IDs
+        registry.addViewController("/edit/{id:.*}").setViewName("forward:/edit.html");
         registry.addViewController("/game/{id:.*}").setViewName("forward:/game.html");
         registry.addViewController("/profile/{id:.*}").setViewName("forward:/profile.html");
         registry.addViewController("/onlineGame/{id:.*}").setViewName("forward:/onlineGame.html");
