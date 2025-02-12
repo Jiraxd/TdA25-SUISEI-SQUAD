@@ -12,6 +12,10 @@ export default function OnlinePage() {
   const { language } = useLanguage();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = TranslateText("ONLINE_PAGE_TITLE", language);
+  }, [language]);
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -21,7 +25,7 @@ export default function OnlinePage() {
         setLoading(false);
         return;
       }
-      const data = await fetch(`/api/v1/users/verify`, {
+      const data = await fetch(`/api/v1/auth/verify`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${loginToken}`,

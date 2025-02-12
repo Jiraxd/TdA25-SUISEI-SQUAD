@@ -137,6 +137,17 @@ const translationsCZ: Record<string, string> = {
   GAMES_PLAYED: "Odehrané hry",
   WINRATE: "Poměr výher",
   CURRENT_RANK: "Aktuální úroveň",
+  LOGIN_TITLE: "Přihlášení",
+  REGISTER_TITLE: "Registrace",
+  LOGIN: "Přihlásit se",
+  EMAIL: "Email",
+  PASSWORD: "Heslo",
+  NO_ACCOUNT: "Nemáš ještě účet?",
+  REGISTER: "Registrovat se",
+  LOGIN_FAILED: "Přihlášení selhalo",
+  GO_BACK: "Jít zpět",
+  REGISTER_FAILED: "Registrace selhala",
+  ONLINE_PAGE_TITLE: "Piškvorky | Online",
 };
 
 const translationsEN: Record<string, string> = {
@@ -255,6 +266,17 @@ const translationsEN: Record<string, string> = {
   JOINED: "Account created",
   GAMES_PLAYED: "Games played",
   WINRATE: "Winrate",
+  LOGIN: "Login",
+  EMAIL: "Email",
+  PASSWORD: "Password",
+  NO_ACCOUNT: "Don't have an account?",
+  REGISTER: "Register",
+  LOGIN_FAILED: "Login failed",
+  LOGIN_TITLE: "Login",
+  REGISTER_TITLE: "Registration",
+  GO_BACK: "Go back",
+  REGISTER_FAILED: "Error registering",
+  ONLINE_PAGE_TITLE: "Tic Tac Toe | Online",
 };
 
 export function ClearLoginCookie() {

@@ -15,6 +15,7 @@ type ProfileDisplayProps = {
 
 export default function ProfileDisplay({ user }: ProfileDisplayProps) {
   const { language } = useLanguage();
+  if (!user) return null;
   const totalWonLostGames = user.wins + user.losses;
   const winrate =
     totalWonLostGames > 0

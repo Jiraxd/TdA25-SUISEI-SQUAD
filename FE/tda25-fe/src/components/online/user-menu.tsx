@@ -29,13 +29,13 @@ export default function UserMenu({ userProfile }: ProfileProps) {
     return (
       <div className="space-x-2">
         <Button
-          onClick={() => router.push("/login?redirect=/profile")}
+          onClick={() => router.push("/login?redirect=/online")}
           className="px-4 py-2 bg-darkerblue text-white rounded-lg text-xl hover:bg-defaultblue"
         >
           {TranslateText("LOG_IN", language)}
         </Button>
         <Button
-          onClick={() => router.push("/register?redirect=/profile")}
+          onClick={() => router.push("/register?redirect=/online")}
           className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-pink"
         >
           {TranslateText("CREATE_ACCOUNT", language)}

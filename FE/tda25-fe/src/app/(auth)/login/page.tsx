@@ -13,20 +13,29 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required.",
-  }),
-});
+import { useEffect, useState } from "react";
+import { useLanguage } from "@/components/languageContext";
+import { SetLoginCookie, TranslateText } from "@/lib/utils";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    document.title = TranslateText("LOGIN_PAGE_TITLE", language);
+  }, [language]);
+  const [formError, setFormError] = useState<string | null>(null);
+  const formSchema = z.object({
+    email: z.string().email({
+      message: TranslateText("INVALID_EMAIL", language),
+    }),
+    password: z.string().min(1, {
+      message: TranslateText("PASSWORD_REQUIRED", language),
+    }),
+  });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +45,8 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const response = await fetch("/api/v1/login", {
+    setFormError(null);
+    const response = await fetch("/api/v1/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,33 +55,49 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      router.push("/dashboard"); // Redirect to dashboard or home page after successful login
+      const redirect = searchParams.get("redirect") || "/online";
+      const token = await response.text();
+      SetLoginCookie(token);
+      router.push(redirect);
     } else {
-      // Handle errors
-      console.error("Login failed");
+      const errorText = await response.json();
+      setFormError(
+        errorText.error
+          ? TranslateText(errorText.error, language)
+          : TranslateText("LOGIN_FAILED", language)
+      );
     }
   }
 
+  const handleGoBack = () => {
+    const redirect = searchParams.get("redirect") || "/online";
+    router.push(redirect);
+  };
+
   return (
-    <div className="min-h-screen bg-darkshade flex items-center justify-center">
-      <div className="bg-black p-8 rounded-lg shadow-lg w-96">
-        <h1 className="text-2xl font-bold mb-6 text-white">Login</h1>
+    <div className="min-h-screen flex items-center  justify-center font-dosis-regular">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-96 border-4 border-darkerblue">
+        <h1 className="text-2xl font-bold mb-6 text-darkerblue font-dosis-bold">
+          {TranslateText("LOGIN", language)}
+        </h1>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white">Email</FormLabel>
+                  <FormLabel className="text-darkerblue font-dosis-bold">
+                    {TranslateText("EMAIL", language)}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="john@example.com"
                       {...field}
-                      className="bg-darkshade text-white"
+                      className="bg-white text-darkerblue border border-darkshade"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-defaultred" />
                 </FormItem>
               )}
             />
@@ -80,35 +106,46 @@ export default function LoginPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white">Password</FormLabel>
+                  <FormLabel className="text-darkerblue font-dosis-bold">
+                    {TranslateText("PASSWORD", language)}
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       {...field}
-                      className="bg-darkshade text-white"
+                      className="bg-white text-darkerblue border border-darkshade "
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-defaultred" />
                 </FormItem>
               )}
             />
             <Button
               type="submit"
-              className="w-full bg-purple hover:bg-pink text-white"
+              className="w-full bg-defaultred hover:bg-pink text-white font-dosis-bold"
             >
-              Login
+              {TranslateText("LOGIN", language)}
             </Button>
+            {formError && (
+              <p className="text-sm text-defaultred text-center">{formError}</p>
+            )}
           </form>
         </Form>
-        <p className="mt-4 text-center text-white">
-          Don't have an account?{" "}
+        <p className="mt-4 text-center text-darkerblue font-dosis-medium">
+          {TranslateText("NO_ACCOUNT", language)}{" "}
           <Link
             href="/register"
-            className="text-defaultblue hover:text-darkerblue"
+            className="text-defaultblue hover:text-pink font-dosis-bold"
           >
-            Register
+            {TranslateText("REGISTER", language)}
           </Link>
         </p>
+        <Button
+          onClick={handleGoBack}
+          className="mt-4 w-full bg-darkerblue hover:bg-defaultblue text-white font-dosis-medium"
+        >
+          {TranslateText("GO_BACK", language)}
+        </Button>
       </div>
     </div>
   );

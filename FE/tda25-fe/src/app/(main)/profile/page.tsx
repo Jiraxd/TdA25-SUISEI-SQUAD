@@ -1,8 +1,8 @@
 "use client";
 
 import { useLanguage } from "@/components/languageContext";
-import { TranslateText } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { GetLoginCookie, TranslateText } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,31 +21,38 @@ export default function ProfilePage() {
   const userId = pathName.split("/").pop();
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const { language } = useLanguage();
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const loginToken = GetLoginCookie();
+      if (!loginToken) {
+        router.push("/login?redirect=/profile");
 
-      setUser({
-        uuid: "testuuid",
-        createdAt: new Date(),
-        username: "J1R4",
-        email: "",
-        elo: 1251,
-        wins: 34,
-        draws: 5,
-        losses: 22,
-        nameColor: "#0284A6",
+        return;
+      }
+      const data = await fetch(`/api/v1/auth/verify`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${loginToken}`,
+        },
+        credentials: "include",
       });
-      if (userId && userId === "profile") {
-        // TODO: fetch current user based on cookies and redirect to /profile/UUID
-        setIsCurrentUser(true);
+
+      if (data.ok) {
+        const user = await data.json();
+        setUser(user);
+
+        if (userId && userId === "profile") {
+          setIsCurrentUser(true);
+        } else {
+          const data = await fetch(`/api/v1/users/${userId}`);
+          const profile = await data.json();
+          if (profile?.id === user.id) setIsCurrentUser(true);
+        }
       } else {
-        const data = await fetch(`/api/v1/users/${userId}`);
-        // if data.UUID === current user UUID, set isCurrentUser to true
-        // setIsCurrentUser(true);
+        router.push("/login?redirect=/profile");
       }
       setLoading(false);
     }
@@ -78,6 +85,22 @@ export default function ProfilePage() {
             >
               {TranslateText("LOGOUT", language)}
             </Button>
+          )}
+          {!isCurrentUser && !loading && (
+            <div className="space-x-2">
+              <Button
+                onClick={() => router.push("/login?redirect=/profile")}
+                className="px-4 py-2 bg-darkerblue text-white rounded-lg text-xl hover:bg-defaultblue"
+              >
+                {TranslateText("LOG_IN", language)}
+              </Button>
+              <Button
+                onClick={() => router.push("/register?redirect=/profile")}
+                className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-pink"
+              >
+                {TranslateText("CREATE_ACCOUNT", language)}
+              </Button>
+            </div>
           )}
         </CardHeader>
         <CardContent>

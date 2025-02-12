@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import localFont from "next/font/local";
 import type React from "react";
 import "../globals.css";
+import { AlertProvider } from "@/components/alertContext";
+import { LanguageProvider } from "@/components/languageContext";
 
 export const metadata: Metadata = {
   title: "Piškvorky - Přihlášení",
@@ -43,9 +45,13 @@ export default function AuthLayout({
       className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable}`}
     >
       <body className="min-h-screen bg-darkshade">
-        <main className="flex items-center justify-center min-h-screen">
-          {children}
-        </main>
+        <LanguageProvider>
+          <AlertProvider>
+            <main className="flex items-center justify-center min-h-screen">
+              {children}
+            </main>
+          </AlertProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
