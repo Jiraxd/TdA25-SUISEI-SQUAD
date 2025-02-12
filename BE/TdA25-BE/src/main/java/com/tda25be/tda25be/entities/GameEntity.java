@@ -11,7 +11,7 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 
 @Entity
-@Table(name = "games")
+@Table(name = "Game")
 @Getter
 @Setter
 public class GameEntity {
