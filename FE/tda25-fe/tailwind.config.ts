@@ -13,6 +13,15 @@ const config: Config = {
         "15": "repeat(15, minmax(0, 1fr))",
       },
       colors: {
+        darkshade: "var(--darkshade)",
+        black: "var(--black)",
+        purple: "var(--purple)",
+        pink: "var(--pink)",
+        darkerblue: "var(--darkerblue)",
+        white: "var(--white)",
+        whitelessbright: "var(--whitelessbright)",
+        defaultblue: "var(--defaultblue)",
+        defaultred: "var(--defaultred)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -53,6 +62,12 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+      },
+      fontFamily: {
+        "dosis-bold": ["var(--font-dosis-bold)"],
+        "dosis-light": ["var(--font-dosis-light)"],
+        "dosis-regular": ["var(--font-dosis-regular)"],
+        "dosis-medium": ["var(--font-dosis-medium)"],
       },
       borderRadius: {
         lg: "var(--radius)",

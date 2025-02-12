@@ -83,7 +83,77 @@ const translationsCZ: Record<string, string> = {
   "1mo": "Poslední měsíc",
   "3mo": "Poslední 3 měsíce",
   ERROR_SEARCH: "Nepodařilo se najít žádné hry podle zadaných kritérií",
-  ERROR_START_NEW_GAME: "Hra je vyhraná!"
+  ERROR_START_NEW_GAME: "Hra je vyhraná!",
+  ONLINE_PLAY: "Hrát online",
+  PAGE_NOT_FOUND: "Tato stránka neexistuje :(",
+  BACK_HOME: "Zpět na domovskou stránku",
+  HOME_PAGE_TITLE: "Piškvorky",
+  PAGE_NOT_FOUND_TITLE: "Piškvorky | 404",
+  GAMES_PAGE_TITLE: "Piškvorky | Úlohy",
+  GAME_PAGE_TITLE: "Piškvorky | Hra",
+  EDIT_PAGE_TITLE: "Piškvorky | Úprava hry",
+  COPYRIGHT: "Copyright",
+  CONTACT: "Kontakt",
+  TERMS_OF_USE: "Podmínky použití",
+  PRIVACY_POLICY: "Ochrana osobních údajů",
+  COPYRIGHT_TEXT:
+    "© 2024 Think different Academy. Všechna práva vyhrazena. Tato platforma pro hraní piškvorek je chráněna autorským právem. Jakékoliv kopírování nebo reprodukce bez předchozího písemného souhlasu je zakázána.",
+  CONTACT_TEXT:
+    "Pro jakékoliv dotazy nás můžete kontaktovat na emailové adrese: tda@scg.cz\n\nAdresa:\nThink different Academy\nKřenová 89/19\n612 00 Brno",
+  TERMS_OF_USE_TEXT:
+    "1. Souhlas s podmínkami\n" +
+    "Používáním této aplikace souhlasíte s těmito podmínkami.\n\n" +
+    "2. Pravidla použití\n" +
+    "- Aplikaci používejte pouze k hraní piškvorek\n" +
+    "- Nenarušujte bezpečnost aplikace\n" +
+    "- Nepoužívejte automatizované systémy\n\n" +
+    "3. Autorská práva\n" +
+    "Obsah je chráněn autorským právem Think different Academy.\n\n" +
+    "4. Odpovědnost\n" +
+    "Aplikace je poskytována bez záruk.\n\n" +
+    "5. Změny\n" +
+    "Vyhrazujeme si právo na změny podmínek.",
+  PRIVACY_POLICY_TEXT:
+    "Ochrana vašich osobních údajů je pro nás prioritou. Shromažďujeme pouze nezbytné údaje pro fungování aplikace. Vaše data nejsou sdílena s třetími stranami a jsou zpracovávána v souladu s GDPR.",
+  CREATE_ACCOUNT: "Vytvořit účet",
+  PROFILE: "Profil",
+  ACCOUNT_SETTINGS: "Nastavení účtu",
+  GAME_HISTORY: "Historie her",
+  LOG_OUT: "Odhlásit se",
+  LOG_IN: "Přihlásit se",
+  WELCOME_ONLINE: "Vítej v Online režimu!",
+  ELO_RATING: "Tvé ELO hodnocení",
+  NEXT_RANK: "Další úroveň",
+  POINTS_NEEDED: "Potřebné ELO body do další úrovně",
+  RANDOM_GAME: "Normální hra",
+  RANKED_RANDOM_GAME: "Hodnocená hra",
+  PRIVATE_GAME: "Soukromá hra",
+  PROFILE_PLAYER: "Profil uživatele: ",
+  SETTINGS: "Nastavení",
+  LOGOUT: "Odhlásit se",
+  ELO: "Aktuální hodnocení ELO",
+  STATS: "Statistiky",
+  JOINED: "Účet založen",
+  GAMES_PLAYED: "Odehrané hry",
+  WINRATE: "Poměr výher",
+  CURRENT_RANK: "Aktuální úroveň",
+  LOGIN_TITLE: "Přihlášení",
+  REGISTER_TITLE: "Registrace",
+  LOGIN: "Přihlásit se",
+  EMAIL: "Email",
+  PASSWORD: "Heslo",
+  NO_ACCOUNT: "Nemáš ještě účet?",
+  REGISTER: "Registrovat se",
+  LOGIN_FAILED: "Přihlášení selhalo",
+  GO_BACK: "Jít zpět",
+  REGISTER_FAILED: "Registrace selhala",
+  ONLINE_PAGE_TITLE: "Piškvorky | Online",
+  USERNAME: "Uživatelské jméno",
+  USERNAME_REQUIRED: "Uživatelské jméno je povinné.",
+  USERNAME_TOO_LONG: "Uživatelské jméno musí mít maximálně 32 znaků.",
+  PASSWORD_REQUIRED: "Heslo je povinné (Minimálně 8 znaků). ",
+  INVALID_EMAIL: "Prosím zadej platnou emailovou adresu.",
+  REGISTER_PAGE_TITLE: "Piškvorky | Registrace",
 };
 
 const translationsEN: Record<string, string> = {
@@ -148,5 +218,93 @@ const translationsEN: Record<string, string> = {
   "1mo": "Last month",
   "3mo": "Last 3 months",
   ERROR_SEARCH: "Could not find any games according to the entered criteria",
-  ERROR_START_NEW_GAME: "Game is already won!"
+  ERROR_START_NEW_GAME: "Game is already won!",
+  ONLINE_PLAY: "Play online",
+  PAGE_NOT_FOUND: "This page does not exist :(",
+  BACK_HOME: "Back to home page",
+  HOME_PAGE_TITLE: "Tic Tac Toe",
+  PAGE_NOT_FOUND_TITLE: "Tic Tac Toe | 404",
+  GAMES_PAGE_TITLE: "Tic Tac Toe | Puzzles",
+  GAME_PAGE_TITLE: "Tic Tac Toe | Game",
+  EDIT_PAGE_TITLE: "Tic Tac Toe | Edit Game",
+  COPYRIGHT: "Copyright",
+  CONTACT: "Contact",
+  TERMS_OF_USE: "Terms of Use",
+  PRIVACY_POLICY: "Privacy Policy",
+  COPYRIGHT_TEXT:
+    "© 2024 Think different Academy. All rights reserved. This Tic Tac Toe game is protected by copyright. Any copying or reproduction without prior written consent is prohibited.",
+  CONTACT_TEXT:
+    "For any inquiries, you can contact us at: tda@scg.cz\n\nAddress:\nThink different Academy\nKřenová 89/19\n612 00 Brno",
+  TERMS_OF_USE_TEXT:
+    "1. Agreement\n" +
+    "By using this application, you agree to these terms.\n\n" +
+    "2. Usage Rules\n" +
+    "- Use the app only for playing Tic Tac Toe\n" +
+    "- Do not breach application security\n" +
+    "- Do not use automated systems\n\n" +
+    "3. Copyright\n" +
+    "Content is protected by Think different Academy copyright.\n\n" +
+    "4. Liability\n" +
+    "The application is provided without warranties.\n\n" +
+    "5. Changes\n" +
+    "We reserve the right to modify these terms.",
+  PRIVACY_POLICY_TEXT:
+    "Protecting your personal data is our priority. We only collect necessary data for the application to function. Your data is not shared with third parties and is processed in accordance with GDPR.",
+  CREATE_ACCOUNT: "Create Account",
+  PROFILE: "Profile",
+  ACCOUNT_SETTINGS: "Account Settings",
+  GAME_HISTORY: "Game History",
+  LOG_OUT: "Log Out",
+  LOG_IN: "Log In",
+  WELCOME_ONLINE: "Welcome to Online Mode!",
+  ELO_RATING: "Your ELO Rating",
+  NEXT_RANK: "Next Rank",
+  POINTS_NEEDED: "ELO points needed for next rank",
+  CURRENT_RANK: "Current Rank",
+  RANDOM_GAME: "Normal Game",
+  RANKED_RANDOM_GAME: "Ranked Game",
+  PRIVATE_GAME: "Private Game",
+  PROFILE_PLAYER: "Profile of player: ",
+  SETTINGS: "Settings",
+  LOGOUT: "Logout",
+  ELO: "Current ELO Rating",
+  STATS: "Statistics",
+  JOINED: "Account created",
+  GAMES_PLAYED: "Games played",
+  WINRATE: "Winrate",
+  LOGIN: "Login",
+  EMAIL: "Email",
+  PASSWORD: "Password",
+  NO_ACCOUNT: "Don't have an account?",
+  REGISTER: "Register",
+  LOGIN_FAILED: "Login failed",
+  LOGIN_TITLE: "Login",
+  REGISTER_TITLE: "Registration",
+  GO_BACK: "Go back",
+  REGISTER_FAILED: "Error registering",
+  ONLINE_PAGE_TITLE: "Tic Tac Toe | Online",
+  USERNAME: "Username",
+  USERNAME_REQUIRED: "Username is required.",
+  USERNAME_TOO_LONG: "Username must be less than 33 characters.",
+  PASSWORD_REQUIRED: "Password is required (Min 8 characters).",
+  INVALID_EMAIL: "Please enter a valid email address.",
+  REGISTER_PAGE_TITLE: "Tic Tac Toe | Register",
 };
+
+export function ClearLoginCookie() {
+  document.cookie =
+    "logintoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+export function SetLoginCookie(token: string) {
+  document.cookie = `logintoken=${token}; path=/;`;
+}
+
+export function GetLoginCookie(): string | null {
+  return (
+    document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("logintoken="))
+      ?.split("=")[1] || null
+  );
+}

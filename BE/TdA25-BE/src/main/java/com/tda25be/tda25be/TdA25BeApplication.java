@@ -6,7 +6,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TdA25BeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TdA25BeApplication.class, args);
-	}
+	public static void main(String[] args) {SpringApplication.run(TdA25BeApplication.class, args);}
 }

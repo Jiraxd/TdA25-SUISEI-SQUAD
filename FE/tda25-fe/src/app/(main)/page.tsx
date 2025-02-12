@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Rocket } from "lucide-react";
@@ -16,6 +16,10 @@ export default function Home() {
       firstSectionRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  useEffect(() => {
+    document.title = TranslateText("HOME_PAGE_TITLE", language);
+  }, [language]);
 
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -142,7 +146,7 @@ export default function Home() {
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 1, delay: 0.5 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8  text-[#F6F6F6] p-4 rounded-full shadow-lg"
+            className="fixed bottom-20 right-8  text-[#F6F6F6] p-4 rounded-full shadow-lg"
             style={{ backgroundColor: "var(--darkerblue)" }}
             aria-label="Scroll to top"
           >

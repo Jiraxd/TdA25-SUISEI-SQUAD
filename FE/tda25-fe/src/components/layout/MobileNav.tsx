@@ -5,7 +5,6 @@ import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ButtonsNavBar } from "./ButtonsNavBar";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { TranslateText } from "@/lib/utils";
 import { useLanguage } from "../languageContext";
 import { useRouter } from "next/navigation";
@@ -55,14 +54,7 @@ export const MobileNav = () => {
                 className="flex flex-row p-4 items-center w-full justify-center"
                 onClick={handleClickHome}
               >
-                <Image
-                  src="/icons/zarivka_thinking_bile.svg"
-                  alt="home_logo"
-                  className="w-10 h-10"
-                  width={48}
-                  height={48}
-                />
-                <div className="text_bold ml-2">
+                <div className="text-2xl ml-2">
                   {TranslateText("HOME_PAGE", language)}
                 </div>
               </button>

@@ -36,6 +36,10 @@ export default function GamePage() {
 
   const { language } = useLanguage();
 
+  useEffect(() => {
+    document.title = TranslateText("GAME_PAGE_TITLE", language);
+  }, [language]);
+
   const fetchGame = async (id: string) => {
     try {
       const res = await fetch(
@@ -159,24 +163,24 @@ export default function GamePage() {
       difficulty: game?.difficulty ?? "medium",
       board: game?.board ?? emptyBoard,
     };
-      const res = await fetch(
-        isDev
-          ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
-          : `/api/v1/games`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(gamePayload),
-        }
-      );
-      if (res.ok) {
-        const data: Game = await res.json();
-        await router.push(`/game/${data.uuid}`);
-      } else {
-        updateErrorMessage(TranslateText("ERROR_SAVE", language));
+    const res = await fetch(
+      isDev
+        ? `https://odevzdavani.tourdeapp.cz/mockbush/api/v1/games`
+        : `/api/v1/games`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(gamePayload),
       }
+    );
+    if (res.ok) {
+      const data: Game = await res.json();
+      await router.push(`/game/${data.uuid}`);
+    } else {
+      updateErrorMessage(TranslateText("ERROR_SAVE", language));
+    }
   }
 
   function checkWinner(board: string[][]): {

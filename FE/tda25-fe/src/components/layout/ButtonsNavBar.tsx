@@ -23,10 +23,14 @@ export const ButtonsNavBar = ({
     router.push("/game");
   };
 
+  const handleClickOnline = () => {
+    router.push("/online");
+  };
+
   const buttonClass =
     orientation === "vertical"
       ? "flex flex-row p-4 items-center w-full justify-center"
-      : "flex flex-row mr-20 p-6 items-center";
+      : "flex flex-row mr-8 p-6 items-center";
 
   return (
     <div
@@ -55,6 +59,18 @@ export const ButtonsNavBar = ({
           height={48}
         />
         <div className="text_bold ml-2">{TranslateText("PLAY", language)}</div>
+      </button>
+      <button className={buttonClass} onClick={handleClickOnline}>
+        <Image
+          src="/icons/zarivka_thinking_bile.svg"
+          alt="Play_logo"
+          className="w-10 h-10"
+          width={48}
+          height={48}
+        />
+        <div className="text_bold ml-2">
+          {TranslateText("ONLINE_PLAY", language)}
+        </div>
       </button>
     </div>
   );
