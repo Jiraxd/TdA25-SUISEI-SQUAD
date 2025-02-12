@@ -154,6 +154,8 @@ const translationsCZ: Record<string, string> = {
   PASSWORD_REQUIRED: "Heslo je povinné (Minimálně 8 znaků). ",
   INVALID_EMAIL: "Prosím zadej platnou emailovou adresu.",
   REGISTER_PAGE_TITLE: "Piškvorky | Registrace",
+  LOGIN_PAGE_TITLE: "Piškvorky | Přihlášení",
+  REGISTER_SUCCESS: "Registrace proběhla úspěšně! Nyní se můžeš přihlásit.",
 };
 
 const translationsEN: Record<string, string> = {
@@ -289,6 +291,8 @@ const translationsEN: Record<string, string> = {
   PASSWORD_REQUIRED: "Password is required (Min 8 characters).",
   INVALID_EMAIL: "Please enter a valid email address.",
   REGISTER_PAGE_TITLE: "Tic Tac Toe | Register",
+  LOGIN_PAGE_TITLE: "Tic Tac Toe | Login",
+  REGISTER_SUCCESS: "Registration successful! You can now log in.",
 };
 
 export function ClearLoginCookie() {
