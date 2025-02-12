@@ -17,36 +17,50 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/components/languageContext";
-import { SetLoginCookie, TranslateText } from "@/lib/utils";
+import { TranslateText } from "@/lib/utils";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { language } = useLanguage();
 
   useEffect(() => {
-    document.title = TranslateText("LOGIN_PAGE_TITLE", language);
+    document.title = TranslateText("REGISTER_PAGE_TITLE", language);
   }, [language]);
+
   const [formError, setFormError] = useState<string | null>(null);
+  const [formSuccess, setFormSuccess] = useState<string | null>(null);
+
   const formSchema = z.object({
     email: z.string().email({
       message: TranslateText("INVALID_EMAIL", language),
     }),
+    username: z
+      .string()
+      .min(1, {
+        message: TranslateText("USERNAME_REQUIRED", language),
+      })
+      .max(32, {
+        message: TranslateText("USERNAME_TOO_LONG", language),
+      }),
     password: z.string().min(8, {
       message: TranslateText("PASSWORD_REQUIRED", language),
     }),
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
+      username: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setFormError(null);
-    const response = await fetch("/api/v1/auth/login", {
+    setFormSuccess(null);
+    const response = await fetch("/api/v1/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,16 +69,13 @@ export default function LoginPage() {
     });
 
     if (response.ok) {
-      const redirect = searchParams.get("redirect") || "/online";
-      const token = await response.text();
-      SetLoginCookie(token);
-      router.push(redirect);
+      setFormSuccess(TranslateText("REGISTER_SUCCESS", language));
     } else {
       const errorText = await response.json();
       setFormError(
         errorText.error
           ? TranslateText(errorText.error, language)
-          : TranslateText("LOGIN_FAILED", language)
+          : TranslateText("REGISTER_FAILED", language)
       );
     }
   }
@@ -75,13 +86,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center  justify-center font-dosis-regular">
+    <div className="min-h-screen flex items-center justify-center font-dosis-regular">
       <div className="bg-white p-8 rounded-xl shadow-lg w-96 border-4 border-darkerblue">
         <h1 className="text-2xl font-bold mb-6 text-darkerblue font-dosis-bold">
-          {TranslateText("LOGIN", language)}
+          {TranslateText("REGISTER", language)}
         </h1>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="email"
@@ -92,7 +103,26 @@ export default function LoginPage() {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="john@example.com"
+                      placeholder="pepanovak@gmail.com"
+                      {...field}
+                      className="bg-white placeholder:text-gray-500 text-black border border-darkshade"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-defaultred" />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-darkerblue font-dosis-bold">
+                    {TranslateText("USERNAME", language)}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Pepa Novak"
                       {...field}
                       className="bg-white placeholder:text-gray-500 text-black border border-darkshade"
                     />
@@ -125,10 +155,15 @@ export default function LoginPage() {
               type="submit"
               className="w-full bg-defaultred hover:bg-pink text-white font-dosis-bold"
             >
-              {TranslateText("LOGIN", language)}
+              {TranslateText("REGISTER", language)}
             </Button>
             {formError && (
               <p className="text-sm text-defaultred text-center">{formError}</p>
+            )}
+            {formSuccess && (
+              <p className="text-sm text-green-600 text-center">
+                {formSuccess}
+              </p>
             )}
           </form>
         </Form>
@@ -136,11 +171,11 @@ export default function LoginPage() {
           {TranslateText("NO_ACCOUNT", language)}{" "}
           <Link
             href={
-              "/register" + ("?redirect=" + searchParams.get("redirect") || "")
+              "/login" + ("?redirect=" + searchParams.get("redirect") || "")
             }
             className="text-defaultblue hover:text-pink font-dosis-bold"
           >
-            {TranslateText("REGISTER", language)}
+            {TranslateText("LOGIN", language)}
           </Link>
         </p>
         <Button

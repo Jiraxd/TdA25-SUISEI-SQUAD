@@ -148,6 +148,11 @@ const translationsCZ: Record<string, string> = {
   GO_BACK: "Jít zpět",
   REGISTER_FAILED: "Registrace selhala",
   ONLINE_PAGE_TITLE: "Piškvorky | Online",
+  USERNAME: "Uživatelské jméno",
+  USERNAME_REQUIRED: "Uživatelské jméno je povinné.",
+  USERNAME_TOO_LONG: "Uživatelské jméno musí mít maximálně 32 znaků.",
+  PASSWORD_REQUIRED: "Heslo je povinné (Minimálně 8 znaků). ",
+  INVALID_EMAIL: "Prosím zadej platnou emailovou adresu.",
 };
 
 const translationsEN: Record<string, string> = {
@@ -277,6 +282,11 @@ const translationsEN: Record<string, string> = {
   GO_BACK: "Go back",
   REGISTER_FAILED: "Error registering",
   ONLINE_PAGE_TITLE: "Tic Tac Toe | Online",
+  USERNAME: "Username",
+  USERNAME_REQUIRED: "Username is required.",
+  USERNAME_TOO_LONG: "Username must be less than 33 characters.",
+  PASSWORD_REQUIRED: "Password is required (Min 8 characters).",
+  INVALID_EMAIL: "Please enter a valid email address.",
 };
 
 export function ClearLoginCookie() {
