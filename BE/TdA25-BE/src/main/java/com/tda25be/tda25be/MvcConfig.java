@@ -9,33 +9,20 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        // Kvůli limitacím v odevzdávání (nepřišel jsem na způsob, jak nahrát dva funkční Docker image)
+        // a našemu výběru tech-stacku jsme se rozhodli využít backend pro forwardování requestů.
 
-        // Route to serve game.html for /game/{id} pattern
+        registerRoute(registry, "/game{slash:.*}", "game.html");
+        registerRoute(registry, "/games{slash:.*}", "games.html");
+        registerRoute(registry, "/edit{slash:.*}", "edit.html");
+        registerRoute(registry, "/online{slash:.*}", "online.html");
+        registerRoute(registry, "/profile{slash:.*}", "profile.html");
+        registerRoute(registry, "/onlineGame/{id:.*}", "onlineGame.html");
+        registerRoute(registry, "/login{slash:.*}", "login.html");
+        registerRoute(registry, "/register{slash:.*}", "register.html");
+    }
 
-        // Kvůli limitacím v odevzdávání (aspon jsem nepřišel na to, jak nahrát 2 docker image aby byly funčkní :D )
-        // a našemu výberu tech-stacku jsme se rozhodli využít backend pro forwardování requestu
-        registry.addViewController("/game/{id:.*}")
-                .setViewName("forward:/game.html");
-
-        registry.addViewController("/game")
-                .setViewName("forward:/game.html");
-
-        registry.addViewController("/game/")
-                .setViewName("forward:/game.html");
-
-        registry.addViewController("/games/")
-                .setViewName("forward:/games.html");
-        
-        registry.addViewController("/games")
-                .setViewName("forward:/games.html");
-
-        registry.addViewController("/edit/{id:.*}")
-                .setViewName("forward:/edit.html");
-
-        registry.addViewController("/edit")
-                .setViewName("forward:/edit.html");
-
-        registry.addViewController("/edit/")
-                .setViewName("forward:/edit.html");
+    private void registerRoute(ViewControllerRegistry registry, String path, String view) {
+        registry.addViewController(path).setViewName("forward:/" + view);
     }
 }
