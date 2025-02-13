@@ -1,28 +1,31 @@
 package com.tda25be.tda25be.api;
 
-import com.tda25be.tda25be.deserializers.Hashing;
 import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.repositories.SessionRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
+    PasswordEncoder passwordEncoder;
     UserRepo userRepo;
     SessionRepo sessionRepo;
-    public AuthController(UserRepo userRepo, SessionRepo sessionRepo) {
+    public AuthController(UserRepo userRepo, SessionRepo sessionRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.sessionRepo = sessionRepo;
+        this.passwordEncoder = passwordEncoder;
     }
-    @GetMapping("login")
+    @PostMapping("login")
     public ResponseEntity<Session> login(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
@@ -30,7 +33,7 @@ public class AuthController {
         if(email == null || password == null || deviceName == null) return ResponseEntity.badRequest().build();
         User user = userRepo.findByEmail(email);
         if(user == null) return ResponseEntity.notFound().build();
-        if(Objects.equals(Hashing.hash(password), user.getPasswordHash())){
+        if(passwordEncoder.matches(password, user.getPasswordHash())){
             Session session = sessionRepo.findByUserAndDeviceName(user, deviceName);
             if(session == null) session = new Session().setUser(user).setDeviceName(deviceName);
             sessionRepo.save(session);
@@ -46,7 +49,7 @@ public class AuthController {
         String password = requestBody.get("password");
         String username = requestBody.get("username");
         if(email == null || password == null || username == null) return ResponseEntity.badRequest().build();
-        User user = new User().setUsername(username).setEmail(email).setPasswordHash(Hashing.hash(password));
+        User user = new User().setUsername(username).setEmail(email).setPasswordHash(passwordEncoder.encode(password));
         userRepo.save(user);
         return ResponseEntity.ok().build();
     }

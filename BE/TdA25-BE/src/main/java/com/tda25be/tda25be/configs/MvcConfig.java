@@ -1,4 +1,4 @@
-package com.tda25be.tda25be;
+package com.tda25be.tda25be.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
