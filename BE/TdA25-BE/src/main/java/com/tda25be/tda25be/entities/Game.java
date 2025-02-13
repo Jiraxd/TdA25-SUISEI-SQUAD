@@ -1,12 +1,10 @@
-package com.tda25be.tda25be.models;
+package com.tda25be.tda25be.entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.tda25be.tda25be.enums.Difficulty;
 import com.tda25be.tda25be.enums.GameState;
-import com.tda25be.tda25be.deserializers.DifficultyDeserializer;
-import com.tda25be.tda25be.entities.GameEntity;
+import jakarta.persistence.*;
 import lombok.*;
-import org.modelmapper.ModelMapper;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,16 +13,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "Game")
 @Getter
 @Setter
 public class Game {
+    @Id
+    @UuidGenerator
     private String uuid;
     private String name;
     private String createdAt;
     private String updatedAt;
     private GameState gameState;
-    @JsonDeserialize(using = DifficultyDeserializer.class)
     private Difficulty difficulty;
+    @Column(length = 1024)
     private String board;
 
     public static List<List<String>> boardTo2DList(String board) {
@@ -43,19 +45,11 @@ public class Game {
         }
         return boardList;
     }
-
-
-
     public List<List<String>> getBoard() {
-
         return boardTo2DList(this.board);
     }
     public void setBoard(List<List<String>> board){
         this.board = board.toString();
     }
-    public static Game fromEntity(GameEntity entity){
-        ModelMapper modelMapper = new ModelMapper();
 
-        return modelMapper.map(entity, Game.class);
-    }
 }

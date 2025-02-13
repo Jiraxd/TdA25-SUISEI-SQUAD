@@ -70,13 +70,14 @@ public class AuthController {
     }
     @GetMapping("logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-        if (token == null || token.isEmpty()) {return ResponseEntity.badRequest().build();}
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
         if (!sessionRepo.existsById(token)) {
             return ResponseEntity.notFound().build();
         }
 
         sessionRepo.deleteById(token);
         return ResponseEntity.ok("Session deleted successfully");
-
     }
 }
