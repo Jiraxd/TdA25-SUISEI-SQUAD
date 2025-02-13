@@ -87,8 +87,8 @@ function RegisterPageContent() {
 
   return (
     <div className="min-h-screen flex items-center justify-center font-dosis-regular">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-96 border-4 border-darkerblue">
-        <h1 className="text-2xl font-bold mb-6 text-darkerblue font-dosis-bold">
+      <div className="bg-white p-8 rounded-xl shadow-md w-96 border-2 border-darkshade shadow-gray-400">
+        <h1 className="text-2xl font-bold mb-6 text-defaultred font-dosis-bold">
           {TranslateText("REGISTER", language)}
         </h1>
         <Form {...form}>
@@ -98,7 +98,7 @@ function RegisterPageContent() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-darkerblue font-dosis-bold">
+                  <FormLabel className="text-darkshade font-dosis-bold">
                     {TranslateText("EMAIL", language)}
                   </FormLabel>
                   <FormControl>
@@ -117,7 +117,7 @@ function RegisterPageContent() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-darkerblue font-dosis-bold">
+                  <FormLabel className="text-darkshade font-dosis-bold">
                     {TranslateText("USERNAME", language)}
                   </FormLabel>
                   <FormControl>
@@ -136,7 +136,7 @@ function RegisterPageContent() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-darkerblue font-dosis-bold">
+                  <FormLabel className="text-darkshade font-dosis-bold">
                     {TranslateText("PASSWORD", language)}
                   </FormLabel>
                   <FormControl>
@@ -153,7 +153,7 @@ function RegisterPageContent() {
             />
             <Button
               type="submit"
-              className="w-full bg-defaultred hover:bg-pink text-white font-dosis-bold"
+              className="w-full bg-defaultred hover:bg-red-700 text-white font-dosis-bold"
             >
               {TranslateText("REGISTER", language)}
             </Button>
@@ -173,14 +173,14 @@ function RegisterPageContent() {
             href={
               "/login" + ("?redirect=" + (searchParams.get("redirect") || ""))
             }
-            className="text-defaultblue hover:text-pink font-dosis-bold"
+            className="text-defaultblue hover:text-darkerblue font-dosis-bold"
           >
             {TranslateText("LOGIN", language)}
           </Link>
         </p>
         <Button
           onClick={handleGoBack}
-          className="mt-4 w-full bg-darkerblue hover:bg-defaultblue text-white font-dosis-medium"
+          className="mt-4 w-full bg-defaultblue hover:bg-darkerblue text-white font-dosis-medium"
         >
           {TranslateText("GO_BACK", language)}
         </Button>
