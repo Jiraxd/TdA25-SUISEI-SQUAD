@@ -51,26 +51,28 @@ export default function RootLayout({
       >
         <AlertProvider>
           <LanguageProvider>
-            <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)] z-50">
-              <div
-                className="flex flex-row top-0 max-h-20 items-center min-w-full"
-                style={{
-                  backgroundColor: "var(--darkerblue)",
-                  minWidth: "50%",
-                }}
-              >
-                <LogoNavBar />
+            <div className=" w-full mx-auto">
+              <div className="flex flex-row sticky top-0 min-w-full justify-between font-[family-name:var(--font-dosis-bold)] z-50">
+                <div
+                  className="flex flex-row top-0 max-h-20 items-center min-w-full 4xl:justify-end"
+                  style={{
+                    backgroundColor: "var(--darkerblue)",
+                    minWidth: "50%",
+                  }}
+                >
+                  <LogoNavBar />
+                </div>
+                <div
+                  className="lg:flex flex-row top-0 max-h-20 items-center justify-end 4xl:justify-start hidden"
+                  style={{
+                    backgroundColor: "var(--defaultblue)",
+                    minWidth: "50%",
+                  }}
+                >
+                  <ButtonsNavBar />
+                </div>
+                <MobileNav />
               </div>
-              <div
-                className="lg:flex flex-row top-0 max-h-20 items-center justify-end hidden"
-                style={{
-                  backgroundColor: "var(--defaultblue)",
-                  minWidth: "50%",
-                }}
-              >
-                <ButtonsNavBar />
-              </div>
-              <MobileNav />
             </div>
             {children}
             <div className="hidden lg:block">

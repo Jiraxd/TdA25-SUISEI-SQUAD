@@ -49,7 +49,7 @@ export default function OnlinePage() {
     >
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between mb-8 items-center">
-          <h1 className="text-3xl lg:text-4xl  text-[#AB2E58] font-dosis-bold">
+          <h1 className="text-3xl lg:text-4xl  text-defaultred font-dosis-bold">
             {TranslateText("WELCOME_ONLINE", language)}
           </h1>
           <UserMenu userProfile={user} />

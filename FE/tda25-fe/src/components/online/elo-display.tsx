@@ -33,18 +33,18 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
   const progress = ((elo - 1000) / (nextRank?.minElo || 0 - 1000)) * 100;
 
   return (
-    <div className="mb-4 sm:mb-8 p-4 sm:p-6 bg-darkshade rounded-lg shadow-md text-white">
-      <h2 className="text-xl sm:text-2xl font-dosis-medium mb-2 sm:mb-4 text-pink">
+    <div className="mb-4 sm:mb-8 p-4 sm:p-6 border-2 border-darkshade rounded-lg shadow-md text-black">
+      <h2 className="text-xl sm:text-2xl font-dosis-bold mb-2 sm:mb-4 text-darkerblue">
         {TranslateText("ELO_RATING", language)}
       </h2>
       <div className="flex flex-row items-center justify-between mb-2">
-        <span className="text-3xl sm:text-4xl font-dosis-medium text-white mb-1 sm:mb-0">
+        <span className="text-3xl sm:text-4xl font-dosis-medium text-black mb-1 sm:mb-0">
           {elo} {" - "}{" "}
           <span style={{ color: currentRank?.color ?? "#FFFFFF" }}>
             {currentRank?.name}
           </span>
         </span>
-        <span className="text-sm sm:text-xl text-white font-dosis-medium">
+        <span className="text-sm sm:text-xl text-black font-dosis-medium">
           {TranslateText("NEXT_RANK", language)}: {nextRank?.minElo ?? 0} {"- "}
           <span style={{ color: nextRank?.color ?? "#FFFFFF" }}>
             {nextRank?.name ?? "UNRANKED"}
@@ -56,12 +56,15 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
           value={progress}
           className="h-full transition-all"
           style={{
-            backgroundColor: "var(--black)",
+            backgroundColor: "var(--whitelessbright)",
+            borderColor: "#6B7280",
+            borderWidth: "2px",
           }}
         />
       </div>
-      <p className="mt-2 text-sm sm:text-base text-whitelessbright font-dosis-medium">
-        {nextRank?.minElo ?? 0} {TranslateText("POINTS_NEEDED", language)}
+      <p className="mt-2 text-sm sm:text-base text-black font-dosis-medium">
+        {TranslateText("POINTS_NEEDED", language)}
+        {" : "} {nextRank?.minElo ?? 0}
       </p>
     </div>
   );

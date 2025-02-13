@@ -44,7 +44,7 @@ export default function AuthLayout({
       lang="en"
       className={`${dosisRegular.variable} ${dosisBold.variable} ${dosisLight.variable} ${dosisMedium.variable}`}
     >
-      <body className="min-h-screen bg-darkshade">
+      <body className="min-h-screen bg-whitelessbright">
         <LanguageProvider>
           <AlertProvider>
             <main className="flex items-center justify-center min-h-screen">
