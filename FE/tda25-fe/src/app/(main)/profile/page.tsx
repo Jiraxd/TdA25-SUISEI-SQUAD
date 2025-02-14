@@ -28,8 +28,20 @@ export default function ProfilePage() {
       setLoading(true);
       const loginToken = GetLoginCookie();
       if (!loginToken) {
-        router.push("/login?redirect=/profile");
-
+        // router.push("/login?redirect=/profile");
+        setUser({
+          uuid: "testuuid",
+          createdAt: new Date(),
+          username: "J1R4",
+          email: "test",
+          elo: 1251,
+          wins: 34,
+          draws: 5,
+          losses: 22,
+          nameColor: "#AB2E58",
+        });
+        setIsCurrentUser(true);
+        setLoading(false);
         return;
       }
       const data = await fetch(`/api/v1/auth/verify`, {
@@ -60,103 +72,116 @@ export default function ProfilePage() {
   }, [userId]);
 
   return (
-    <div className="bg-whitelessbright min-w-full max-w-screen min-h-screen text-white font-dosis-medium p-4 sm:p-6 md:p-8">
-      <Card className="max-w-4xl mx-auto mt-4 sm:mt-6 bg-darkshade border-none">
-        <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-          <CardTitle className="text-2xl sm:text-3xl lg:text-4xl text-whitelessbright font-dosis-bold text-center sm:text-left">
-            {loading ? (
-              <Skeleton className="h-10 w-64 bg-gray-700" />
-            ) : (
-              <span>
-                {TranslateText("PROFILE_PLAYER", language)}
-                <span style={{ color: getNameColor(user) }}>
-                  {user?.username}
-                </span>
-              </span>
-            )}
-          </CardTitle>
-          {isCurrentUser && !loading && (
-            <Button
-              variant="destructive"
-              className="bg-defaultred hover:bg-pink w-full sm:w-auto"
-              onClick={() => {
-                setIsCurrentUser(false);
-              }}
-            >
-              {TranslateText("LOGOUT", language)}
-            </Button>
-          )}
-          {!isCurrentUser && !loading && (
-            <div className="space-x-2">
-              <Button
-                onClick={() => router.push("/login?redirect=/profile")}
-                className="px-4 py-2 bg-darkerblue text-white rounded-lg text-xl hover:bg-defaultblue"
-              >
-                {TranslateText("LOG_IN", language)}
-              </Button>
-              <Button
-                onClick={() => router.push("/register?redirect=/profile")}
-                className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-pink"
-              >
-                {TranslateText("CREATE_ACCOUNT", language)}
-              </Button>
-            </div>
-          )}
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="profile" className="w-full">
-            {!loading && (
-              <TabsList
-                className={`grid h-full w-full ${
-                  isCurrentUser ? "grid-cols-3" : "grid-cols-2"
-                } bg-darkerblue rounded-sm`}
-              >
-                <TabsTrigger
-                  value="profile"
-                  className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
-                >
-                  {TranslateText("PROFILE", language)}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="game-history"
-                  className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
-                >
-                  {TranslateText("GAME_HISTORY", language)}
-                </TabsTrigger>
-                {isCurrentUser && (
-                  <TabsTrigger
-                    value="settings"
-                    className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
-                  >
-                    {TranslateText("SETTINGS", language)}
-                  </TabsTrigger>
+    <>
+      <title>{TranslateText("PROFILE_PAGE_TITLE", language)}</title>
+      <div className="bg-whitelessbright text-white font-dosis-medium min-h-screen overflow-x-hidden">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8">
+          <Card className="mt-4 sm:mt-6 bg-whitelessbright text-darkshade border-2 border-darkshade">
+            <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+              <CardTitle className="text-2xl sm:text-3xl lg:text-4xl text-whitelessbright font-dosis-bold text-center sm:text-left">
+                {loading ? (
+                  <Skeleton className="h-10 w-64 bg-gray-700" />
+                ) : (
+                  <span className="text-darkerblue">
+                    {TranslateText("PROFILE_PLAYER", language)}
+                    <span style={{ color: getNameColor(user) }}>
+                      {user?.username}
+                    </span>
+                  </span>
                 )}
-              </TabsList>
-            )}
-            <TabsContent
-              value="profile"
-              className="bg-black p-4 sm:p-6 rounded-b-lg mt-0"
-            >
-              {loading ? <ProfileSkeleton /> : <ProfileDisplay user={user!} />}
-            </TabsContent>
-            <TabsContent
-              value="game-history"
-              className="bg-black p-4 sm:p-6 rounded-b-lg mt-0"
-            >
-              {loading ? <GameHistorySkeleton /> : <GameHistory />}
-            </TabsContent>
-            {isCurrentUser && (
-              <TabsContent
-                value="settings"
-                className="bg-black p-4 sm:p-6 rounded-b-lg mt-0"
-              >
-                {loading ? <SettingsSkeleton /> : <SettingsProfile />}
-              </TabsContent>
-            )}
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+              </CardTitle>
+              {isCurrentUser && !loading && (
+                <Button
+                  variant="destructive"
+                  className="bg-defaultred hover:bg-pink w-full sm:w-auto"
+                  onClick={() => {
+                    setIsCurrentUser(false);
+                  }}
+                >
+                  {TranslateText("LOGOUT", language)}
+                </Button>
+              )}
+              {!isCurrentUser && !loading && (
+                <div className="space-x-2">
+                  <Button
+                    onClick={() => router.push("/login?redirect=/profile")}
+                    className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-red-700"
+                  >
+                    {TranslateText("LOG_IN", language)}
+                  </Button>
+                  <Button
+                    onClick={() => router.push("/register?redirect=/profile")}
+                    className="px-4 py-2 bg-defaultblue text-white rounded-lg text-xl hover:bg-darkerblue"
+                  >
+                    {TranslateText("CREATE_ACCOUNT", language)}
+                  </Button>
+                </div>
+              )}
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="profile" className="w-full">
+                {!loading && (
+                  <TabsList
+                    className={`grid h-full w-full ${
+                      isCurrentUser ? "grid-cols-3" : "grid-cols-2"
+                    } bg-darkerblue rounded-none rounded-t-lg`}
+                  >
+                    <TabsTrigger
+                      value="profile"
+                      className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
+                    >
+                      {TranslateText("PROFILE", language)}
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="game-history"
+                      className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
+                    >
+                      {TranslateText("GAME_HISTORY", language)}
+                    </TabsTrigger>
+                    {isCurrentUser && (
+                      <TabsTrigger
+                        value="settings"
+                        className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
+                      >
+                        {TranslateText("SETTINGS", language)}
+                      </TabsTrigger>
+                    )}
+                  </TabsList>
+                )}
+                <TabsContent
+                  value="profile"
+                  className="bg-white border-2 border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
+                >
+                  {loading ? (
+                    <ProfileSkeleton />
+                  ) : (
+                    <ProfileDisplay user={user!} />
+                  )}
+                </TabsContent>
+                <TabsContent
+                  value="game-history"
+                  className="bg-black p-4 sm:p-6 rounded-b-lg mt-0"
+                >
+                  {loading ? <GameHistorySkeleton /> : <GameHistory />}
+                </TabsContent>
+                {isCurrentUser && (
+                  <TabsContent
+                    value="settings"
+                    className="bg-white border-2 border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
+                  >
+                    {loading ? (
+                      <SettingsSkeleton />
+                    ) : (
+                      <SettingsProfile user={user} />
+                    )}
+                  </TabsContent>
+                )}
+              </Tabs>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </>
   );
 }
 

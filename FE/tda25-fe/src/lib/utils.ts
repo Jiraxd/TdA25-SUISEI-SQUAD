@@ -156,6 +156,21 @@ const translationsCZ: Record<string, string> = {
   REGISTER_PAGE_TITLE: "Piškvorky | Registrace",
   LOGIN_PAGE_TITLE: "Piškvorky | Přihlášení",
   REGISTER_SUCCESS: "Registrace proběhla úspěšně! Nyní se můžeš přihlásit.",
+  CHOOSE_COLOR: "Vybrat barvu",
+  PROFILE_SETTINGS: "Nastavení profilu",
+  USERNAME_MIN_LENGTH: "Uživatelské jméno musí mít alespoň 3 znaky",
+  USERNAME_MAX_LENGTH: "Uživatelské jméno nesmí být delší než 20 znaků",
+  CURRENT_PASSWORD: "Současné heslo",
+  PASSWORDS_DO_NOT_MATCH: "Hesla se neshodují",
+  INVALID_COLOR: "Prosím zadejte platný kód barvy",
+  NAME_COLOR: "Barva jména",
+  SAVE_CHANGES: "Uložit změny",
+  NEW_PASSWORD: "Nové heslo (volitelné)",
+  EMAIL_OPTIONAL: "Email (volitelné)",
+  PROFILE_PICTURE: "Profilový obrázek",
+  CHOOSE_PICTURE: "Změnit obrázek",
+  REMOVE_PICTURE: "Odstranit obrázek",
+  PROFILE_PAGE_TITLE: "Piškvorky | Profil",
 };
 
 const translationsEN: Record<string, string> = {
@@ -293,6 +308,21 @@ const translationsEN: Record<string, string> = {
   REGISTER_PAGE_TITLE: "Tic Tac Toe | Register",
   LOGIN_PAGE_TITLE: "Tic Tac Toe | Login",
   REGISTER_SUCCESS: "Registration successful! You can now log in.",
+  CHOOSE_COLOR: "Choose Color",
+  PROFILE_SETTINGS: "Profile Settings",
+  USERNAME_MIN_LENGTH: "Username must be at least 3 characters",
+  USERNAME_MAX_LENGTH: "Username must not exceed 20 characters",
+  CURRENT_PASSWORD: "Current Password",
+  PASSWORDS_DO_NOT_MATCH: "Passwords do not match",
+  INVALID_COLOR: "Please enter a valid color code",
+  NAME_COLOR: "Name Color",
+  SAVE_CHANGES: "Save Changes",
+  NEW_PASSWORD: "New Password (optional)",
+  EMAIL_OPTIONAL: "Email (optional)",
+  PROFILE_PICTURE: "Profile Picture",
+  CHOOSE_PICTURE: "Choose Picture",
+  REMOVE_PICTURE: "Remove Picture",
+  PROFILE_PAGE_TITLE: "Tic Tac Toe | Profile",
 };
 
 export function ClearLoginCookie() {

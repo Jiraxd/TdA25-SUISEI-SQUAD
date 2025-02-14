@@ -26,10 +26,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
   const nextRank = getNextRank(user.elo);
   const pointsNeeded = nextRank ? nextRank.minElo - user.elo : 0;
   return (
-    <Card
-      className="bg-black text-white"
-      style={{ borderColor: "var(--purple)", borderWidth: "2px" }}
-    >
+    <Card className=" text-black">
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar className="w-20 h-20">
@@ -38,11 +35,13 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
           <div>
             <CardTitle
               className="text-2xl font-dosis-bold"
-              style={{ color: getNameColor(user) }}
+              style={{
+                color: getNameColor(user),
+              }}
             >
               {user.username}
             </CardTitle>
-            <p className="text-sm text-whitelessbright">
+            <p className="text-sm text-black">
               {TranslateText("JOINED", language)}:{" "}
               {new Date(user.createdAt).toLocaleDateString()}
             </p>
@@ -55,18 +54,20 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
             <p className="text-lg font-dosis-bold text-defaultblue">
               {TranslateText("ELO", language)}
             </p>
-            <p className="text-2xl font-dosis-bold text-white">{user.elo}</p>
-            <p className="text-lg text-whitelessbright">
+            <p className="text-2xl font-dosis-bold text-black">{user.elo}</p>
+            <p className="text-lg text-black">
               {TranslateText("CURRENT_RANK", language)}:{" "}
               <span
-                className="font-dosis-bold "
-                style={{ color: currentRank.color }}
+                className="font-dosis-bold px-1"
+                style={{
+                  color: currentRank.color,
+                }}
               >
                 {currentRank.name}
               </span>
             </p>
             {nextRank && (
-              <p className="text-lg text-whitelessbright">
+              <p className="text-lg  text-black">
                 {TranslateText("NEXT_RANK", language)}:{" "}
                 <span
                   className="font-dosis-bold "
@@ -77,7 +78,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
               </p>
             )}
             {nextRank && (
-              <p className="text-lg text-whitelessbright ">
+              <p className="text-lg  text-black ">
                 {TranslateText("POINTS_NEEDED", language)}: {pointsNeeded}
               </p>
             )}
@@ -92,11 +93,11 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
               {" - "}
               <span className="text-defaultred">{user.losses}L</span>
             </p>
-            <p className="text-lg text-whitelessbright">
+            <p className="text-lg text-black">
               {TranslateText("GAMES_PLAYED", language)}:{" "}
               {totalWonLostGames + user.draws}
             </p>
-            <p className="text-lg text-whitelessbright">
+            <p className="text-lg  text-black">
               {TranslateText("WINRATE", language)}: {winrate}%
             </p>
           </div>
