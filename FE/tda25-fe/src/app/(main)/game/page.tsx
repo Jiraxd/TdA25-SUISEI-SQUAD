@@ -36,10 +36,6 @@ export default function GamePage() {
 
   const { language } = useLanguage();
 
-  useEffect(() => {
-    document.title = TranslateText("GAME_PAGE_TITLE", language);
-  }, [language]);
-
   const fetchGame = async (id: string) => {
     try {
       const res = await fetch(
@@ -255,66 +251,69 @@ export default function GamePage() {
   }
 
   return (
-    <motion.div
-      className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-4"
-      style={{ backgroundColor: "var(--whitelessbright)" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      {!game ? (
-        <div>
-          <LoadingCircle />
-        </div>
-      ) : (
-        <>
-          <div className="block lg:hidden w-full">
-            <MobileGame
-              game={game}
-              winner={winner}
-              currentPlayer={currentPlayer}
-              winLane={winLane}
-              language={language}
-              handleClick={handleClick}
-              controls={controls}
-            />
+    <>
+      <title>{TranslateText("GAME_PAGE_TITLE", language)}</title>
+      <motion.div
+        className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-4"
+        style={{ backgroundColor: "var(--whitelessbright)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        {!game ? (
+          <div>
+            <LoadingCircle />
           </div>
+        ) : (
+          <>
+            <div className="block lg:hidden w-full">
+              <MobileGame
+                game={game}
+                winner={winner}
+                currentPlayer={currentPlayer}
+                winLane={winLane}
+                language={language}
+                handleClick={handleClick}
+                controls={controls}
+              />
+            </div>
 
-          <div className="hidden lg:block w-full">
-            <DesktopGame
-              game={game}
-              winner={winner}
-              currentPlayer={currentPlayer}
-              winLane={winLane}
-              language={language}
-              handleClick={handleClick}
-              controls={controls}
-              isNewGame={isNewGame}
-              isSaveDialogOpen={isSaveDialogOpen}
-              setIsSaveDialogOpen={setIsSaveDialogOpen}
-              setGameName={setGameName}
-              setDifficulty={setDifficulty}
-              startNewGame={startNewGame}
-              saveGame={saveGame}
-              startNewGameFromExisting={startNewGameFromExisting}
-            />
-          </div>
-          <div className="block lg:hidden">
-            <GameControls
-              isNewGame={isNewGame}
-              isSaveDialogOpen={isSaveDialogOpen}
-              setIsSaveDialogOpen={setIsSaveDialogOpen}
-              game={game}
-              language={language}
-              setGameName={setGameName}
-              setDifficulty={setDifficulty}
-              startNewGame={startNewGame}
-              saveGame={saveGame}
-              vertical={false}
-              startNewGameFromExisting={startNewGameFromExisting}
-            />
-          </div>
-        </>
-      )}
-    </motion.div>
+            <div className="hidden lg:block w-full">
+              <DesktopGame
+                game={game}
+                winner={winner}
+                currentPlayer={currentPlayer}
+                winLane={winLane}
+                language={language}
+                handleClick={handleClick}
+                controls={controls}
+                isNewGame={isNewGame}
+                isSaveDialogOpen={isSaveDialogOpen}
+                setIsSaveDialogOpen={setIsSaveDialogOpen}
+                setGameName={setGameName}
+                setDifficulty={setDifficulty}
+                startNewGame={startNewGame}
+                saveGame={saveGame}
+                startNewGameFromExisting={startNewGameFromExisting}
+              />
+            </div>
+            <div className="block lg:hidden">
+              <GameControls
+                isNewGame={isNewGame}
+                isSaveDialogOpen={isSaveDialogOpen}
+                setIsSaveDialogOpen={setIsSaveDialogOpen}
+                game={game}
+                language={language}
+                setGameName={setGameName}
+                setDifficulty={setDifficulty}
+                startNewGame={startNewGame}
+                saveGame={saveGame}
+                vertical={false}
+                startNewGameFromExisting={startNewGameFromExisting}
+              />
+            </div>
+          </>
+        )}
+      </motion.div>
+    </>
   );
 }

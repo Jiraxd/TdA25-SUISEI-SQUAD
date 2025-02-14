@@ -38,9 +38,6 @@ export default function Games() {
   const { updateErrorMessage } = useAlertContext();
 
   useEffect(() => {
-    document.title = TranslateText("GAMES_PAGE_TITLE", language);
-  }, [language]);
-  useEffect(() => {
     async function getGames() {
       const isDev = process.env.NODE_ENV === "development";
       const url = isDev
@@ -144,174 +141,177 @@ export default function Games() {
   }
 
   return (
-    <div className="container mx-auto pb-8 font-[family-name:var(--font-dosis-bold)]">
-      <div className="flex flex-col mb-6 justify-center align-middle items-center w-full">
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold w-fit text-center p-8 "
-          style={{
-            color: "var(--defaultred)",
-          }}
-        >
-          {TranslateText("PUZZLES_TO_SOLVE", language)}
-        </motion.div>
-        <div className="flex flex-col lg:flex-row justify-center items-center p-4 gap-4">
-          <Input
-            className="text-white flex p-6 text-xl lg:p-4 lg:text-md"
-            onInput={(e) => setSearch(e.currentTarget.value)}
+    <>
+      <title>{TranslateText("GAMES_PAGE_TITLE", language)}</title>
+      <div className="container mx-auto pb-8 font-[family-name:var(--font-dosis-bold)]">
+        <div className="flex flex-col mb-6 justify-center align-middle items-center w-full">
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold w-fit text-center p-8 "
             style={{
-              backgroundColor: "var(--darkerblue)",
-              color: "var(--whitelessbright)",
+              color: "var(--defaultred)",
             }}
-            placeholder={TranslateText("SEARCH", language)}
-          />
-          <Popover>
-            <PopoverTrigger asChild>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Button
-                  className="p-6 text-xl h-9 lg:p-4 lg:text-md"
-                  style={{
-                    backgroundColor: "var(--darkshade)",
-                  }}
-                >
-                  {TranslateText("SEARCH_OPTIONS_DIFFICULTY", language)}
-                </Button>
-              </motion.div>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-80 border-2 shadow-lg"
+          >
+            {TranslateText("PUZZLES_TO_SOLVE", language)}
+          </motion.div>
+          <div className="flex flex-col lg:flex-row justify-center items-center p-4 gap-4">
+            <Input
+              className="text-white flex p-6 text-xl lg:p-4 lg:text-md"
+              onInput={(e) => setSearch(e.currentTarget.value)}
               style={{
-                backgroundColor: "var(--darkshade)",
-                borderColor: "var(--purple)",
+                backgroundColor: "var(--darkerblue)",
+                color: "var(--whitelessbright)",
               }}
-            >
-              <div className="grid gap-4 text-white">
-                <div className="grid gap-2">
-                  {Difficulties.map((difficulty) => (
-                    <div
-                      className="flex items-center space-x-2"
-                      key={difficulty}
-                    >
-                      <Checkbox
-                        checked={difficultySearch.includes(difficulty)}
-                        id={difficulty}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            if (difficultySearch.includes(difficulty)) {
-                              return;
-                            } else {
-                              setDifficultySearch([
-                                ...difficultySearch,
-                                difficulty,
-                              ]);
-                            }
-                          } else {
-                            setDifficultySearch(
-                              difficultySearch.filter(
-                                (diff) => diff !== difficulty
-                              )
-                            );
-                          }
-                        }}
-                      />
-                      <label
-                        htmlFor={difficulty}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {TranslateText(difficulty, language)}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Popover>
-            <PopoverTrigger asChild>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Button
-                  className="p-6 text-xl h-9 lg:p-4 lg:text-md"
-                  style={{
-                    backgroundColor: "var(--darkshade)",
-                  }}
+              placeholder={TranslateText("SEARCH", language)}
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
                 >
-                  {TranslateText("SEARCH_OPTIONS_DATE", language)}
-                </Button>
-              </motion.div>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-80 border-2 shadow-lg"
-              style={{
-                backgroundColor: "var(--darkshade)",
-                borderColor: "var(--purple)",
-              }}
-            >
-              <div className="grid gap-4 text-white">
-                <div className="grid gap-2">
-                  <RadioGroup
-                    defaultValue={dateSearch}
-                    onValueChange={(value) => {
-                      setDateSearch(value);
+                  <Button
+                    className="p-6 text-xl h-9 lg:p-4 lg:text-md"
+                    style={{
+                      backgroundColor: "var(--darkshade)",
                     }}
                   >
-                    {DateModifiedSearchOptions.map((date, index) => (
-                      <div className="flex items-center space-x-2" key={date}>
-                        <RadioGroupItem value={date} id={index.toString()} />
-                        <label htmlFor={index.toString()}>
-                          {TranslateText(date, language)}
+                    {TranslateText("SEARCH_OPTIONS_DIFFICULTY", language)}
+                  </Button>
+                </motion.div>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-80 border-2 shadow-lg"
+                style={{
+                  backgroundColor: "var(--darkshade)",
+                  borderColor: "var(--purple)",
+                }}
+              >
+                <div className="grid gap-4 text-white">
+                  <div className="grid gap-2">
+                    {Difficulties.map((difficulty) => (
+                      <div
+                        className="flex items-center space-x-2"
+                        key={difficulty}
+                      >
+                        <Checkbox
+                          checked={difficultySearch.includes(difficulty)}
+                          id={difficulty}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              if (difficultySearch.includes(difficulty)) {
+                                return;
+                              } else {
+                                setDifficultySearch([
+                                  ...difficultySearch,
+                                  difficulty,
+                                ]);
+                              }
+                            } else {
+                              setDifficultySearch(
+                                difficultySearch.filter(
+                                  (diff) => diff !== difficulty
+                                )
+                              );
+                            }
+                          }}
+                        />
+                        <label
+                          htmlFor={difficulty}
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          {TranslateText(difficulty, language)}
                         </label>
                       </div>
                     ))}
-                  </RadioGroup>
+                  </div>
                 </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }}>
-            <Button
-              onClick={filterGames}
-              className="p-6 text-xl h-9 lg:p-4 lg:text-md"
-              style={{
-                backgroundColor: "var(--defaultred)",
-              }}
-            >
-              {TranslateText("SEARCH_BTN", language)}
-            </Button>
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger asChild>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Button
+                    className="p-6 text-xl h-9 lg:p-4 lg:text-md"
+                    style={{
+                      backgroundColor: "var(--darkshade)",
+                    }}
+                  >
+                    {TranslateText("SEARCH_OPTIONS_DATE", language)}
+                  </Button>
+                </motion.div>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-80 border-2 shadow-lg"
+                style={{
+                  backgroundColor: "var(--darkshade)",
+                  borderColor: "var(--purple)",
+                }}
+              >
+                <div className="grid gap-4 text-white">
+                  <div className="grid gap-2">
+                    <RadioGroup
+                      defaultValue={dateSearch}
+                      onValueChange={(value) => {
+                        setDateSearch(value);
+                      }}
+                    >
+                      {DateModifiedSearchOptions.map((date, index) => (
+                        <div className="flex items-center space-x-2" key={date}>
+                          <RadioGroupItem value={date} id={index.toString()} />
+                          <label htmlFor={index.toString()}>
+                            {TranslateText(date, language)}
+                          </label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.9 }}>
+              <Button
+                onClick={filterGames}
+                className="p-6 text-xl h-9 lg:p-4 lg:text-md"
+                style={{
+                  backgroundColor: "var(--defaultred)",
+                }}
+              >
+                {TranslateText("SEARCH_BTN", language)}
+              </Button>
+            </motion.div>
+          </div>
+        </div>
+        {games === null ? (
+          <div className="flex w-full justify-center align-middle items-center mb-8">
+            <LoadingCircle />
+          </div>
+        ) : (
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5 gap-4 mb-8"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {currentGames.map((game: Game) => (
+              <GameCard key={game.uuid} game={game} />
+            ))}
           </motion.div>
-        </div>
-      </div>
-      {games === null ? (
-        <div className="flex w-full justify-center align-middle items-center mb-8">
-          <LoadingCircle />
-        </div>
-      ) : (
+        )}
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-5 gap-4 mb-8"
-          initial={{ opacity: 0, y: -50 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          {currentGames.map((game: Game) => (
-            <GameCard key={game.uuid} game={game} />
-          ))}
+          <Pagination
+            totalPages={totalPages}
+            currentPage={page}
+            callback={handleChangePage}
+          />
         </motion.div>
-      )}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <Pagination
-          totalPages={totalPages}
-          currentPage={page}
-          callback={handleChangePage}
-        />
-      </motion.div>
-    </div>
+      </div>
+    </>
   );
 }
