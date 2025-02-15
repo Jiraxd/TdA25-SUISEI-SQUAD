@@ -54,7 +54,7 @@ export default function OnlinePage() {
             <UserMenu userProfile={user} />
           </div>
           <EloDisplay loading={loading} userProfile={user} />
-          <GameOptions />
+          <GameOptions user={user} />
         </div>
       </div>
     </>

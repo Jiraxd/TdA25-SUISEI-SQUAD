@@ -6,7 +6,7 @@ import { LogoNavBar } from "@/components/layout/LogoNavBar";
 import LanguageDisplay from "@/components/layout/LanguageDisplay";
 import { LanguageProvider } from "@/components/languageContext";
 import { AlertProvider } from "@/components/alertContext";
-import ErrorDisplay from "@/components/layout/ErrorDisplay";
+import AlertDisplay from "@/components/layout/AlertDisplay";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Footer } from "@/components/layout/Footer";
 
@@ -80,7 +80,7 @@ export default function RootLayout({
               <Footer />
             </div>
 
-            <ErrorDisplay />
+            <AlertDisplay />
           </LanguageProvider>
         </AlertProvider>
       </body>

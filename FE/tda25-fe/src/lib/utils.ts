@@ -171,6 +171,11 @@ const translationsCZ: Record<string, string> = {
   CHOOSE_PICTURE: "Změnit obrázek",
   REMOVE_PICTURE: "Odstranit obrázek",
   PROFILE_PAGE_TITLE: "Piškvorky | Profil",
+  SEARCHING_GAME: "Hledání hry...",
+  MATCHMAKING_CANCELLED: "Hledání hry zrušeno",
+  MATCHMAKING_REQUEST_SENT: "Začal si hledat hru!",
+  MATCHMAKING_REQUEST_ERROR: "Chyba při hledání hry",
+  USER_NOT_LOGGED_IN: "Pro hraní musíte být přihlášeni",
 };
 
 const translationsEN: Record<string, string> = {
@@ -323,6 +328,11 @@ const translationsEN: Record<string, string> = {
   CHOOSE_PICTURE: "Choose Picture",
   REMOVE_PICTURE: "Remove Picture",
   PROFILE_PAGE_TITLE: "Tic Tac Toe | Profile",
+  SEARCHING_GAME: "Searching for game...",
+  MATCHMAKING_CANCELLED: "Matchmaking cancelled",
+  MATCHMAKING_REQUEST_SENT: "Started searching for a game!",
+  MATCHMAKING_REQUEST_ERROR: "Error finding game",
+  USER_NOT_LOGGED_IN: "You must be logged in to play",
 };
 
 export function ClearLoginCookie() {
