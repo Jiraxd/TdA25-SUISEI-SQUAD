@@ -176,6 +176,11 @@ const translationsCZ: Record<string, string> = {
   MATCHMAKING_REQUEST_SENT: "Začal si hledat hru!",
   MATCHMAKING_REQUEST_ERROR: "Chyba při hledání hry",
   USER_NOT_LOGGED_IN: "Pro hraní musíte být přihlášeni",
+  GAME_FOUND_TITLE: "Hra nalezena!",
+  GAME_FOUND_DESCRIPTION: "Hru můžete příjmout či odmítnout",
+  ACCEPT: "Přijmout",
+  DECLINE: "Odmítnout",
+  MATCHMAKING_TIMEOUT: "Čas na přijetí hry vypršel",
 };
 
 const translationsEN: Record<string, string> = {
@@ -333,6 +338,11 @@ const translationsEN: Record<string, string> = {
   MATCHMAKING_REQUEST_SENT: "Started searching for a game!",
   MATCHMAKING_REQUEST_ERROR: "Error finding game",
   USER_NOT_LOGGED_IN: "You must be logged in to play",
+  GAME_FOUND_TITLE: "Game found!",
+  GAME_FOUND_DESCRIPTION: "You can accept or decline the game",
+  ACCEPT: "Accept",
+  DECLINE: "Decline",
+  MATCHMAKING_TIMEOUT: "Time to accept the game has expired",
 };
 
 export function ClearLoginCookie() {

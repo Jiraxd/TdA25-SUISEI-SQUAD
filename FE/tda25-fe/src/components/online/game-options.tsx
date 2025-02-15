@@ -4,6 +4,7 @@ import { GetLoginCookie, TranslateText } from "@/lib/utils";
 import { UserProfile } from "@/models/UserProfile";
 import { useAlertContext } from "../alertContext";
 import { useEffect, useState } from "react";
+import { GameFound } from "./game-found";
 
 type GameOptionsProps = {
   user: UserProfile | null;
@@ -14,6 +15,8 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const [inQueue, setInQueue] = useState(false);
   const [queueType, setQueueType] = useState<"ranked" | "normal" | null>(null);
   const [queueTime, setQueueTime] = useState(0);
+  const [foundGame, setShowFound] = useState(true);
+  const [opponent, setOpponent] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -67,92 +70,112 @@ export default function GameOptions({ user }: GameOptionsProps) {
     }
   }
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <button
-        onClick={() => handleClickMatchmaking(false)}
-        disabled={inQueue}
-        className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
-          inQueue && queueType === "normal"
-            ? "bg-purple"
-            : "bg-defaultblue hover:bg-darkerblue"
-        }`}
-      >
-        {inQueue && queueType === "normal" ? (
-          <>
-            <Timer size={48} className="text-white animate-pulse" />
-            <span className="text-2xl font-dosis-bold text-white">
-              {Math.floor(queueTime / 60)}:
-              {(queueTime % 60).toString().padStart(2, "0")}
-            </span>
-            <span className="text-2xl font-dosis-bold text-white">
-              {TranslateText("SEARCHING_GAME", language)}
-            </span>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCancelQueue();
-              }}
-              className="px-4   cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
-            >
-              <X size={24} />
-            </div>
-          </>
-        ) : (
-          <>
-            <Users size={48} className="text-white" />
-            <span className="text-xl font-dosis-bold">
-              {TranslateText("RANDOM_GAME", language)}
-            </span>
-          </>
-        )}
-      </button>
-      <button
-        onClick={() => handleClickMatchmaking(true)}
-        disabled={inQueue}
-        className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
-          inQueue && queueType === "ranked"
-            ? "bg-purple"
-            : "bg-defaultblue hover:bg-darkerblue"
-        }`}
-      >
-        {inQueue && queueType === "ranked" ? (
-          <>
-            <Timer size={48} className="text-white animate-pulse" />
-            <span className="text-2xl font-dosis-bold text-white">
-              {Math.floor(queueTime / 60)}:
-              {(queueTime % 60).toString().padStart(2, "0")}
-            </span>
-            <span className="text-xl font-dosis-bold text-white">
-              {TranslateText("SEARCHING_GAME", language)}
-            </span>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCancelQueue();
-              }}
-              className="px-4 cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
-            >
-              <X size={24} />
-            </div>
-          </>
-        ) : (
-          <>
-            <Swords size={48} className="text-white" />
-            <span className="text-2xl font-dosis-bold">
-              {TranslateText("RANKED_RANDOM_GAME", language)}
-            </span>
-          </>
-        )}
-      </button>
-      <button
-        disabled={inQueue}
-        className="p-6 bg-defaultblue rounded-lg hover:bg-darkerblue  transition-colors flex flex-col items-center justify-center space-y-4"
-      >
-        <Lock size={48} className="text-white" />
-        <span className="text-2xl font-dosis-bold">
-          {TranslateText("PRIVATE_GAME", language)}
-        </span>
-      </button>
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <button
+          onClick={() => handleClickMatchmaking(false)}
+          disabled={inQueue}
+          className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
+            inQueue && queueType === "normal"
+              ? "bg-purple"
+              : "bg-defaultblue hover:bg-darkerblue"
+          }`}
+        >
+          {inQueue && queueType === "normal" ? (
+            <>
+              <Timer size={48} className="text-white animate-pulse" />
+              <span className="text-2xl font-dosis-bold text-white">
+                {Math.floor(queueTime / 60)}:
+                {(queueTime % 60).toString().padStart(2, "0")}
+              </span>
+              <span className="text-2xl font-dosis-bold text-white">
+                {TranslateText("SEARCHING_GAME", language)}
+              </span>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancelQueue();
+                }}
+                className="px-4   cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
+              >
+                <X size={24} />
+              </div>
+            </>
+          ) : (
+            <>
+              <Users size={48} className="text-white" />
+              <span className="text-xl font-dosis-bold">
+                {TranslateText("RANDOM_GAME", language)}
+              </span>
+            </>
+          )}
+        </button>
+        <button
+          onClick={() => handleClickMatchmaking(true)}
+          disabled={inQueue}
+          className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
+            inQueue && queueType === "ranked"
+              ? "bg-purple"
+              : "bg-defaultblue hover:bg-darkerblue"
+          }`}
+        >
+          {inQueue && queueType === "ranked" ? (
+            <>
+              <Timer size={48} className="text-white animate-pulse" />
+              <span className="text-2xl font-dosis-bold text-white">
+                {Math.floor(queueTime / 60)}:
+                {(queueTime % 60).toString().padStart(2, "0")}
+              </span>
+              <span className="text-xl font-dosis-bold text-white">
+                {TranslateText("SEARCHING_GAME", language)}
+              </span>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancelQueue();
+                }}
+                className="px-4 cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
+              >
+                <X size={24} />
+              </div>
+            </>
+          ) : (
+            <>
+              <Swords size={48} className="text-white" />
+              <span className="text-2xl font-dosis-bold">
+                {TranslateText("RANKED_RANDOM_GAME", language)}
+              </span>
+            </>
+          )}
+        </button>
+        <button
+          disabled={inQueue}
+          className="p-6 bg-defaultblue rounded-lg hover:bg-darkerblue  transition-colors flex flex-col items-center justify-center space-y-4"
+        >
+          <Lock size={48} className="text-white" />
+          <span className="text-2xl font-dosis-bold">
+            {TranslateText("PRIVATE_GAME", language)}
+          </span>
+        </button>
+      </div>
+      <GameFound
+        isOpen={foundGame}
+        opponent={{
+          username: opponent?.username || "Opponent",
+          elo: opponent?.elo || 0,
+          avatar: opponent?.profilePicture || "/images/placeholder-avatar.png",
+          nameColor: opponent?.nameColor || "black",
+        }}
+        onAccept={async () => {
+          setShowFound(false);
+          // TODO BE REQUEST TO START GAME
+        }}
+        onDecline={async () => {
+          setShowFound(false);
+          // TODO BE REQUEST TO DECLINE GAME
+        }}
+        timeoutSeconds={30}
+      />
+    </>
   );
 }
