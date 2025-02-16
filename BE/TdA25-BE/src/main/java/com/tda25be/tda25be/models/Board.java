@@ -7,18 +7,32 @@ import org.apache.coyote.BadRequestException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Board {
+    public void setBoard(List<List<String>> board) throws BadRequestException, SemanticErrorException {
+        if (board == null) throw new BadRequestException("Board wasn't specified");
+        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
+        int xAmount = 0;
+        int oAmount = 0;
+        for (List<String> row : board) {
+            for (String symbol: row) {
+                if(Objects.equals(symbol, "X")) xAmount++;
+                else if (Objects.equals(symbol, "O")) oAmount++;
+                else if (!symbol.isEmpty()) throw new SemanticErrorException("Invalid symbol");
+            }
+        }
+        if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
+        this.board = board;
+    }
+
     public List<List<String>> board;
     public boolean oTurn = false;
     private boolean nextWin = false;
 
-    public Board(List<List<String>> board) throws BadRequestException {
-        if (board == null) throw new BadRequestException("Board wasn't specified");
-        if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
-        this.board = board;
+    public Board(List<List<String>> board) throws BadRequestException, SemanticErrorException {
+        this.setBoard(board);
     }
-
 
     public GameState getState(){
         nextWin = false;
@@ -29,11 +43,8 @@ public class Board {
             for (String symbol: row) {
                 if(Objects.equals(symbol, "X")) xAmount++;
                 else if (Objects.equals(symbol, "O")) oAmount++;
-                else if (!symbol.isEmpty()) throw new SemanticErrorException("Invalid symbol");
             }
         }
-
-        if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
         if(xAmount > oAmount) oTurn = true;
         if(xAmount == oAmount) oTurn = false;
 
@@ -98,4 +109,12 @@ public class Board {
         return streak;
     }
 
+    public void playMove(int x, int y, Boolean placeO) throws BadRequestException, SemanticErrorException {
+        List<List<String>> newBoard = board.stream()
+                .map(ArrayList::new) // Create a new ArrayList for each inner list
+                .collect(Collectors.toList());
+            String symbol = placeO ? "O" : "X";
+            newBoard.get(y).set(x, symbol);
+            setBoard(newBoard);
+    }
 }

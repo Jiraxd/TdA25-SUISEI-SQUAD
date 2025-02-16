@@ -1,6 +1,7 @@
 package com.tda25be.tda25be.deserializers;
 
 import com.tda25be.tda25be.enums.Difficulty;
+import com.tda25be.tda25be.error.SemanticErrorException;
 import com.tda25be.tda25be.models.Board;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -37,7 +38,7 @@ public class BoardConverter implements AttributeConverter<Board, String> {
         }
         try {
             return new Board(boardList);
-        } catch (BadRequestException e) {
+        } catch (BadRequestException | SemanticErrorException e) {
             throw new RuntimeException(e);
         }
     }

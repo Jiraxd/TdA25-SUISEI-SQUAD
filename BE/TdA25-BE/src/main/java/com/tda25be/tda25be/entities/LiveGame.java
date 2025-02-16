@@ -1,5 +1,7 @@
 package com.tda25be.tda25be.entities;
 
+import com.tda25be.tda25be.deserializers.BoardConverter;
+import com.tda25be.tda25be.models.Board;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +17,13 @@ public class LiveGame {
     @Id
     @UuidGenerator
     private String uuid;
-    private String board;
+    @Convert(converter = BoardConverter.class)
+    private Board board;
     @OneToMany
     private List<User> user;
+    @ManyToOne
+    private User playerX;
+    @ManyToOne
+    private User playerO;
 
 }
