@@ -33,10 +33,6 @@ export default function EditPage() {
     if (currentPlayer === "") setCurrentPlayer("X");
   }
 
-  useEffect(() => {
-    document.title = TranslateText("EDIT_PAGE_TITLE", language);
-  }, [language]);
-
   const router = useRouter();
 
   const fetchGame = async (id: string) => {
@@ -162,64 +158,67 @@ export default function EditPage() {
   }
 
   return (
-    <motion.div
-      className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-4"
-      style={{ backgroundColor: "var(--whitelessbright)" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
-      {!game ? (
-        <div>
-          <LoadingCircle />
-        </div>
-      ) : (
-        <>
-          <div className="block lg:hidden w-full">
-            <MobileEdit
-              game={game}
-              currentPlayer={currentPlayer}
-              language={language}
-              handleClick={handleClick}
-              controls={controls}
-              setCurrentPlayer={changePlayer}
-            />
+    <>
+      <title>{TranslateText("EDIT_PAGE_TITLE", language)}</title>
+      <motion.div
+        className="font-[family-name:var(--font-dosis-bold)] flex flex-col items-center justify-center pt-4"
+        style={{ backgroundColor: "var(--whitelessbright)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        {!game ? (
+          <div>
+            <LoadingCircle />
           </div>
+        ) : (
+          <>
+            <div className="block lg:hidden w-full">
+              <MobileEdit
+                game={game}
+                currentPlayer={currentPlayer}
+                language={language}
+                handleClick={handleClick}
+                controls={controls}
+                setCurrentPlayer={changePlayer}
+              />
+            </div>
 
-          <div className="hidden lg:block w-full">
-            <DesktopEdit
-              game={game}
-              language={language}
-              setGameName={setGameName}
-              setDifficulty={setDifficulty}
-              deleteGame={deleteGame}
-              isSaveDialogOpen={isSaveDialogOpen}
-              setIsSaveDialogOpen={setIsSaveDialogOpen}
-              handleClick={handleClick}
-              controls={controls}
-              saveNew={saveAsNewOrUpdate}
-              updateSaveNew={setSaveAsNewOrUpdate}
-              saveGameNewOrUpdate={SaveNewUpdate}
-              currentPlayer={currentPlayer}
-              setCurrentPlayer={changePlayer}
-            />
-          </div>
-          <div className="block lg:hidden">
-            <EditControls
-              isSaveDialogOpen={isSaveDialogOpen}
-              setIsSaveDialogOpen={setIsSaveDialogOpen}
-              saveNew={saveAsNewOrUpdate}
-              setGameName={setGameName}
-              setDifficulty={setDifficulty}
-              saveGameNewOrUpdate={SaveNewUpdate}
-              deleteGame={deleteGame}
-              language={language}
-              vertical={false}
-              game={game}
-              updateSaveNew={setSaveAsNewOrUpdate}
-            />
-          </div>
-        </>
-      )}
-    </motion.div>
+            <div className="hidden lg:block w-full">
+              <DesktopEdit
+                game={game}
+                language={language}
+                setGameName={setGameName}
+                setDifficulty={setDifficulty}
+                deleteGame={deleteGame}
+                isSaveDialogOpen={isSaveDialogOpen}
+                setIsSaveDialogOpen={setIsSaveDialogOpen}
+                handleClick={handleClick}
+                controls={controls}
+                saveNew={saveAsNewOrUpdate}
+                updateSaveNew={setSaveAsNewOrUpdate}
+                saveGameNewOrUpdate={SaveNewUpdate}
+                currentPlayer={currentPlayer}
+                setCurrentPlayer={changePlayer}
+              />
+            </div>
+            <div className="block lg:hidden">
+              <EditControls
+                isSaveDialogOpen={isSaveDialogOpen}
+                setIsSaveDialogOpen={setIsSaveDialogOpen}
+                saveNew={saveAsNewOrUpdate}
+                setGameName={setGameName}
+                setDifficulty={setDifficulty}
+                saveGameNewOrUpdate={SaveNewUpdate}
+                deleteGame={deleteGame}
+                language={language}
+                vertical={false}
+                game={game}
+                updateSaveNew={setSaveAsNewOrUpdate}
+              />
+            </div>
+          </>
+        )}
+      </motion.div>
+    </>
   );
 }
