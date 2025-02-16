@@ -12,6 +12,7 @@ public class Board {
     public List<List<String>> board;
     public boolean oTurn = false;
     private boolean nextWin = false;
+
     public Board(List<List<String>> board) throws BadRequestException {
         if (board == null) throw new BadRequestException("Board wasn't specified");
         if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
@@ -31,9 +32,11 @@ public class Board {
                 else if (!symbol.isEmpty()) throw new SemanticErrorException("Invalid symbol");
             }
         }
+
         if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
         if(xAmount > oAmount) oTurn = true;
-        nextWin = false;
+        if(xAmount == oAmount) oTurn = false;
+
         for (int y = 0; y < board.size(); y++) {
             List<String> row = board.get(y);
             for (int x = 0; x < row.size(); x++) {
@@ -49,7 +52,7 @@ public class Board {
         else state = GameState.midgame;
         return state;
     }
-    public boolean checkNeighbours(int x, int y){
+    private boolean checkNeighbours(int x, int y){
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;
@@ -64,7 +67,7 @@ public class Board {
     }
         return false;
     }
-    public int step(int x, int y, int nextX, int nextY,int streak, Boolean placed){
+    private int step(int x, int y, int nextX, int nextY,int streak, Boolean placed){
         if(streak == 5) {
             return streak;
         };

@@ -31,7 +31,7 @@ public class LiveGameController{
         if(token.isEmpty()) return; //TODO ERROR
         User user = authController.verify(token.get()).getBody();
         if(liveGame.getUser().contains(user)) {
-            //TODO wip
+            liveGame.getBoard();
         }
 
     }

@@ -29,12 +29,12 @@ public class GameController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path="/games")
     public Game createGame(@RequestBody Game game) throws BadRequestException {
-        List<List<String>> board = game.getBoard();
+        Board board = game.getBoard();
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
-        game.setGameState(new Board(board).getState());
+        game.setGameState(board.getState());
         return gameRepository.saveAndFlush(game);
     }
     @ResponseStatus(HttpStatus.OK)
@@ -71,11 +71,11 @@ public class GameController {
         try
         {
             Game oldEntity = gameRepository.findById(uuid).get();
-            List<List<String>> board = game.getBoard();
+            Board board = game.getBoard();
             oldEntity.setBoard(board);
             oldEntity.setName(game.getName());
             oldEntity.setDifficulty(game.getDifficulty());
-            oldEntity.setGameState(new Board(board).getState());
+            oldEntity.setGameState(board.getState());
             oldEntity.setUpdatedAt(LocalDateTime.now().toString());
             return gameRepository.saveAndFlush(oldEntity);
         }catch (NoSuchElementException exception){

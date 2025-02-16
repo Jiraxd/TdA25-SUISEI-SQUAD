@@ -1,9 +1,12 @@
 package com.tda25be.tda25be.entities;
 
+import com.tda25be.tda25be.deserializers.BoardConverter;
 import com.tda25be.tda25be.enums.Difficulty;
 import com.tda25be.tda25be.enums.GameState;
+import com.tda25be.tda25be.models.Board;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.coyote.BadRequestException;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.ArrayList;
@@ -26,30 +29,13 @@ public class Game {
     private String updatedAt;
     private GameState gameState;
     private Difficulty difficulty;
+    @Getter
     @Column(length = 1024)
-    private String board;
+    @Convert(converter = BoardConverter.class)
+    private Board board;
 
-    public static List<List<String>> boardTo2DList(String board) {
-        List<List<String>> boardList = new ArrayList<>();
-        board = board.substring(1, board.length()-1);
-        Pattern rowPattern = Pattern.compile("\\[(.*?)\\]");
-        Matcher rowMatcher = rowPattern.matcher(board);
-
-        while (rowMatcher.find()) {
-            String rowContent = rowMatcher.group(1).trim();
-            ArrayList<String> row = Arrays.stream(rowContent.split(",", -1))
-                    .map(String::trim)
-                    .collect(Collectors.toCollection(ArrayList<String>::new));
-
-            boardList.add(row);
-        }
-        return boardList;
-    }
-    public List<List<String>> getBoard() {
-        return boardTo2DList(this.board);
-    }
-    public void setBoard(List<List<String>> board){
-        this.board = board.toString();
+    public void setBoard(Board board) throws BadRequestException {
+        this.board = board;
     }
 
 }
