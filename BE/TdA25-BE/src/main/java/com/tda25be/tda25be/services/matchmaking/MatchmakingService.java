@@ -27,6 +27,7 @@ public abstract class MatchmakingService {
         else if(service instanceof UnrankedMatchmakingService){
             return MatchmakingTypes.unranked;
         }
+        return null;
     }
 
     public void joinMatchmaking(User user) {
