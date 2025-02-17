@@ -107,7 +107,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                   <Avatar className="w-20 h-20">
                     <AvatarImage
                       src={previewUrl || "/images/placeholder-avatar.png"}
-                      alt={"profile_picture"}
+                      alt={value?.name || "profile_picture"}
                     />
                   </Avatar>
                   <div className="flex flex-col gap-2">
