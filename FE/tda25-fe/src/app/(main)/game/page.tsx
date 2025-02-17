@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion, useAnimation } from "framer-motion";
 import { Game } from "@/models/Game";
 import { LoadingCircle } from "@/components/loadingCircle";
-import { TranslateText } from "@/lib/utils";
+import { checkWinner, TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
 import { GameCreateUpdate } from "@/models/GameCreateUpdate";
 import { useAlertContext } from "@/components/alertContext";
@@ -179,55 +179,6 @@ export default function GamePage() {
     }
   }
 
-  function checkWinner(board: string[][]): {
-    winner: boolean;
-    winningLine: number[][];
-  } {
-    const lines = [
-      // Horizontal lines
-      ...board.map((row, rowIndex) =>
-        row.map((_, colIndex) => [rowIndex, colIndex])
-      ),
-      // Vertical lines
-      ...board[0].map((_, colIndex) =>
-        board.map((_, rowIndex) => [rowIndex, colIndex])
-      ),
-      // Diagonal lines
-      ...Array.from({ length: board.length * 2 - 1 }, (_, i) => {
-        const diagonal1 = [];
-        const diagonal2 = [];
-        for (let j = 0; j <= i; j++) {
-          const x1 = i - j;
-          const y1 = j;
-          const x2 = board.length - 1 - (i - j);
-          const y2 = j;
-          if (x1 < board.length && y1 < board.length) {
-            diagonal1.push([x1, y1]);
-          }
-          if (x2 >= 0 && y2 < board.length) {
-            diagonal2.push([x2, y2]);
-          }
-        }
-        return [diagonal1, diagonal2];
-      }).flat(),
-    ];
-
-    for (const line of lines) {
-      for (let i = 0; i <= line.length - 5; i++) {
-        const segment = line.slice(i, i + 5);
-        const cells = segment.map(
-          ([rowIndex, colIndex]) => board[rowIndex][colIndex]
-        );
-        if (
-          cells.every((cell) => cell.toUpperCase() === "X") ||
-          cells.every((cell) => cell.toUpperCase() === "O")
-        ) {
-          return { winner: true, winningLine: segment };
-        }
-      }
-    }
-    return { winner: false, winningLine: [] };
-  }
   function handleClick(rowIndex: number, colIndex: number) {
     if (!game || game.board[rowIndex][colIndex] !== "" || winner) {
       return;

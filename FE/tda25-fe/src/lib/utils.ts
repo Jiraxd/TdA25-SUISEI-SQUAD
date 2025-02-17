@@ -181,6 +181,24 @@ const translationsCZ: Record<string, string> = {
   ACCEPT: "Přijmout",
   DECLINE: "Odmítnout",
   MATCHMAKING_TIMEOUT: "Čas na přijetí hry vypršel",
+  ONLINE_GAME_PAGE_TITLE: "Piškvorky | Online hra",
+  YOUR_SYMBOL: "Váš symbol",
+  TIME_REMAINING: "Zbývající čas",
+  OPPONENT: "Soupeř",
+  WINS: "Výhry",
+  DRAWS: "Remízy",
+  LOSSES: "Prohry",
+  SURRENDER: "Vzdát se",
+  PLAYERS_TURN: "Na tahu je hráč",
+  GAME_STATE: "Stav hry",
+  GAME_OVER: "Hra skončila",
+  GAME_DRAW: "Remíza",
+  MOVE_COUNT: "Počet tahů",
+  WINS_PLURAL: "výher",
+  DRAWS_PLURAL: "remíz",
+  LOSSES_PLURAL: "proher",
+  ELO_RATING_OPPONENT: "Soupeřovo ELO hodnocení",
+  ROUNDS_PLAYED: "Odehrané kola",
 };
 
 const translationsEN: Record<string, string> = {
@@ -343,6 +361,24 @@ const translationsEN: Record<string, string> = {
   ACCEPT: "Accept",
   DECLINE: "Decline",
   MATCHMAKING_TIMEOUT: "Time to accept the game has expired",
+  ONLINE_GAME_PAGE_TITLE: "Tic Tac Toe | Online Game",
+  YOUR_SYMBOL: "Your Symbol",
+  TIME_REMAINING: "Time Remaining",
+  OPPONENT: "Opponent",
+  WINS: "Wins",
+  DRAWS: "Draws",
+  LOSSES: "Losses",
+  SURRENDER: "Surrender",
+  PLAYERS_TURN: "Player's turn",
+  GAME_STATE: "Game State",
+  GAME_OVER: "Game Over",
+  GAME_DRAW: "Draw",
+  MOVE_COUNT: "Move count",
+  WINS_PLURAL: "wins",
+  DRAWS_PLURAL: "draws",
+  LOSSES_PLURAL: "losses",
+  ELO_RATING_OPPONENT: "Opponent's ELO Rating",
+  ROUNDS_PLAYED: "Rounds played",
 };
 
 export function ClearLoginCookie() {
@@ -361,4 +397,54 @@ export function GetLoginCookie(): string | null {
       .find((row) => row.startsWith("logintoken="))
       ?.split("=")[1] || null
   );
+}
+
+export function checkWinner(board: string[][]): {
+  winner: boolean;
+  winningLine: number[][];
+} {
+  const lines = [
+    // Horizontal lines
+    ...board.map((row, rowIndex) =>
+      row.map((_, colIndex) => [rowIndex, colIndex])
+    ),
+    // Vertical lines
+    ...board[0].map((_, colIndex) =>
+      board.map((_, rowIndex) => [rowIndex, colIndex])
+    ),
+    // Diagonal lines
+    ...Array.from({ length: board.length * 2 - 1 }, (_, i) => {
+      const diagonal1 = [];
+      const diagonal2 = [];
+      for (let j = 0; j <= i; j++) {
+        const x1 = i - j;
+        const y1 = j;
+        const x2 = board.length - 1 - (i - j);
+        const y2 = j;
+        if (x1 < board.length && y1 < board.length) {
+          diagonal1.push([x1, y1]);
+        }
+        if (x2 >= 0 && y2 < board.length) {
+          diagonal2.push([x2, y2]);
+        }
+      }
+      return [diagonal1, diagonal2];
+    }).flat(),
+  ];
+
+  for (const line of lines) {
+    for (let i = 0; i <= line.length - 5; i++) {
+      const segment = line.slice(i, i + 5);
+      const cells = segment.map(
+        ([rowIndex, colIndex]) => board[rowIndex][colIndex]
+      );
+      if (
+        cells.every((cell) => cell.toUpperCase() === "X") ||
+        cells.every((cell) => cell.toUpperCase() === "O")
+      ) {
+        return { winner: true, winningLine: segment };
+      }
+    }
+  }
+  return { winner: false, winningLine: [] };
 }

@@ -15,7 +15,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const [inQueue, setInQueue] = useState(false);
   const [queueType, setQueueType] = useState<"ranked" | "normal" | null>(null);
   const [queueTime, setQueueTime] = useState(0);
-  const [foundGame, setShowFound] = useState(true);
+  const [foundGame, setShowFound] = useState(false);
   const [opponent, setOpponent] = useState<UserProfile | null>(null);
 
   useEffect(() => {
