@@ -34,9 +34,9 @@ export const ButtonsNavBar = ({
 
   return (
     <div
-      className={
+      className={`${
         orientation === "vertical" ? "flex flex-col w-full" : "flex flex-row"
-      }
+      }  4xl:ml-96`}
     >
       <button className={buttonClass} onClick={handleClickGames}>
         <Image

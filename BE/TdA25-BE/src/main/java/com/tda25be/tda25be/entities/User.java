@@ -36,6 +36,6 @@ public class User {
     private int losses = 0;
     private int draws = 0;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Session> sessions;
 }

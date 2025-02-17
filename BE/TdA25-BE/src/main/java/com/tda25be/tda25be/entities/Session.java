@@ -19,7 +19,7 @@ public class Session {
     @NonNull
     private String token;
     private String deviceName;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     public User user;
 
     public Session(){

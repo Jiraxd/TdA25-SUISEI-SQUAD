@@ -13,7 +13,7 @@ export const LogoNavBar = () => {
     router.push("/");
   };
   return (
-    <>
+    <div className="4xl:mr-96">
       <button
         className="flex flex-row p-2 lg:p-6 items-center"
         onClick={handleClick}
@@ -32,6 +32,6 @@ export const LogoNavBar = () => {
           {"| " + TranslateText("HOME", language)}
         </div>
       </button>
-    </>
+    </div>
   );
 };

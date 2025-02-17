@@ -4,6 +4,7 @@ public enum GameState {
         opening,
         midgame,
         endgame,
+        completed,
         unknown
     }
 

@@ -1,79 +1,67 @@
 package com.tda25be.tda25be.api;
 
-import com.tda25be.tda25be.deserializers.Hashing;
 import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.entities.User;
-import com.tda25be.tda25be.repositories.SessionRepo;
-import com.tda25be.tda25be.repositories.UserRepo;
+import com.tda25be.tda25be.services.auth.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    UserRepo userRepo;
-    SessionRepo sessionRepo;
-    public AuthController(UserRepo userRepo, SessionRepo sessionRepo) {
-        this.userRepo = userRepo;
-        this.sessionRepo = sessionRepo;
-    }
-    @GetMapping("login")
+
+    private final AuthService authService;
+
+    @PostMapping("login")
     public ResponseEntity<Session> login(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
         String deviceName = requestBody.get("deviceName");
-        if(email == null || password == null || deviceName == null) return ResponseEntity.badRequest().build();
-        User user = userRepo.findByEmail(email);
-        if(user == null) return ResponseEntity.notFound().build();
-        if(Objects.equals(Hashing.hash(password), user.getPasswordHash())){
-            Session session = sessionRepo.findByUserAndDeviceName(user, deviceName);
-            if(session == null) session = new Session().setUser(user).setDeviceName(deviceName);
-            sessionRepo.save(session);
-            return ResponseEntity.ok(session);
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
-    @PostMapping("register")
-    public ResponseEntity<Session> register(@RequestBody Map<String, String> requestBody) {
-        String email = requestBody.get("email");
-        String password = requestBody.get("password");
-        String username = requestBody.get("username");
-        if(email == null || password == null || username == null) return ResponseEntity.badRequest().build();
-        User user = new User().setUsername(username).setEmail(email).setPasswordHash(Hashing.hash(password));
-        userRepo.save(user);
-        return ResponseEntity.ok().build();
-    }
-    @GetMapping("verify")
-    public ResponseEntity<User> verify(@RequestHeader("Authorization") String token) {
-        if (token == null || token.isEmpty()) {
+
+        if (email == null || password == null || deviceName == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        User user = sessionRepo.findById(token)
-                .map(Session::getUser)
-                .orElse(null);
+        Session session = authService.login(email, password, deviceName);
+        if (session == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(session);
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<Void> register(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        String password = requestBody.get("password");
+        String username = requestBody.get("username");
+
+        if (email == null || password == null || username == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        authService.register(email, password, username);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("verify")
+    public ResponseEntity<User> verify(@RequestHeader("Authorization") String token) {
+        if (token == null || token.isEmpty()) { return ResponseEntity.badRequest().build(); }
+        User user = authService.verify(token);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(user);
     }
+
     @GetMapping("logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-        if (token == null || token.isEmpty()) {return ResponseEntity.badRequest().build();}
-        if (!sessionRepo.existsById(token)) {
-            return ResponseEntity.notFound().build();
+        if (!authService.logout(token)) {
+            return ResponseEntity.badRequest().build();
         }
-
-        sessionRepo.deleteById(token);
         return ResponseEntity.ok("Session deleted successfully");
-
     }
 }

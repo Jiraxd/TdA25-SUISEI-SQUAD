@@ -11,7 +11,7 @@ export const RANKS: Rank[] = [
   { name: "BRONZE", minElo: 300, maxElo: 599, color: "#CD7F32" }, // Bronze
   { name: "SILVER", minElo: 600, maxElo: 899, color: "#C0C0C0" }, // Silver
   { name: "GOLD", minElo: 900, maxElo: 1199, color: "#FFD700" }, // Gold
-  { name: "PLATINUM", minElo: 1200, maxElo: 1499, color: "#E5E4E2" }, // Platinum
+  { name: "PLATINUM", minElo: 1200, maxElo: 1499, color: "#A8C3BC" }, // Platinum
   { name: "DIAMOND", minElo: 1500, maxElo: 1799, color: "#B9F2FF" }, // Diamond Blue
   { name: "MASTER", minElo: 1800, maxElo: 1999, color: "#FF4069" }, // Master
   { name: "GRANDMASTER", minElo: 2000, maxElo: Infinity, color: "#FF0000" }, // Grandmaster

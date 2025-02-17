@@ -1,12 +1,9 @@
 package com.tda25be.tda25be.api;
 
-import com.tda25be.tda25be.enums.GameState;
+import com.tda25be.tda25be.entities.Game;
 import com.tda25be.tda25be.error.ResourceNotFound;
-import com.tda25be.tda25be.error.SemanticErrorException;
 import com.tda25be.tda25be.models.Board;
-import com.tda25be.tda25be.models.Game;
 import com.tda25be.tda25be.models.OrganizationResponse;
-import com.tda25be.tda25be.entities.GameEntity;
 import com.tda25be.tda25be.repositories.GameRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -32,28 +29,24 @@ public class GameController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path="/games")
     public Game createGame(@RequestBody Game game) throws BadRequestException {
-        List<List<String>> board = game.getBoard();
+        Board board = game.getBoard();
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
         game.setCreatedAt(LocalDateTime.now().toString());
         game.setUpdatedAt(game.getCreatedAt());
-        game.setGameState(new Board(board).getState());
-        return Game.fromEntity(gameRepository.saveAndFlush(GameEntity.fromGame(game)));
+        game.setGameState(board.getState());
+        return gameRepository.saveAndFlush(game);
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path="/games" )
     public List<Game> getAllGames(){
-        List<Game> games = new ArrayList<>();
-        for (GameEntity entity : gameRepository.findAll()) {
-            games.add(Game.fromEntity(entity));
-        }
-        return games;
+        return new ArrayList<>(gameRepository.findAll());
     }
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path="/games/{uuid}")
     public Game getGame(@PathVariable String uuid){
         try {
-            return Game.fromEntity(gameRepository.findById(uuid).get());
+            return gameRepository.findById(uuid).get();
         }
         catch (NoSuchElementException exception){
             throw new ResourceNotFound();
@@ -68,24 +61,23 @@ public class GameController {
             throw new ResourceNotFound();
         }
     }
-    @ResponseStatus(HttpStatus.OK) //test this more, if parse works and semantic error is blocking
+    @ResponseStatus(HttpStatus.OK)
     @PutMapping(path="/games/{uuid}")
     public Game updateGame(@PathVariable String uuid, @RequestBody Game game) throws BadRequestException {
-        GameEntity entity = GameEntity.fromGame(game);
 
         if (game.getDifficulty() == null) throw new BadRequestException("Difficulty wasn't specified");
         if (game.getBoard() == null) throw new BadRequestException("Board wasn't specified");
         if (game.getName() == null) throw new BadRequestException("Name wasn't specified");
         try
         {
-            GameEntity oldEntity = gameRepository.findById(uuid).get();
-            List<List<String>> board = entity.getBoard();
+            Game oldEntity = gameRepository.findById(uuid).get();
+            Board board = game.getBoard();
             oldEntity.setBoard(board);
-            oldEntity.setName(entity.getName());
-            oldEntity.setDifficulty(entity.getDifficulty());
-            oldEntity.setGameState(new Board(board).getState());
+            oldEntity.setName(game.getName());
+            oldEntity.setDifficulty(game.getDifficulty());
+            oldEntity.setGameState(board.getState());
             oldEntity.setUpdatedAt(LocalDateTime.now().toString());
-            return Game.fromEntity(gameRepository.saveAndFlush(oldEntity));
+            return gameRepository.saveAndFlush(oldEntity);
         }catch (NoSuchElementException exception){
             throw new ResourceNotFound();
         }
