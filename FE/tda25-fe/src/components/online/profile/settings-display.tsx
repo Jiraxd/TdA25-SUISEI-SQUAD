@@ -61,23 +61,24 @@ const createSettingsFormSchema = (language: language) =>
 type SettingsFormValues = z.infer<ReturnType<typeof createSettingsFormSchema>>;
 
 export default function SettingsProfile({ user }: SettingsProfileProps) {
-  if (!user) return null;
   const { language } = useLanguage();
-  const [currentColor, setCurrentColor] = useState(user.nameColor || "#000000");
+  const [currentColor, setCurrentColor] = useState(
+    user?.nameColor || "#000000"
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(
-    user.profilePicture || ""
+    user?.profilePicture || ""
   );
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(createSettingsFormSchema(language)),
     defaultValues: {
-      username: user.username,
-      email: user.email,
+      username: user?.username,
+      email: user?.email,
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      nameColor: user.nameColor || "#000000",
+      nameColor: user?.nameColor || "#000000",
     },
   });
 
@@ -85,6 +86,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
     console.log(data);
   }
 
+  if (!user) return null;
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">

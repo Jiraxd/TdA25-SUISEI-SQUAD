@@ -41,6 +41,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
       setInQueue(false);
       setQueueType(null);
       setQueueTime(0);
+      setOpponent(null);
       updateSuccessMessage(TranslateText("MATCHMAKING_CANCELLED", language));
     }
   }
