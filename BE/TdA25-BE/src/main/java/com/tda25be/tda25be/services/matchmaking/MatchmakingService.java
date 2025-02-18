@@ -48,10 +48,7 @@ public abstract class MatchmakingService {
         if (opponent != null) {
             matchmakingUsers.remove(user);
             matchmakingUsers.remove(opponent);
-            List<User> users = new ArrayList<>();
-            users.add(opponent);
-            users.add(user);
-            LiveGame liveGame = new LiveGame(getMatchmakingType(this)).setUsers(users);
+            LiveGame liveGame = new LiveGame(getMatchmakingType(this));
             if(Math.round(Math.random()) != 0){
                 liveGame.setPlayerO(opponent).setPlayerX(user);
             }

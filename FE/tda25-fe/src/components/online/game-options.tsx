@@ -15,9 +15,12 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const [inQueue, setInQueue] = useState(false);
   const [queueType, setQueueType] = useState<"ranked" | "normal" | null>(null);
   const [queueTime, setQueueTime] = useState(0);
-  const [foundGame, setShowFound] = useState(true);
+  const [foundGame, setShowFound] = useState(false);
   const [opponent, setOpponent] = useState<UserProfile | null>(null);
 
+  useEffect(() => {
+    
+  }, []);
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (inQueue) {
@@ -45,20 +48,23 @@ export default function GameOptions({ user }: GameOptionsProps) {
       updateSuccessMessage(TranslateText("MATCHMAKING_CANCELLED", language));
     }
   }
-  async function handleClickMatchmaking(ranked: boolean) {
+  async function handleClickMatchmaking(ranked: "unranked" | "ranked") {
     if (user === null) {
       updateErrorMessage(TranslateText("USER_NOT_LOGGED_IN", language));
       return;
     }
     updateSuccessMessage(TranslateText("MATCHMAKING_REQUEST_SENT", language));
     const loginToken = GetLoginCookie();
-    const data = await fetch(`/api/v1/matchmaking/start?ranked=${ranked}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${loginToken}`,
-      },
-      credentials: "include",
-    });
+    const data = await fetch(
+      `/api/v1/matchmaking/start?matchmaking=${ranked}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${loginToken}`,
+        },
+        credentials: "include",
+      }
+    );
     if (data.ok) {
       setInQueue(true);
       setQueueType(ranked ? "ranked" : "normal");
@@ -74,7 +80,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <button
-          onClick={() => handleClickMatchmaking(false)}
+          onClick={() => handleClickMatchmaking("unranked")}
           disabled={inQueue}
           className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
             inQueue && queueType === "normal"
@@ -112,7 +118,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
           )}
         </button>
         <button
-          onClick={() => handleClickMatchmaking(true)}
+          onClick={() => handleClickMatchmaking("ranked")}
           disabled={inQueue}
           className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
             inQueue && queueType === "ranked"
