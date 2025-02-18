@@ -25,7 +25,10 @@ export default function GameOptions({ user }: GameOptionsProps) {
 
   useEffect(() => {
     const client = new Client({
-      webSocketFactory: () => new SockJS("/app/handshake"),
+      webSocketFactory: () =>
+        new SockJS("/app/handshake", null, {
+          transports: ["websocket"],
+        }),
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },
@@ -36,10 +39,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
         console.log("Connected to matchmaking");
         client.subscribe("/user/matchmaking", (message) => {
           const response = JSON.parse(message.body);
-          if (
-            response.statusCode === 202 &&
-            response.body.type === "MatchFound"
-          ) {
+          if (response.body.type === "MatchFound") {
             router.push(`/onlineGame/${response.body.message}`);
           }
         });
