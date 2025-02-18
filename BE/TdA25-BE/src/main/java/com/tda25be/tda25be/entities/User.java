@@ -10,7 +10,6 @@ import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Table(name = "App_User", uniqueConstraints={@UniqueConstraint(columnNames={"email"})})
 @Entity
@@ -34,7 +33,4 @@ public class User {
     private int win = 0;
     private int losses = 0;
     private int draws = 0;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Session> sessions;
 }
