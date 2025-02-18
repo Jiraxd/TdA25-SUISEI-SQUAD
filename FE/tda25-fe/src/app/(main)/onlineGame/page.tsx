@@ -86,10 +86,9 @@ export default function OnlineGamePage() {
   }, [gameId]);
 
   useEffect(() => {
-    const wsUrl = `ws://${window.location.host}/app/handshake`;
     const stompClient = new Client({
       webSocketFactory: () =>
-        new SockJS(wsUrl, undefined, {
+        new SockJS("/app/handshake", {
           transports: ["websocket"],
         }),
       connectHeaders: {
