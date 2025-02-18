@@ -52,7 +52,7 @@ function LoginContent() {
       body: JSON.stringify({
         email: values.email,
         password: values.password,
-        device: window.navigator.userAgent,
+        deviceName: window.navigator.userAgent,
       }),
     });
 
