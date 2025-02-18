@@ -27,7 +27,6 @@ public class Game {
     @Getter
     @Column(length = 1024)
     @Convert(converter = BoardConverter.class)
-    @NonNull
     private Board board;
 
     public void setBoard(@NonNull Board board) {
