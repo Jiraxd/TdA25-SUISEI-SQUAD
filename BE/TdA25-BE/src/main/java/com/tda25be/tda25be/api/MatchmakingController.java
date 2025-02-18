@@ -9,20 +9,18 @@ import com.tda25be.tda25be.services.matchmaking.UnrankedMatchmakingService;
 import jakarta.persistence.Convert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/v1/matchmaking")
 public class MatchmakingController {
     private final List<MatchmakingService> matchmakingServices;
     private final UserRepo userRepo;
 
-    @GetMapping
+    @GetMapping("/start")
     public ResponseEntity<String> startMatchmaking(@RequestParam MatchmakingTypes matchmaking , @RequestHeader("Authorization") String token){
         if(matchmaking == null || token == null) return ResponseEntity.badRequest().build();
         User user = userRepo.findById(token).orElse(null);
