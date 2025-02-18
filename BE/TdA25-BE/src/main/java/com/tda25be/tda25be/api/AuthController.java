@@ -22,7 +22,7 @@ public class AuthController {
     private final UserRepo userRepo;
     private final SessionRepo sessionRepo;
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<Session> login(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
@@ -47,7 +47,7 @@ public class AuthController {
         return new ResponseEntity<>(filteredSessions, HttpStatus.OK);
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
@@ -65,7 +65,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("verify")
+    @GetMapping("/verify")
     public ResponseEntity<User> verify(@RequestHeader("Authorization") String token) {
         if (token == null || token.isEmpty()) { return ResponseEntity.badRequest().build(); }
         User user = authService.verify(token);
@@ -75,7 +75,7 @@ public class AuthController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping("logout")
+    @GetMapping("/logout")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
         if (!authService.logout(token)) {
             return ResponseEntity.badRequest().build();
