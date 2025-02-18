@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 //import { GameFound } from "./game-found";
 import { useRouter } from "next/navigation";
 import { Client } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 
 type GameOptionsProps = {
   user: UserProfile | null;
@@ -25,10 +24,9 @@ export default function GameOptions({ user }: GameOptionsProps) {
 
   useEffect(() => {
     const client = new Client({
-      webSocketFactory: () =>
-        new SockJS("/app/handshake", {
-          transports: ["websocket"],
-        }),
+      brokerURL: `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+        window.location.host
+      }/app/handshake`,
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },

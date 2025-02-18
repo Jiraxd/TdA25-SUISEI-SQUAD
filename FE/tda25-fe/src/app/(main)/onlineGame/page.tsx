@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAlertContext } from "@/components/alertContext";
 import { Client } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -87,15 +86,11 @@ export default function OnlineGamePage() {
 
   useEffect(() => {
     const stompClient = new Client({
-      webSocketFactory: () =>
-        new SockJS("/app/handshake", {
-          transports: ["websocket"],
-        }),
+      brokerURL: `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
+        window.location.host
+      }/app/handshake`,
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
-      },
-      debug: (str) => {
-        console.log("STOMP:", str);
       },
       onConnect: () => {
         console.log("Connected to game websocket");
