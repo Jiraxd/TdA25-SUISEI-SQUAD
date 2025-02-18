@@ -381,22 +381,22 @@ const translationsEN: Record<string, string> = {
   ROUNDS_PLAYED: "Rounds played",
 };
 
-export function ClearLoginCookie() {
-  document.cookie =
-    "logintoken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+import Cookies from "js-cookie";
+
+export function ClearLoginCookie(): void {
+  Cookies.remove("logintoken", { path: "/" });
 }
 
-export function SetLoginCookie(token: string) {
-  document.cookie = `logintoken=${token}; path=/;`;
+export function SetLoginCookie(token: string): void {
+  Cookies.set("logintoken", token, {
+    path: "/",
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
 }
 
 export function GetLoginCookie(): string | null {
-  return (
-    document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("logintoken="))
-      ?.split("=")[1] || null
-  );
+  return Cookies.get("logintoken") || null;
 }
 
 export function checkWinner(board: string[][]): {
