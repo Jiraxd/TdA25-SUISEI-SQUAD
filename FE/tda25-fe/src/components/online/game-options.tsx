@@ -23,16 +23,28 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const socket = io("/app/handshake", {
+    const socket = io({
+      path: "/app/handshake",
       extraHeaders: {
         Authorization: GetLoginCookie() || "",
       },
+      transports: ["websocket"],
     });
 
-    socket.on("/app/ws/user/matchmaking", (data) => {
-      if (data.MatchFound) {
-        router.push(`/onlineGame/${data.MatchFound}`);
+    socket.on("/user/matchmaking", (response) => {
+      const { body, statusCode } = response;
+      if (statusCode === 202 && body.type === "MatchFound") {
+        router.push(`/onlineGame/${body.message}`);
       }
+    });
+
+    socket.on("connect_error", (error) => {
+      updateErrorMessage(
+        TranslateText("MATCHMAKING_CONNECTION_ERROR", language)
+      );
+      setInQueue(false);
+      setQueueType(null);
+      setQueueTime(0);
     });
     return () => {
       socket.disconnect();

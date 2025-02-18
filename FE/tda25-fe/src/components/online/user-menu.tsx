@@ -27,7 +27,7 @@ export default function UserMenu({ userProfile }: ProfileProps) {
   }, [userProfile]);
   if (!isLoggedIn) {
     return (
-      <div className="space-x-2">
+      <div className="space-x-2 space-y-2 lg:space-y-0 flex-col lg:flex-row flex">
         <Button
           onClick={() => router.push("/login?redirect=/online")}
           className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-red-700"
