@@ -28,9 +28,6 @@ public class LiveGame {
     @NonNull
     private Board board;
     private MatchmakingTypes matchmakingTypes;
-    @OneToMany
-    @NonNull
-    private List<User> users;
     @ManyToOne
     @NonNull
     private User playerX;
@@ -51,6 +48,11 @@ public class LiveGame {
         }
         board = new Board(boardList);
         this.matchmakingTypes = matchmakingType;
-        this.users = new ArrayList<>();
+    }
+    public List<User> getUsers(){
+        List<User> users = new ArrayList<>();
+        users.add(playerX);
+        users.add(playerO);
+        return users;
     }
 }
