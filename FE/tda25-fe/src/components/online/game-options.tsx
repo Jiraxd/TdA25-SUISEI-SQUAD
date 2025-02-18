@@ -24,17 +24,13 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const wsUrl = `ws://${window.location.host}/app/handshake`;
     const client = new Client({
       webSocketFactory: () =>
-        new SockJS(wsUrl, undefined, {
+        new SockJS("/app/handshake", {
           transports: ["websocket"],
         }),
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
-      },
-      debug: (str) => {
-        console.log("STOMP:", str);
       },
       onConnect: () => {
         console.log("Connected to matchmaking");

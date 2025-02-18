@@ -55,11 +55,13 @@ export default function UserMenu({ userProfile }: ProfileProps) {
           className="font-dosis-medium flex items-center space-x-2 px-4 py-2 bg-darkerblue text-white rounded-lg text-xl hover:bg-darkerblue/80"
         >
           <img
-            src="/images/placeholder-avatar.png"
+            src={
+              userProfile?.profilePicture || "/images/placeholder-avatar.png"
+            }
             alt="Profile"
             className="w-6 h-6 rounded-full"
           />
-          <span>{"TODO NAME"}</span>
+          <span>{userProfile?.username}</span>
           <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>

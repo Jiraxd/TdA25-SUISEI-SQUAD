@@ -15,7 +15,7 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
 
   if (loading) {
     return (
-      <div className="mb-4 sm:mb-8 p-4 sm:p-6 bg-darkshade rounded-lg shadow-md text-white">
+      <div className="mb-4 sm:mb-8 p-4 sm:p-6 bg-whitelessbright border-2 border-darkshade rounded-lg shadow-md text-white">
         <Skeleton className="h-6 sm:h-8 w-32 sm:w-48 mb-2 sm:mb-4 bg-gray-700" />
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
           <Skeleton className="h-8 sm:h-10 w-16 sm:w-20 bg-gray-700 mb-2 sm:mb-0" />
