@@ -2,6 +2,7 @@ package com.tda25be.tda25be.api;
 
 import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.entities.User;
+import com.tda25be.tda25be.repositories.SessionRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 @RequiredArgsConstructor
 @RestController
@@ -17,6 +20,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserRepo userRepo;
+    private final SessionRepo sessionRepo;
 
     @PostMapping("login")
     public ResponseEntity<Session> login(@RequestBody Map<String, String> requestBody) {
@@ -33,6 +37,14 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(session);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Session>> getSessions(User user) {
+        List<Session> sessions = sessionRepo.findByUser((user));
+        List<Session> filteredSessions = new ArrayList<>();
+        sessions.forEach(session -> filteredSessions.add(session.setToken(null)));
+        return new ResponseEntity<>(filteredSessions, HttpStatus.OK);
     }
 
     @PostMapping("register")
