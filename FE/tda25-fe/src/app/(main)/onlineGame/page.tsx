@@ -86,9 +86,7 @@ export default function OnlineGamePage() {
 
   useEffect(() => {
     const stompClient = new Client({
-      brokerURL: `${window.location.protocol === "https:" ? "wss:" : "ws:"}//${
-        window.location.host
-      }/app/handshake`,
+      brokerURL: `ws://${window.location.host}/app/handshake`,
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },
