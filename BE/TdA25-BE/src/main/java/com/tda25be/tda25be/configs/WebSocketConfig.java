@@ -22,12 +22,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/user", "/topic");
-        config.setApplicationDestinationPrefixes("/app/handshake");
+        config.setApplicationDestinationPrefixes("/app/ws");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/app/ws")
+        registry.addEndpoint("/app/handshake")
                 .setAllowedOrigins("*")
                 .addInterceptors(webSocketAuthInterceptor)
                 .setHandshakeHandler(userPrincipalHandshakeHandler)
