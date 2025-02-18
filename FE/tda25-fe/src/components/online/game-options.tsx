@@ -24,9 +24,10 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const router = useRouter();
 
   useEffect(() => {
+    const wsUrl = `ws://${window.location.host}/app/handshake`;
     const client = new Client({
       webSocketFactory: () =>
-        new SockJS("/app/handshake", null, {
+        new SockJS(wsUrl, undefined, {
           transports: ["websocket"],
         }),
       connectHeaders: {
