@@ -88,6 +88,7 @@ public class GameController {
             throw new ResourceNotFound();
         }
     }
+    @GetMapping("/liveGame")
     public ResponseEntity<LiveGame> liveGame(@RequestHeader("Authorization") String token){
         if(token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         User user = authService.verify(token);
