@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAlertContext } from "@/components/alertContext";
 import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -86,7 +87,7 @@ export default function OnlineGamePage() {
 
   useEffect(() => {
     const stompClient = new Client({
-      brokerURL: `ws://${window.location.host}/app/handshake`,
+      webSocketFactory: () => new SockJS("/app/handshake"),
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },
