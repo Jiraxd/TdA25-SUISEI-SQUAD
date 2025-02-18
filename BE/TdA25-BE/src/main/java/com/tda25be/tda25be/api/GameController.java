@@ -28,10 +28,12 @@ public class GameController {
     private final GameRepository gameRepository;
     private final LiveGameRepo liveGameRepo;
     private final AuthService authService;
+
     @GetMapping(path = "/test")
     public OrganizationResponse api() {
         return new OrganizationResponse("Student Cyber Games");
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path="/games")
     public Game createGame(@RequestBody Game game) throws BadRequestException {
@@ -43,11 +45,13 @@ public class GameController {
         game.setGameState(board.getState());
         return gameRepository.saveAndFlush(game);
     }
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path="/games" )
     public List<Game> getAllGames(){
         return new ArrayList<>(gameRepository.findAll());
     }
+
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path="/games/{uuid}")
     public Game getGame(@PathVariable String uuid){
@@ -58,6 +62,7 @@ public class GameController {
             throw new ResourceNotFound();
         }
     }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path="/games/{uuid}")
     public void deleteGame(@PathVariable String uuid) {
@@ -67,6 +72,7 @@ public class GameController {
             throw new ResourceNotFound();
         }
     }
+
     @ResponseStatus(HttpStatus.OK)
     @PutMapping(path="/games/{uuid}")
     public Game updateGame(@PathVariable String uuid, @RequestBody Game game) throws BadRequestException {
@@ -88,6 +94,7 @@ public class GameController {
             throw new ResourceNotFound();
         }
     }
+
     @GetMapping("/liveGame")
     public ResponseEntity<LiveGame> liveGame(@RequestHeader("Authorization") String token){
         if(token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

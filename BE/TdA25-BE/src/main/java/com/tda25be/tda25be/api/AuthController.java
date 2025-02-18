@@ -2,6 +2,7 @@ package com.tda25be.tda25be.api;
 
 import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.entities.User;
+import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepo userRepo;
 
     @PostMapping("login")
     public ResponseEntity<Session> login(@RequestBody Map<String, String> requestBody) {
@@ -34,15 +36,19 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<Void> register(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<String> register(@RequestBody Map<String, String> requestBody) {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
         String username = requestBody.get("username");
 
-        if (email == null || password == null || username == null) {
-            return ResponseEntity.badRequest().build();
+        if (email == null) {
+            return ResponseEntity.badRequest().body("Email not specified.");
+        } else if (password == null) {
+            return ResponseEntity.badRequest().body("Password not specified.");
+        } else if (username == null) {
+            return ResponseEntity.badRequest().body("Username not specified.");
         }
-
+        if(userRepo.findByEmail(email) != null) return ResponseEntity.badRequest().body("User already exists.");
         authService.register(email, password, username);
         return ResponseEntity.ok().build();
     }
@@ -52,7 +58,7 @@ public class AuthController {
         if (token == null || token.isEmpty()) { return ResponseEntity.badRequest().build(); }
         User user = authService.verify(token);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return ResponseEntity.ok(user);
     }
