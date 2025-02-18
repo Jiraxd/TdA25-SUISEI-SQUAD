@@ -60,8 +60,8 @@ public abstract class MatchmakingService {
     }
 
     private void notifyPlayers(User user, User opponent, LiveGame liveGame) {
-        webSocketUtil.sendMessageToUser(user.getUuid(), "/user/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.ACCEPTED);
-        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/user/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.ACCEPTED); //TODO goofy
+        webSocketUtil.sendMessageToUser(user.getUuid(), "/user/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/user/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy
     }
 
     protected abstract boolean isValidMatch(User user, User opponent);
