@@ -58,8 +58,8 @@ function LoginContent() {
 
     if (response.ok) {
       const redirect = searchParams.get("redirect") || "/online";
-      const token = await response.text();
-      SetLoginCookie(token);
+      const data = await response.json();
+      SetLoginCookie(data.token);
       router.push(redirect);
     } else {
       const errorText = await response.json();
