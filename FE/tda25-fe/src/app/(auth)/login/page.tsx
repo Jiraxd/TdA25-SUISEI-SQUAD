@@ -49,7 +49,11 @@ function LoginContent() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(values),
+      body: JSON.stringify({
+        email: values.email,
+        password: values.password,
+        deviceName: window.navigator.userAgent,
+      }),
     });
 
     if (response.ok) {

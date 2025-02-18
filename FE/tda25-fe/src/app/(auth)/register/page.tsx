@@ -63,7 +63,9 @@ function RegisterPageContent() {
       },
       body: JSON.stringify(values),
     });
-
+    console.log(response);
+    setFormSuccess(TranslateText("REGISTER_SUCCESS", language));
+    return;
     if (response.ok) {
       setFormSuccess(TranslateText("REGISTER_SUCCESS", language));
     } else {
