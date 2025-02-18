@@ -5,8 +5,9 @@ import { UserProfile } from "@/models/UserProfile";
 import { useAlertContext } from "../alertContext";
 import { useEffect, useState } from "react";
 //import { GameFound } from "./game-found";
-import { io } from "socket.io-client";
 import { useRouter } from "next/navigation";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 type GameOptionsProps = {
   user: UserProfile | null;
@@ -23,31 +24,46 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const socket = io({
-      path: "/app/handshake",
-      extraHeaders: {
+    const client = new Client({
+      webSocketFactory: () => new SockJS("/app/handshake"),
+      connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },
-      transports: ["websocket"],
+      debug: (str) => {
+        console.log("STOMP:", str);
+      },
+      onConnect: () => {
+        console.log("Connected to matchmaking");
+        client.subscribe("/user/matchmaking", (message) => {
+          const response = JSON.parse(message.body);
+          if (
+            response.statusCode === 202 &&
+            response.body.type === "MatchFound"
+          ) {
+            router.push(`/onlineGame/${response.body.message}`);
+          }
+        });
+      },
+      onDisconnect: () => {
+        console.log("Disconnected from matchmaking");
+        setInQueue(false);
+        setQueueType(null);
+        setQueueTime(0);
+      },
+      onStompError: (error) => {
+        console.error("STOMP error:", error);
+        updateErrorMessage(
+          TranslateText("MATCHMAKING_CONNECTION_ERROR", language)
+        );
+      },
     });
 
-    socket.on("/user/matchmaking", (response) => {
-      const { body, statusCode } = response;
-      if (statusCode === 202 && body.type === "MatchFound") {
-        router.push(`/onlineGame/${body.message}`);
-      }
-    });
+    client.activate();
 
-    socket.on("connect_error", (error) => {
-      updateErrorMessage(
-        TranslateText("MATCHMAKING_CONNECTION_ERROR", language)
-      );
-      setInQueue(false);
-      setQueueType(null);
-      setQueueTime(0);
-    });
     return () => {
-      socket.disconnect();
+      if (client.active) {
+        client.deactivate();
+      }
     };
   }, []);
   useEffect(() => {

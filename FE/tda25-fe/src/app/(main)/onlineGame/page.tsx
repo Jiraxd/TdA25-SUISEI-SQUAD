@@ -12,7 +12,8 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAlertContext } from "@/components/alertContext";
-import { io } from "socket.io-client";
+import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -84,28 +85,48 @@ export default function OnlineGamePage() {
   }, [gameId]);
 
   useEffect(() => {
-    const socket = io("/app/handshake", {
-      extraHeaders: {
+    const client = new Client({
+      webSocketFactory: () => new SockJS("/app/handshake"),
+      connectHeaders: {
         Authorization: GetLoginCookie() || "",
+      },
+      debug: (str) => {
+        console.log("STOMP:", str);
+      },
+      onConnect: () => {
+        console.log("Connected to game websocket");
+        client.subscribe("/user/game-updates", (message) => {
+          const data = JSON.parse(message.body);
+          const response = data.body;
+
+          if (response.type === "Win") {
+            setWinner(response.message as "X" | "O" | "draw");
+            const { winner, winningLine } = checkWinner(board);
+            setWinLane(winningLine);
+          } else if (response.type === "Board") {
+            setBoard(response.message as Array<Array<"X" | "O" | "">>);
+          } else if (response.type === "Error") {
+            updateErrorMessage(
+              TranslateText(response.message as string, language)
+            );
+          }
+        });
+      },
+      onDisconnect: () => {
+        console.log("Disconnected from game websocket");
+      },
+      onStompError: (error) => {
+        console.error("STOMP error:", error);
+        updateErrorMessage(TranslateText("GAME_CONNECTION_ERROR", language));
       },
     });
 
-    socket.on("/user/game-updates", (data) => {
-      const message: WSMessage = JSON.parse(data);
-      if (message.type === "Win") {
-        setWinner(message.message as "X" | "O" | "draw");
-        const { winner, winningLine } = checkWinner(board);
-        setWinLane(winningLine);
-      } else if (message.type === "Board") {
-        setBoard(message.message as Array<Array<"X" | "O" | "">>);
-      } else if (message.type === "Error") {
-        updateErrorMessage(TranslateText(message.message as string, language));
-      }
-    });
+    client.activate();
 
     return () => {
-      socket.off("/user/game-updates");
-      socket.disconnect();
+      if (client.active) {
+        client.deactivate();
+      }
     };
   }, []);
 
