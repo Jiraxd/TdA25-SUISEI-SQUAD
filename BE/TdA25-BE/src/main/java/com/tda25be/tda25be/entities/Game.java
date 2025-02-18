@@ -19,11 +19,8 @@ public class Game {
     @Id
     @UuidGenerator
     private String uuid;
-    @NonNull
     private String name;
-    @NonNull
     private String createdAt;
-    @NonNull
     private String updatedAt;
     private GameState gameState;
     private Difficulty difficulty;

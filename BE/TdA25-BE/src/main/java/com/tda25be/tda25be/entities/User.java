@@ -25,9 +25,8 @@ public class User {
     @ReadOnlyProperty
     @CreationTimestamp
     private Timestamp createdAt;
-    @NonNull
+    @Column(unique=true)
     private String email;
-    @NonNull
     private String username;
     @NonNull
     private String passwordHash;
