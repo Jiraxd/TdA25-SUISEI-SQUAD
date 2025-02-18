@@ -11,6 +11,13 @@ import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAlertContext } from "@/components/alertContext";
+import { io } from "socket.io-client";
+
+type WSMessage = {
+  type: "Win" | "Board" | "Error";
+  message: string | Array<Array<"X" | "O" | "">>;
+};
 
 export default function OnlineGamePage() {
   const pathName = usePathname();
@@ -27,7 +34,7 @@ export default function OnlineGamePage() {
   const [timeRemaining, setTimeRemaining] = useState<number>(30);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
   const controls = useAnimation();
-
+  const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
   useEffect(() => {
     if (timeRemaining > 0) {
       const timer = setInterval(() => {
@@ -76,8 +83,52 @@ export default function OnlineGamePage() {
     fetchData();
   }, [gameId]);
 
-  function handleClick(rowIndex: number, colIndex: number) {
-    // WEBSOCKET move implementation here
+  useEffect(() => {
+    const socket = io("/app/handshake", {
+      extraHeaders: {
+        Authorization: GetLoginCookie() || "",
+      },
+    });
+
+    socket.on("/user/game-updates", (data) => {
+      const message: WSMessage = JSON.parse(data);
+      if (message.type === "Win") {
+        setWinner(message.message as "X" | "O" | "draw");
+        const { winner, winningLine } = checkWinner(board);
+        setWinLane(winningLine);
+      } else if (message.type === "Board") {
+        setBoard(message.message as Array<Array<"X" | "O" | "">>);
+      } else if (message.type === "Error") {
+        updateErrorMessage(TranslateText(message.message as string, language));
+      }
+    });
+
+    return () => {
+      socket.off("/user/game-updates");
+      socket.disconnect();
+    };
+  }, []);
+
+  async function handleClick(rowIndex: number, colIndex: number) {
+    if (board[rowIndex][colIndex] !== "" || winner) return;
+    const data = await fetch(`/app/ws/move/${gameId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: GetLoginCookie() || "",
+      },
+      body: JSON.stringify({
+        X: rowIndex,
+        Y: colIndex,
+      }),
+    });
+    if (data.ok) {
+      const newData = await data.json();
+      setBoard(newData.board);
+      updateSuccessMessage(TranslateText("MOVE_SUCCESS", language));
+    } else {
+      updateErrorMessage(TranslateText("MOVE_ERROR", language));
+    }
   }
 
   return (
@@ -209,7 +260,19 @@ export default function OnlineGamePage() {
                         whileHover={{ scale: 0.95 }}
                         whileTap={{ scale: 0.85 }}
                       >
-                        {cell.toUpperCase()}
+                        {cell === "X" ? (
+                          <img
+                            className="w-[80%] h-[80%]"
+                            src="/icons/X_cervene.svg"
+                          />
+                        ) : cell === "O" ? (
+                          <img
+                            className="w-[80%] h-[80%]"
+                            src="/icons/O_modre.svg"
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </motion.button>
                     ))
                   )}
