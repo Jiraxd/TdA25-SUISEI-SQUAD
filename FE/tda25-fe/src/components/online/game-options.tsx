@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 //import { GameFound } from "./game-found";
 import { useRouter } from "next/navigation";
 import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
 
 type GameOptionsProps = {
   user: UserProfile | null;
@@ -24,9 +25,12 @@ export default function GameOptions({ user }: GameOptionsProps) {
 
   useEffect(() => {
     const client = new Client({
-      brokerURL: `ws://${window.location.host}/app/handshake`,
+      webSocketFactory: () => new SockJS("/app/handshake"),
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
+      },
+      debug: (str) => {
+        console.log("STOMP debug:", str);
       },
       onConnect: () => {
         console.log("Connected to matchmaking");
