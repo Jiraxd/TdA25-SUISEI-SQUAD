@@ -36,6 +36,7 @@ export default function OnlineGamePage() {
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
   const controls = useAnimation();
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
+  const [client, setClient] = useState<Client | null>(null);
   useEffect(() => {
     if (timeRemaining > 0) {
       const timer = setInterval(() => {
@@ -85,8 +86,12 @@ export default function OnlineGamePage() {
   }, [gameId]);
 
   useEffect(() => {
-    const client = new Client({
-      webSocketFactory: () => new SockJS("/app/handshake"),
+    const wsUrl = `ws://${window.location.host}/app/handshake`;
+    const stompClient = new Client({
+      webSocketFactory: () =>
+        new SockJS(wsUrl, undefined, {
+          transports: ["websocket"],
+        }),
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },
@@ -95,7 +100,7 @@ export default function OnlineGamePage() {
       },
       onConnect: () => {
         console.log("Connected to game websocket");
-        client.subscribe("/user/game-updates", (message) => {
+        stompClient.subscribe("/user/game-updates", (message) => {
           const data = JSON.parse(message.body);
           const response = data.body;
 
@@ -120,34 +125,34 @@ export default function OnlineGamePage() {
         updateErrorMessage(TranslateText("GAME_CONNECTION_ERROR", language));
       },
     });
-
-    client.activate();
+    setClient(stompClient);
+    stompClient.activate();
 
     return () => {
-      if (client.active) {
-        client.deactivate();
+      if (stompClient.active) {
+        stompClient.deactivate();
       }
     };
   }, []);
 
   async function handleClick(rowIndex: number, colIndex: number) {
-    if (board[rowIndex][colIndex] !== "" || winner) return;
-    const data = await fetch(`/app/ws/move/${gameId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: GetLoginCookie() || "",
-      },
-      body: JSON.stringify({
-        X: rowIndex,
-        Y: colIndex,
-      }),
-    });
-    if (data.ok) {
-      const newData = await data.json();
-      setBoard(newData.board);
-      updateSuccessMessage(TranslateText("MOVE_SUCCESS", language));
-    } else {
+    if (!client) return;
+    if (board[rowIndex][colIndex] !== "" || winner || !client.active) return;
+
+    try {
+      client.publish({
+        destination: `/app/ws/makeMove/${gameId}`,
+        body: JSON.stringify({
+          X: rowIndex,
+          Y: colIndex,
+        }),
+        headers: {
+          Authorization: GetLoginCookie() || "",
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error("Move error:", error);
       updateErrorMessage(TranslateText("MOVE_ERROR", language));
     }
   }
