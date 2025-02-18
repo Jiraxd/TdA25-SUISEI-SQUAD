@@ -4,7 +4,9 @@ import { GetLoginCookie, TranslateText } from "@/lib/utils";
 import { UserProfile } from "@/models/UserProfile";
 import { useAlertContext } from "../alertContext";
 import { useEffect, useState } from "react";
-import { GameFound } from "./game-found";
+//import { GameFound } from "./game-found";
+import { io } from "socket.io-client";
+import { useRouter } from "next/navigation";
 
 type GameOptionsProps = {
   user: UserProfile | null;
@@ -15,11 +17,26 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const [inQueue, setInQueue] = useState(false);
   const [queueType, setQueueType] = useState<"ranked" | "normal" | null>(null);
   const [queueTime, setQueueTime] = useState(0);
-  const [foundGame, setShowFound] = useState(false);
-  const [opponent, setOpponent] = useState<UserProfile | null>(null);
+  // const [foundGame, setShowFound] = useState(false);
+  // const [opponent, setOpponent] = useState<UserProfile | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
-    
+    const socket = io("/app/handshake", {
+      extraHeaders: {
+        Authorization: GetLoginCookie() || "",
+      },
+    });
+
+    socket.on("/app/ws/user/matchmaking", (data) => {
+      if (data.MatchFound) {
+        router.push(`/onlineGame/${data.MatchFound}`);
+      }
+    });
+    return () => {
+      socket.disconnect();
+    };
   }, []);
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -44,7 +61,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
       setInQueue(false);
       setQueueType(null);
       setQueueTime(0);
-      setOpponent(null);
+      //     setOpponent(null);
       updateSuccessMessage(TranslateText("MATCHMAKING_CANCELLED", language));
     }
   }
@@ -165,7 +182,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
           </span>
         </button>
       </div>
-      <GameFound
+      {/*  <GameFound
         isOpen={foundGame}
         opponent={{
           username: opponent?.username || "Opponent",
@@ -183,6 +200,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
         }}
         timeoutSeconds={30}
       />
+   */}
     </>
   );
 }
