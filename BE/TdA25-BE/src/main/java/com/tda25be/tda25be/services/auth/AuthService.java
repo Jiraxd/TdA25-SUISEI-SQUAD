@@ -33,11 +33,15 @@ public class AuthService {
         }
         return null;
     }
-
-    public User register(String email, String password, String username) {
-        User user = new User().setUsername(username).setEmail(email).setPasswordHash(passwordEncoder.encode(password));
+    public User register(String email, String password, String username, Integer elo) {
+        if(userRepo.findByEmail(email) != null) return null;
+        User user = new User().setUsername(username).setEmail(email).setPasswordHash(passwordEncoder.encode(password)).setElo(elo);
         userRepo.save(user);
         return user;
+    }
+
+    public User register(String email, String password, String username) {
+        return register(email, password, username, 400);
     }
 
     public User verify(String token) {
