@@ -28,7 +28,7 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor{
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpServletRequest = servletRequest.getServletRequest();
 
-            String sessionToken = httpServletRequest.getHeader("Authorization");
+            String sessionToken = httpServletRequest.getParameter("Authorization");
 
             if (sessionToken != null) {
                 Optional<Session> session = sessionRepository.findByToken(sessionToken);
