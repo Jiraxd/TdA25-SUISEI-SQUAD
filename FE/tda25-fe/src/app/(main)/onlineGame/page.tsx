@@ -208,12 +208,31 @@ export default function OnlineGamePage() {
                       </span>
                     </div>
 
+                    <div className="flex flex-col items-center">
+                      <span className="text-lg">
+                        {TranslateText("ON_TURN", language)}
+                      </span>
+                      {playerSymbol === "X" ? (
+                        <img
+                          className="w-[10%] h-[10%]"
+                          src="/icons/X_cervene.svg"
+                        />
+                      ) : playerSymbol === "O" ? (
+                        <img
+                          className="w-[10%] h-[10%]"
+                          src="/icons/O_modre.svg"
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+
                     <div className="flex justify-center items-center">
                       <div className="text-center">
                         <div className="text-lg text-darkshade">
                           {TranslateText("ROUNDS_PLAYED", language)}
                         </div>
-                        <div className="font-bold">
+                        <div className="font-bold text-2xl">
                           {board.flat().filter((f) => f === "O").length}
                         </div>
                       </div>
@@ -332,19 +351,19 @@ export default function OnlineGamePage() {
                     </div>
                     <div className="flex justify-between">
                       <span>{TranslateText("WINS", language)}:</span>
-                      <span className="font-bold text-green-600">
+                      <span className="font-bold text-black">
                         {opponent?.wins || 0}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>{TranslateText("DRAWS", language)}:</span>
-                      <span className="font-bold text-yellow-600">
+                      <span className="font-bold text-black">
                         {opponent?.draws || 0}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>{TranslateText("LOSSES", language)}:</span>
-                      <span className="font-bold text-red-600">
+                      <span className="font-bold text-black">
                         {opponent?.losses || 0}
                       </span>
                     </div>

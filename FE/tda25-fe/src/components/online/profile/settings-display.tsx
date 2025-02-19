@@ -100,9 +100,6 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             name="profilePicture"
             render={({ field: { value, ...field } }) => (
               <FormItem>
-                <FormLabel>
-                  {TranslateText("PROFILE_PICTURE", language)}
-                </FormLabel>
                 <div className="flex items-center gap-4">
                   <Avatar className="w-20 h-20">
                     <AvatarImage
@@ -268,7 +265,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
           <div className="flex gap-4">
             <Button
               type="submit"
-              className="w-full bg-defaultblue hover:bg-darkerblue text-white"
+              className="w-full bg-defaultblue hover:bg-darkerblue text-white text-lg"
             >
               {TranslateText("SAVE_CHANGES", language)}
             </Button>

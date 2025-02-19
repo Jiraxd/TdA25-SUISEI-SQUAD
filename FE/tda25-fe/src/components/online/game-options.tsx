@@ -140,7 +140,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
           {inQueue && queueType === "unranked" ? (
             <>
               <div className="flex-row flex items-center space-x-6 w-full justify-center">
-                <div>
+                <div className="flex-row flex items-center">
                   <Timer size={36} className="text-white animate-pulse" />
                   <span className="text-xl font-dosis-bold text-white">
                     {Math.floor(queueTime / 60)}:
@@ -152,7 +152,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
                     e.stopPropagation();
                     handleCancelQueue();
                   }}
-                  className="px-4 ml-4 cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
+                  className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
                 >
                   <X size={24} />
                 </div>

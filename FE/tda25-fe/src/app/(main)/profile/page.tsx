@@ -93,7 +93,7 @@ export default function ProfilePage() {
               {isCurrentUser && !loading && (
                 <Button
                   variant="destructive"
-                  className="bg-defaultred hover:bg-pink w-full sm:w-auto"
+                  className="bg-defaultred text-lg hover:bg-pink w-full sm:w-auto"
                   onClick={() => {
                     setIsCurrentUser(false);
                   }}
@@ -124,24 +124,24 @@ export default function ProfilePage() {
                   <TabsList
                     className={`grid h-full w-full ${
                       isCurrentUser ? "grid-cols-3" : "grid-cols-2"
-                    } bg-darkerblue rounded-none rounded-t-lg`}
+                    } bg-whitelessbright border-2 border-darkshade rounded-none rounded-t-lg`}
                   >
                     <TabsTrigger
                       value="profile"
-                      className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
+                      className="text-black rounded-xl data-[state=active]:bg-defaultblue data-[state=active]:text-white text-sm md:text-lg"
                     >
                       {TranslateText("PROFILE", language)}
                     </TabsTrigger>
                     <TabsTrigger
                       value="game-history"
-                      className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
+                      className="text-black rounded-xl data-[state=active]:bg-defaultblue data-[state=active]:text-white text-sm md:text-lg"
                     >
                       {TranslateText("GAME_HISTORY", language)}
                     </TabsTrigger>
                     {isCurrentUser && (
                       <TabsTrigger
                         value="settings"
-                        className="text-white rounded-xl data-[state=active]:bg-defaultred data-[state=active]:text-white text-sm md:text-lg"
+                        className="text-black rounded-xl data-[state=active]:bg-defaultblue data-[state=active]:text-white text-sm md:text-lg"
                       >
                         {TranslateText("SETTINGS", language)}
                       </TabsTrigger>
@@ -150,7 +150,7 @@ export default function ProfilePage() {
                 )}
                 <TabsContent
                   value="profile"
-                  className="bg-white border-2 border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
+                  className="bg-white border border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
                 >
                   {loading ? (
                     <ProfileSkeleton />

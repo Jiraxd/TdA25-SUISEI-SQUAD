@@ -41,7 +41,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
             >
               {user.username}
             </CardTitle>
-            <p className="text-sm text-black">
+            <p className="text-lg text-black">
               {TranslateText("JOINED", language)}:{" "}
               {new Date(user.createdAt).toLocaleDateString()}
             </p>
@@ -55,7 +55,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
               {TranslateText("ELO", language)}
             </p>
             <p className="text-2xl font-dosis-bold text-black">{user.elo}</p>
-            <p className="text-lg text-black">
+            <p className="text-lg text-black font-dosis-bold">
               {TranslateText("CURRENT_RANK", language)}:{" "}
               <span
                 className="font-dosis-bold px-1"
@@ -67,7 +67,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
               </span>
             </p>
             {nextRank && (
-              <p className="text-lg  text-black">
+              <p className="text-lg font-dosis-bold  text-black">
                 {TranslateText("NEXT_RANK", language)}:{" "}
                 <span
                   className="font-dosis-bold "
@@ -78,27 +78,37 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
               </p>
             )}
             {nextRank && (
-              <p className="text-lg  text-black ">
-                {TranslateText("POINTS_NEEDED", language)}: {pointsNeeded}
+              <p className="text-lg  text-black font-dosis-bold ">
+                {TranslateText("POINTS_NEEDED", language)}:{" "}
+                <span className="font-dosis-regular">{pointsNeeded}</span>
               </p>
             )}
           </div>
-          <div className="space-y-2">
-            <p className="text-lg font-dosis-bold text-defaultblue">
+          <div className="space-y-2 font-dosis-bold">
+            <p className="text-lg text-defaultblue">
               {TranslateText("STATS", language)}
             </p>
-            <p className="text-xl font-dosis-bold">
-              <span className="text-green-500">{user.wins}W</span> {" - "}
-              <span className="text-yellow-500">{user.draws}D</span>
-              {" - "}
-              <span className="text-defaultred">{user.losses}L</span>
+            <p className="text-lg text-black">
+              {TranslateText("WINS", language)}:{" "}
+              <span className="font-dosis-regular">{user.wins}</span>
+            </p>
+            <p className="text-lg text-black">
+              {TranslateText("DRAWS", language)}:{" "}
+              <span className="font-dosis-regular">{user.draws}</span>
+            </p>
+            <p className="text-lg text-black">
+              {TranslateText("LOSSES", language)}:{" "}
+              <span className="font-dosis-regular">{user.losses}</span>
             </p>
             <p className="text-lg text-black">
               {TranslateText("GAMES_PLAYED", language)}:{" "}
-              {totalWonLostGames + user.draws}
+              <span className="font-dosis-regular">
+                {totalWonLostGames + user.draws}
+              </span>
             </p>
             <p className="text-lg  text-black">
-              {TranslateText("WINRATE", language)}: {winrate}%
+              {TranslateText("WINRATE", language)}:{" "}
+              <span className="font-dosis-regular">{winrate}%</span>
             </p>
           </div>
         </div>

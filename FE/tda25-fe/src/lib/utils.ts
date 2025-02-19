@@ -198,7 +198,7 @@ const translationsCZ: Record<string, string> = {
   DRAWS_PLURAL: "remíz",
   LOSSES_PLURAL: "proher",
   ELO_RATING_OPPONENT: "Soupeřovo ELO hodnocení",
-  ROUNDS_PLAYED: "Odehrané kola",
+  ROUNDS_PLAYED: "Odehraná kola",
 };
 
 const translationsEN: Record<string, string> = {
