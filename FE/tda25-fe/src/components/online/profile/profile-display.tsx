@@ -49,9 +49,9 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-4 font-dosis-medium">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 font-dosis-medium">
           <div className="space-y-2">
-            <p className="text-lg font-dosis-bold text-defaultblue">
+            <p className="text-2xl font-dosis-bold text-defaultblue">
               {TranslateText("ELO", language)}
             </p>
             <p className="text-2xl font-dosis-bold text-black">{user.elo}</p>
@@ -85,7 +85,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
             )}
           </div>
           <div className="space-y-2 font-dosis-bold">
-            <p className="text-lg text-defaultblue">
+            <p className="text-2xl text-defaultblue">
               {TranslateText("STATS", language)}
             </p>
             <p className="text-lg text-black">
