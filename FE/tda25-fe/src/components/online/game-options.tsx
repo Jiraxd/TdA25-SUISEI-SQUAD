@@ -16,7 +16,9 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const { language } = useLanguage();
   const { updateErrorMessage, updateSuccessMessage } = useAlertContext();
   const [inQueue, setInQueue] = useState(false);
-  const [queueType, setQueueType] = useState<"ranked" | "normal" | null>(null);
+  const [queueType, setQueueType] = useState<"ranked" | "unranked" | null>(
+    null
+  );
   const [queueTime, setQueueTime] = useState(0);
   // const [foundGame, setShowFound] = useState(false);
   // const [opponent, setOpponent] = useState<UserProfile | null>(null);
@@ -93,7 +95,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
   async function handleClickMatchmaking(ranked: "unranked" | "ranked") {
     if (user === null) {
       updateErrorMessage(TranslateText("USER_NOT_LOGGED_IN", language));
-      return;
+      // return;
     }
     updateSuccessMessage(TranslateText("MATCHMAKING_REQUEST_SENT", language));
     const loginToken = GetLoginCookie();
@@ -109,9 +111,14 @@ export default function GameOptions({ user }: GameOptionsProps) {
     );
     if (data.ok) {
       setInQueue(true);
-      setQueueType(ranked ? "ranked" : "normal");
+      setQueueType(ranked);
       setQueueTime(0);
     } else {
+      setInQueue(true);
+      setQueueType(ranked);
+      setQueueTime(0);
+
+      return;
       setInQueue(false);
       setQueueType(null);
       setQueueTime(0);
@@ -124,31 +131,35 @@ export default function GameOptions({ user }: GameOptionsProps) {
         <button
           onClick={() => handleClickMatchmaking("unranked")}
           disabled={inQueue}
-          className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
-            inQueue && queueType === "normal"
+          className={`p-6 max-h-[140px] rounded-lg transition-colors flex flex-col items-center justify-center space-y-2 ${
+            inQueue && queueType === "unranked"
               ? "bg-purple"
               : "bg-defaultblue hover:bg-darkerblue"
           }`}
         >
-          {inQueue && queueType === "normal" ? (
+          {inQueue && queueType === "unranked" ? (
             <>
-              <Timer size={48} className="text-white animate-pulse" />
-              <span className="text-2xl font-dosis-bold text-white">
-                {Math.floor(queueTime / 60)}:
-                {(queueTime % 60).toString().padStart(2, "0")}
-              </span>
+              <div className="flex-row flex items-center space-x-6 w-full justify-center">
+                <div className="flex-row flex items-center">
+                  <Timer size={36} className="text-white animate-pulse" />
+                  <span className="text-xl font-dosis-bold text-white">
+                    {Math.floor(queueTime / 60)}:
+                    {(queueTime % 60).toString().padStart(2, "0")}
+                  </span>
+                </div>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCancelQueue();
+                  }}
+                  className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
+                >
+                  <X size={24} />
+                </div>
+              </div>
               <span className="text-2xl font-dosis-bold text-white">
                 {TranslateText("SEARCHING_GAME", language)}
               </span>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCancelQueue();
-                }}
-                className="px-4   cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
-              >
-                <X size={24} />
-              </div>
             </>
           ) : (
             <>
@@ -162,7 +173,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
         <button
           onClick={() => handleClickMatchmaking("ranked")}
           disabled={inQueue}
-          className={`p-6 rounded-lg transition-colors flex flex-col items-center justify-center space-y-4 ${
+          className={`p-6 rounded-lg max-h-[140px] transition-colors flex flex-col items-center justify-center space-y-4 ${
             inQueue && queueType === "ranked"
               ? "bg-purple"
               : "bg-defaultblue hover:bg-darkerblue"
@@ -170,23 +181,27 @@ export default function GameOptions({ user }: GameOptionsProps) {
         >
           {inQueue && queueType === "ranked" ? (
             <>
-              <Timer size={48} className="text-white animate-pulse" />
+              <div className="flex-row flex items-center space-x-6 w-full justify-center">
+                <div>
+                  <Timer size={36} className="text-white animate-pulse" />
+                  <span className="text-xl font-dosis-bold text-white">
+                    {Math.floor(queueTime / 60)}:
+                    {(queueTime % 60).toString().padStart(2, "0")}
+                  </span>
+                </div>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCancelQueue();
+                  }}
+                  className="px-4 ml-4 cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
+                >
+                  <X size={24} />
+                </div>
+              </div>
               <span className="text-2xl font-dosis-bold text-white">
-                {Math.floor(queueTime / 60)}:
-                {(queueTime % 60).toString().padStart(2, "0")}
-              </span>
-              <span className="text-xl font-dosis-bold text-white">
                 {TranslateText("SEARCHING_GAME", language)}
               </span>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleCancelQueue();
-                }}
-                className="px-4 cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
-              >
-                <X size={24} />
-              </div>
             </>
           ) : (
             <>

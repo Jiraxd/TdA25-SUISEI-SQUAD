@@ -17,10 +17,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { Edit } from "lucide-react";
 
 interface SettingsProfileProps {
   user: UserProfile | null;
 }
+
+const availableColors = [
+  "#caaa1c",
+  "#78ca1c",
+  "#2ca420",
+  "#20beb0",
+  "#2091be",
+  "#6930db",
+  "#db3080",
+  "#c42c48",
+  "#c47d2c",
+];
 
 const createSettingsFormSchema = (language: language) =>
   z
@@ -100,16 +113,27 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             name="profilePicture"
             render={({ field: { value, ...field } }) => (
               <FormItem>
-                <FormLabel>
-                  {TranslateText("PROFILE_PICTURE", language)}
-                </FormLabel>
                 <div className="flex items-center gap-4">
-                  <Avatar className="w-20 h-20">
-                    <AvatarImage
-                      src={previewUrl || "/images/placeholder-avatar.png"}
-                      alt={value?.name || "profile_picture"}
-                    />
-                  </Avatar>
+                  <div className="relative w-20 h-20">
+                    <Avatar className="w-20 h-20 overflow-hidden">
+                      <AvatarImage
+                        src={previewUrl || "/images/placeholder-avatar.png"}
+                        alt={value?.name || "profile_picture"}
+                        style={{
+                          objectFit: "cover",
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </Avatar>
+                    <div
+                      className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 hover:bg-opacity-75 transition-opacity duration-200 rounded-full cursor-pointer opacity-0 hover:opacity-50"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <Edit className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
                   <div className="flex flex-col gap-2">
                     <input
                       type="file"
@@ -125,14 +149,6 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                         }
                       }}
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="border border-darkshade"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      {TranslateText("CHOOSE_PICTURE", language)}
-                    </Button>
                     {
                       <Button
                         type="button"
@@ -158,7 +174,9 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{TranslateText("USERNAME", language)}</FormLabel>
+                <FormLabel className="text-md">
+                  {TranslateText("USERNAME", language)}
+                </FormLabel>
                 <FormControl>
                   <Input {...field} className="border border-darkshade" />
                 </FormControl>
@@ -173,7 +191,9 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             defaultValue={user.email}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{TranslateText("EMAIL", language)}</FormLabel>
+                <FormLabel className="text-md">
+                  {TranslateText("EMAIL", language)}
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -190,7 +210,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             name="currentPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
+                <FormLabel className="text-md">
                   {TranslateText("CURRENT_PASSWORD", language)}
                 </FormLabel>
                 <FormControl>
@@ -210,7 +230,9 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{TranslateText("NEW_PASSWORD", language)}</FormLabel>
+                <FormLabel className="text-md">
+                  {TranslateText("NEW_PASSWORD", language)}
+                </FormLabel>
                 <FormControl>
                   <Input
                     type="password"
@@ -227,48 +249,45 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
             name="nameColor"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{TranslateText("NAME_COLOR", language)}</FormLabel>
-                <div className="flex items-center gap-4">
+                <FormLabel className="text-md">
+                  {TranslateText("NAME_COLOR", language)}
+                </FormLabel>
+                <div className="flex flex-col items-start gap-4">
                   <FormControl>
-                    <div className="flex items-center gap-4">
-                      <Input
-                        type="color"
-                        {...field}
-                        id="colorPicker"
-                        className="sr-only"
-                        onChange={(e) => {
-                          field.onChange(e);
-                          setCurrentColor(e.target.value);
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="flex items-center gap-2 border border-darkshade"
-                        onClick={() =>
-                          document.getElementById("colorPicker")?.click()
-                        }
-                      >
-                        <div
-                          className="w-4 h-4 rounded-sm border border-gray-300 "
-                          style={{ backgroundColor: currentColor }}
+                    <div className="flex items-center gap-2">
+                      {availableColors.map((color) => (
+                        <button
+                          key={color}
+                          type="button"
+                          className={`w-8 h-8 rounded-full border border-gray-300 cursor-pointer`}
+                          style={{ backgroundColor: color }}
+                          onClick={() => {
+                            field.onChange(color);
+                            setCurrentColor(color);
+                          }}
                         />
-                        {TranslateText("CHOOSE_COLOR", language)}
-                      </Button>
-                      <div className="text-sm bg-muted px-2 py-1 rounded border border-darkshade">
-                        {currentColor.toUpperCase()}
-                      </div>
+                      ))}
                     </div>
                   </FormControl>
+                  {/* Selected Color Display */}
+                  <div className="flex items-center gap-4">
+                    <div className="text-md bg-muted px-2 py-1 rounded">
+                      {TranslateText("CURRENT_COLOR", language)}:
+                    </div>
+                    <div
+                      className="w-8 h-8 rounded-full border border-gray-300"
+                      style={{ backgroundColor: currentColor }}
+                    />
+                  </div>
+                  <FormMessage />
                 </div>
-                <FormMessage />
               </FormItem>
             )}
           />
           <div className="flex gap-4">
             <Button
               type="submit"
-              className="w-full bg-defaultblue hover:bg-darkerblue text-white"
+              className="w-full bg-defaultblue hover:bg-darkerblue text-white text-lg"
             >
               {TranslateText("SAVE_CHANGES", language)}
             </Button>
