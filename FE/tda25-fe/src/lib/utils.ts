@@ -200,6 +200,7 @@ const translationsCZ: Record<string, string> = {
   ELO_RATING_OPPONENT: "Soupeřovo ELO hodnocení",
   ROUNDS_PLAYED: "Odehraná kola",
   CURRENT_COLOR: "Aktuálně vybraná barva",
+  ON_TURN: "Na tahu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -381,6 +382,7 @@ const translationsEN: Record<string, string> = {
   ELO_RATING_OPPONENT: "Opponent's ELO Rating",
   ROUNDS_PLAYED: "Rounds played",
   CURRENT_COLOR: "Currently selected color",
+  ON_TURN: "On turn",
 };
 
 import Cookies from "js-cookie";
