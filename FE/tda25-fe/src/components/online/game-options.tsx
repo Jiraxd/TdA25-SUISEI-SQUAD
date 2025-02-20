@@ -32,7 +32,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
         console.log("STOMP debug:", str);
       },
       onConnect: () => {
-        client.subscribe("/user/matchmaking", (message) => {
+        client.subscribe("/app/ws/user/matchmaking", (message) => {
           console.log(message);
           const response = JSON.parse(message.body);
           if (response.body.type === "MatchFound") {
@@ -119,93 +119,89 @@ export default function GameOptions({ user }: GameOptionsProps) {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <button
-          onClick={() => handleClickMatchmaking("unranked")}
-          disabled={inQueue}
-          className={`p-6 max-h-[140px] rounded-lg transition-colors flex flex-col items-center justify-center space-y-2 ${
-            inQueue && queueType === "unranked"
-              ? "bg-purple"
-              : "bg-defaultblue hover:bg-darkerblue"
-          }`}
-        >
-          {inQueue && queueType === "unranked" ? (
-            <>
-              <div className="flex-row flex items-center space-x-6 w-full justify-center">
-                <div className="flex-row flex items-center">
-                  <Timer size={36} className="text-white animate-pulse" />
-                  <span className="text-xl font-dosis-bold text-white">
-                    {Math.floor(queueTime / 60)}:
-                    {(queueTime % 60).toString().padStart(2, "0")}
-                  </span>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCancelQueue();
-                  }}
-                  className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
-                >
-                  <X size={24} />
-                </div>
+        {/*UNRANKED BUTTON */}
+        {inQueue && queueType === "unranked" && (
+          <div
+            className={`p-6 max-h-[140px] rounded-lg transition-colors flex flex-col items-center justify-center space-y-2 bg-purple`}
+          >
+            <div className="flex-row flex items-center space-x-6 w-full justify-center">
+              <div className="flex-row flex items-center">
+                <Timer size={36} className="text-white animate-pulse" />
+                <span className="text-xl font-dosis-bold text-white">
+                  {Math.floor(queueTime / 60)}:
+                  {(queueTime % 60).toString().padStart(2, "0")}
+                </span>
               </div>
-              <span className="text-2xl font-dosis-bold text-white">
-                {TranslateText("SEARCHING_GAME", language)}
-              </span>
-            </>
-          ) : (
-            <>
-              <Users size={48} className="text-white" />
-              <span className="text-xl font-dosis-bold">
-                {TranslateText("RANDOM_GAME", language)}
-              </span>
-            </>
-          )}
-        </button>
-        <button
-          onClick={() => handleClickMatchmaking("ranked")}
-          disabled={inQueue}
-          className={`p-6 rounded-lg max-h-[140px] transition-colors flex flex-col items-center justify-center space-y-4 ${
-            inQueue && queueType === "ranked"
-              ? "bg-purple"
-              : "bg-defaultblue hover:bg-darkerblue"
-          }`}
-        >
-          {inQueue && queueType === "ranked" ? (
-            <>
-              <div className="flex-row flex items-center space-x-6 w-full justify-center">
-                <div className="flex-row flex items-center">
-                  <Timer size={36} className="text-white animate-pulse" />
-                  <span className="text-xl font-dosis-bold text-white">
-                    {Math.floor(queueTime / 60)}:
-                    {(queueTime % 60).toString().padStart(2, "0")}
-                  </span>
-                </div>
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCancelQueue();
-                  }}
-                  className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
-                >
-                  <X size={24} />
-                </div>
+              <div
+                onClick={(e) => {
+                  handleCancelQueue();
+                }}
+                className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
+              >
+                <X size={24} />
               </div>
-              <span className="text-2xl font-dosis-bold text-white">
-                {TranslateText("SEARCHING_GAME", language)}
-              </span>
-            </>
-          ) : (
-            <>
-              <Swords size={48} className="text-white" />
-              <span className="text-2xl font-dosis-bold">
-                {TranslateText("RANKED_RANDOM_GAME", language)}
-              </span>
-            </>
-          )}
-        </button>
+            </div>
+            <span className="text-2xl font-dosis-bold text-white">
+              {TranslateText("SEARCHING_GAME", language)}
+            </span>
+          </div>
+        )}
+        {queueType !== "unranked" && (
+          <button
+            onClick={() => handleClickMatchmaking("unranked")}
+            disabled={inQueue}
+            className={`p-6 max-h-[140px] rounded-lg transition-colors flex flex-col items-center justify-center space-y-2 bg-defaultblue hover:bg-darkerblue`}
+          >
+            <Users size={48} className="text-white" />
+            <span className="text-2xl font-dosis-bold">
+              {TranslateText("RANDOM_GAME", language)}
+            </span>
+          </button>
+        )}
+        {/*END OF UNRANKED BUTTON */}
+        {/*RANKED BUTTON */}
+        {inQueue && queueType === "ranked" && (
+          <div
+            className={`p-6 max-h-[140px] rounded-lg transition-colors flex flex-col items-center justify-center space-y-2 bg-purple`}
+          >
+            <div className="flex-row flex items-center space-x-6 w-full justify-center">
+              <div className="flex-row flex items-center">
+                <Timer size={36} className="text-white animate-pulse" />
+                <span className="text-xl font-dosis-bold text-white">
+                  {Math.floor(queueTime / 60)}:
+                  {(queueTime % 60).toString().padStart(2, "0")}
+                </span>
+              </div>
+              <div
+                onClick={(e) => {
+                  handleCancelQueue();
+                }}
+                className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
+              >
+                <X size={24} />
+              </div>
+            </div>
+            <span className="text-2xl font-dosis-bold text-white">
+              {TranslateText("SEARCHING_GAME", language)}
+            </span>
+          </div>
+        )}
+        {queueType !== "ranked" && (
+          <button
+            onClick={() => handleClickMatchmaking("ranked")}
+            disabled={inQueue}
+            className={`p-6 max-h-[140px] rounded-lg transition-colors flex flex-col items-center justify-center space-y-2 bg-defaultblue hover:bg-darkerblue`}
+          >
+            <Swords size={48} className="text-white" />
+            <span className="text-2xl font-dosis-bold">
+              {TranslateText("RANKED_RANDOM_GAME", language)}
+            </span>
+          </button>
+        )}
+        {/*END OF RANKED BUTTON */}
         <button
           disabled={inQueue}
-          className="p-6 bg-defaultblue rounded-lg hover:bg-darkerblue  transition-colors flex flex-col items-center justify-center space-y-4"
+          className="p-4 bg-defaultblue rounded-lg hover:bg-darkerblue  transition-colors flex flex-col items-center justify-center space-y-4"
         >
           <Lock size={48} className="text-white" />
           <span className="text-2xl font-dosis-bold">
