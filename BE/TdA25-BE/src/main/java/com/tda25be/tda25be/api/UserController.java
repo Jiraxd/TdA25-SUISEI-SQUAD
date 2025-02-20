@@ -23,8 +23,6 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final UserRepo userRepo;
     private final AuthService authService;
-    private final ResourceTransactionManager resourceTransactionManager;
-
 
     @PostMapping
         public ResponseEntity<User> createUser(@RequestBody UserCreateRequest request) {
