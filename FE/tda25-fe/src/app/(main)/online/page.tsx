@@ -11,6 +11,16 @@ import { GetLoginCookie, TranslateText } from "@/lib/utils";
 import { UserProfile } from "@/models/UserProfile";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function OnlinePage() {
   const { language } = useLanguage();
@@ -19,10 +29,17 @@ export default function OnlinePage() {
   const [privateGameId, setPrivateGameId] = useState("");
   const router = useRouter();
   const { updateErrorMessage } = useAlertContext();
+  const [leaderboard, setLeaderboard] = useState<UserProfile[]>([]);
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-
+      const leaderBoardData = await fetch(`/api/v1/users`);
+      if (leaderBoardData.ok) {
+        const leaderboard = await leaderBoardData.json();
+        setLeaderboard(
+          (leaderboard as UserProfile[]).toSorted((a, b) => b.elo - a.elo)
+        );
+      }
       const loginToken = GetLoginCookie();
       if (!loginToken) {
         setLoading(false);
@@ -101,6 +118,65 @@ export default function OnlinePage() {
               {TranslateText("JOIN_PRIVATE_GAME", language)}
             </Button>
           </form>
+          <div className="mt-8 border border-darkshade rounded-lg p-4">
+            <Table>
+              <TableHeader className="font-dosis-bold">
+                <TableRow>
+                  <TableHead
+                    colSpan={4}
+                    className="text-left text-darkerblue text-2xl pb-4"
+                  >
+                    {TranslateText("LEADERBOARD", language)}
+                  </TableHead>
+                </TableRow>
+                <TableRow>
+                  <TableHead>{TranslateText("USERNAME", language)}</TableHead>
+                  <TableHead>{TranslateText("ELO", language)}</TableHead>
+                  <TableHead className="w-[100px]">
+                    {TranslateText("WINRATE", language)}
+                  </TableHead>
+                  <TableHead className="text-right">
+                    {TranslateText("GAMES_PLAYED", language)}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-darkshade font-dosis-regular">
+                {loading
+                  ? [...Array(5)].map((_, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <Skeleton className="w-32 h-4 bg-gray-400" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-16 h-4 bg-gray-400" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-16 h-4 bg-gray-400" />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Skeleton className="w-16 h-4 ml-auto bg-gray-400" />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : leaderboard.map((user, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{user.username}</TableCell>
+                        <TableCell>{user.elo}</TableCell>
+                        <TableCell>
+                          {(
+                            (user.wins / (user.wins + user.losses)) *
+                            100
+                          ).toFixed(1)}
+                          %
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {user.wins + user.losses + user.draws}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
     </>
