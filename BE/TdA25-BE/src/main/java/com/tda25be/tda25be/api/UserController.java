@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController()
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final UserRepo userRepo;
