@@ -60,6 +60,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
       if (client.active) {
         client.deactivate();
       }
+      handleCancelQueue();
     };
   }, []);
   useEffect(() => {
@@ -92,7 +93,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
   async function handleClickMatchmaking(ranked: "unranked" | "ranked") {
     if (user === null) {
       updateErrorMessage(TranslateText("USER_NOT_LOGGED_IN", language));
-      // return;
+      return;
     }
     updateSuccessMessage(TranslateText("MATCHMAKING_REQUEST_SENT", language));
     const loginToken = GetLoginCookie();
@@ -111,11 +112,6 @@ export default function GameOptions({ user }: GameOptionsProps) {
       setQueueType(ranked);
       setQueueTime(0);
     } else {
-      setInQueue(true);
-      setQueueType(ranked);
-      setQueueTime(0);
-
-      return;
       setInQueue(false);
       setQueueType(null);
       setQueueTime(0);

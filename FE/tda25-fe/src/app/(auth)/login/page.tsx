@@ -76,12 +76,7 @@ function LoginContent() {
       SetLoginCookie(data.token);
       router.push(redirect);
     } else {
-      const errorText = await response.json();
-      setFormError(
-        errorText.error
-          ? TranslateText(errorText.error, language)
-          : TranslateText("LOGIN_FAILED", language)
-      );
+      setFormError(TranslateText("LOGIN_FAILED", language));
     }
   }
 

@@ -201,6 +201,13 @@ const translationsCZ: Record<string, string> = {
   ROUNDS_PLAYED: "Odehraná kola",
   CURRENT_COLOR: "Aktuálně vybraná barva",
   ON_TURN: "Na tahu",
+  JOIN_PRIVATE_GAME: "Připojit se k soukromé hře",
+  ENTER_PRIVATE_GAME_ID: "Zadejte ID soukromé hry",
+  PASSWORD_MIN_LENGTH: "Heslo musí mít alespoň 8 znaků",
+  PASSWORD_SPECIAL_CHAR: "Heslo musí obsahovat alespoň jeden speciální znak",
+  PASSWORD_NUMBER: "Heslo musí obsahovat alespoň jedno číslo",
+  PASSWORD_LOWERCASE: "Heslo musí obsahovat alespoň jedno malé písmeno",
+  PASSWORD_UPPERCASE: "Heslo musí obsahovat alespoň jedno velké písmeno",
 };
 
 const translationsEN: Record<string, string> = {
@@ -383,6 +390,13 @@ const translationsEN: Record<string, string> = {
   ROUNDS_PLAYED: "Rounds played",
   CURRENT_COLOR: "Currently selected color",
   ON_TURN: "On turn",
+  JOIN_PRIVATE_GAME: "Join private game",
+  ENTER_PRIVATE_GAME_ID: "Enter private game ID",
+  PASSWORD_MIN_LENGTH: "Password must be at least 8 characters long",
+  PASSWORD_SPECIAL_CHAR: "Password must contain at least one special character",
+  PASSWORD_NUMBER: "Password must contain at least one number",
+  PASSWORD_LOWERCASE: "Password must contain at least one lowercase letter",
+  PASSWORD_UPPERCASE: "Password must contain at least one uppercase letter",
 };
 
 import Cookies from "js-cookie";
