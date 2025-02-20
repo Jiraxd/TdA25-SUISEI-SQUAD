@@ -209,6 +209,17 @@ const translationsCZ: Record<string, string> = {
   PASSWORD_LOWERCASE: "Heslo musí obsahovat alespoň jedno malé písmeno",
   PASSWORD_UPPERCASE: "Heslo musí obsahovat alespoň jedno velké písmeno",
   LEADERBOARD: "Žebříček nejlepších",
+  CREATE_PRIVATE_GAME: "Vytvořit soukromou hru",
+  PRIVATE_GAME_DESCRIPTION:
+    "Vytvořte soukromou hru a sdílejte odkaz s přítelem",
+  CHOOSE_SYMBOL: "Vyberte si symbol",
+  CHOOSE_TIME_LIMIT: "Vyberte časový limit",
+  MINUTES: "minut",
+  GENERATE_LINK: "Vygenerovat odkaz",
+  GAME_LINK: "Odkaz na hru",
+  COPY: "Kopírovat",
+  SOMETHING_WENT_WRONG: "Něco se pokazilo, zkuste to prosím znovu",
+  CLOSE: "Zavřít",
 };
 
 const translationsEN: Record<string, string> = {
@@ -399,6 +410,17 @@ const translationsEN: Record<string, string> = {
   PASSWORD_LOWERCASE: "Password must contain at least one lowercase letter",
   PASSWORD_UPPERCASE: "Password must contain at least one uppercase letter",
   LEADERBOARD: "Leaderboard",
+  CREATE_PRIVATE_GAME: "Create Private Game",
+  PRIVATE_GAME_DESCRIPTION:
+    "Create a private game and share the link with your friend",
+  CHOOSE_SYMBOL: "Choose your symbol",
+  CHOOSE_TIME_LIMIT: "Choose time limit",
+  MINUTES: "minutes",
+  GENERATE_LINK: "Generate game link",
+  GAME_LINK: "Game link",
+  COPY: "Copy",
+  SOMETHING_WENT_WRONG: "Something went wrong, please try again",
+  CLOSE: "Close",
 };
 
 import Cookies from "js-cookie";
