@@ -9,6 +9,7 @@ import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.support.ResourceTransactionManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,11 +23,13 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final UserRepo userRepo;
     private final AuthService authService;
+    private final ResourceTransactionManager resourceTransactionManager;
 
-        @PostMapping
+
+    @PostMapping
         public ResponseEntity<User> createUser(@RequestBody UserCreateRequest request) {
             User user = authService.register(request.getEmail(), request.getPassword(), request.getUsername(), request.getElo());
-            if(user == null) return ResponseEntity.badRequest().build(); //TODO exception handler global
+            if(user == null) return ResponseEntity.badRequest().build();
             return ResponseEntity.status(201).body(user);
         }
 

@@ -30,7 +30,7 @@ public class User {
     @NonNull
     private String passwordHash;
     private int elo = 400;
-    private int win = 0;
+    private int wins = 0;
     private int losses = 0;
     private int draws = 0;
 }
