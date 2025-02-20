@@ -97,8 +97,8 @@ export default function OnlineGamePage() {
     const stompClient = new Client({
       brokerURL: `${protocol}//${window.location.host}/app/handshake`,
       onConnect: () => {
-        console.log("Connected to game websocket");
         stompClient.subscribe("/user/game-updates", (message) => {
+          console.log(message);
           const data = JSON.parse(message.body);
           const response = data.body;
 
@@ -115,11 +115,7 @@ export default function OnlineGamePage() {
           }
         });
       },
-      onDisconnect: () => {
-        console.log("Disconnected from game websocket");
-      },
       onStompError: (error) => {
-        console.error("STOMP error:", error);
         updateErrorMessage(TranslateText("GAME_CONNECTION_ERROR", language));
       },
     });
@@ -139,7 +135,7 @@ export default function OnlineGamePage() {
 
     try {
       client.publish({
-        destination: `/app/ws/makeMove/${gameId}`,
+        destination: `/app/ws/makeMove`,
         body: JSON.stringify({
           X: rowIndex,
           Y: colIndex,
