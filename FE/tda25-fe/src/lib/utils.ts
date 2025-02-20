@@ -208,6 +208,7 @@ const translationsCZ: Record<string, string> = {
   PASSWORD_NUMBER: "Heslo musí obsahovat alespoň jedno číslo",
   PASSWORD_LOWERCASE: "Heslo musí obsahovat alespoň jedno malé písmeno",
   PASSWORD_UPPERCASE: "Heslo musí obsahovat alespoň jedno velké písmeno",
+  LEADERBOARD: "Žebříček nejlepších",
 };
 
 const translationsEN: Record<string, string> = {
@@ -397,6 +398,7 @@ const translationsEN: Record<string, string> = {
   PASSWORD_NUMBER: "Password must contain at least one number",
   PASSWORD_LOWERCASE: "Password must contain at least one lowercase letter",
   PASSWORD_UPPERCASE: "Password must contain at least one uppercase letter",
+  LEADERBOARD: "Leaderboard",
 };
 
 import Cookies from "js-cookie";
