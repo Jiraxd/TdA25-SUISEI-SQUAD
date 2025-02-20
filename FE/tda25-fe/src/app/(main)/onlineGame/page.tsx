@@ -36,20 +36,25 @@ export default function OnlineGamePage() {
   const [ranked, setRanked] = useState<boolean>(false);
   const [winner, setWinner] = useState<"X" | "O" | "draw" | null>(null);
   const [winLane, setWinLane] = useState<number[][]>([]);
-  const [timeRemaining, setTimeRemaining] = useState<number>(30);
+  const [timeRemaining, setTimeRemaining] = useState<number>(480);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
+  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O" | null>(null);
   const controls = useAnimation();
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
   const [client, setClient] = useState<Client | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (timeRemaining > 0) {
+    if (
+      timeRemaining > 0 &&
+      currentPlayer !== null &&
+      currentPlayer === playerSymbol
+    ) {
       const timer = setInterval(() => {
         setTimeRemaining((prev) => Math.max(0, prev - 1));
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [timeRemaining]);
+  }, [timeRemaining, currentPlayer, playerSymbol]);
 
   useEffect(() => {
     // TESTING
@@ -108,6 +113,7 @@ export default function OnlineGamePage() {
             setWinLane(winningLine);
           } else if (response.type === "Board") {
             setBoard(response.message as Array<Array<"X" | "O" | "">>);
+            // TODO set time from BE
           } else if (response.type === "Error") {
             updateErrorMessage(
               TranslateText(response.message as string, language)
@@ -250,12 +256,12 @@ export default function OnlineGamePage() {
                         <span className="text-lg">
                           {TranslateText("ON_TURN", language)}
                         </span>
-                        {playerSymbol === "X" ? (
+                        {currentPlayer === "X" ? (
                           <img
                             className="w-[10%] h-[10%]"
                             src="/icons/X_cervene.svg"
                           />
-                        ) : playerSymbol === "O" ? (
+                        ) : currentPlayer === "O" ? (
                           <img
                             className="w-[10%] h-[10%]"
                             src="/icons/O_modre.svg"
@@ -284,12 +290,13 @@ export default function OnlineGamePage() {
                           <AlarmClockIcon className="h-6 w-6" />
                           <span
                             className={`text-2xl font-bold ${
-                              timeRemaining < 10
+                              timeRemaining < 60
                                 ? "text-defaultred"
                                 : "text-darkshade"
                             }`}
                           >
-                            {timeRemaining}s
+                            {Math.floor(timeRemaining / 60)}:
+                            {(timeRemaining % 60).toString().padStart(2, "0")}
                           </span>
                         </div>
                       </div>
