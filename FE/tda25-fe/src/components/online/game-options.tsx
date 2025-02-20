@@ -32,8 +32,8 @@ export default function GameOptions({ user }: GameOptionsProps) {
         console.log("STOMP debug:", str);
       },
       onConnect: () => {
-        console.log("Connected to matchmaking");
         client.subscribe("/user/matchmaking", (message) => {
+          console.log(message);
           const response = JSON.parse(message.body);
           if (response.body.type === "MatchFound") {
             router.push(`/onlineGame/${response.body.message}`);
@@ -41,13 +41,11 @@ export default function GameOptions({ user }: GameOptionsProps) {
         });
       },
       onDisconnect: () => {
-        console.log("Disconnected from matchmaking");
         setInQueue(false);
         setQueueType(null);
         setQueueTime(0);
       },
       onStompError: (error) => {
-        console.error("STOMP error:", error);
         updateErrorMessage(
           TranslateText("MATCHMAKING_CONNECTION_ERROR", language)
         );
