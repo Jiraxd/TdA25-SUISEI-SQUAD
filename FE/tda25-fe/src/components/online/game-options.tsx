@@ -32,8 +32,8 @@ export default function GameOptions({ user }: GameOptionsProps) {
         console.log("STOMP debug:", str);
       },
       onConnect: () => {
-        console.log("Connected to matchmaking");
         client.subscribe("/user/matchmaking", (message) => {
+          console.log(message);
           const response = JSON.parse(message.body);
           if (response.body.type === "MatchFound") {
             router.push(`/onlineGame/${response.body.message}`);
@@ -41,13 +41,11 @@ export default function GameOptions({ user }: GameOptionsProps) {
         });
       },
       onDisconnect: () => {
-        console.log("Disconnected from matchmaking");
         setInQueue(false);
         setQueueType(null);
         setQueueTime(0);
       },
       onStompError: (error) => {
-        console.error("STOMP error:", error);
         updateErrorMessage(
           TranslateText("MATCHMAKING_CONNECTION_ERROR", language)
         );
@@ -60,6 +58,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
       if (client.active) {
         client.deactivate();
       }
+      handleCancelQueue();
     };
   }, []);
   useEffect(() => {
@@ -92,7 +91,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
   async function handleClickMatchmaking(ranked: "unranked" | "ranked") {
     if (user === null) {
       updateErrorMessage(TranslateText("USER_NOT_LOGGED_IN", language));
-      // return;
+      return;
     }
     updateSuccessMessage(TranslateText("MATCHMAKING_REQUEST_SENT", language));
     const loginToken = GetLoginCookie();
@@ -111,11 +110,6 @@ export default function GameOptions({ user }: GameOptionsProps) {
       setQueueType(ranked);
       setQueueTime(0);
     } else {
-      setInQueue(true);
-      setQueueType(ranked);
-      setQueueTime(0);
-
-      return;
       setInQueue(false);
       setQueueType(null);
       setQueueTime(0);
@@ -179,7 +173,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
           {inQueue && queueType === "ranked" ? (
             <>
               <div className="flex-row flex items-center space-x-6 w-full justify-center">
-                <div>
+                <div className="flex-row flex items-center">
                   <Timer size={36} className="text-white animate-pulse" />
                   <span className="text-xl font-dosis-bold text-white">
                     {Math.floor(queueTime / 60)}:
@@ -191,7 +185,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
                     e.stopPropagation();
                     handleCancelQueue();
                   }}
-                  className="px-4 ml-4 cursor-pointer py-2 bg-defaultred rounded-lg hover:bg-red-700 text-white"
+                  className="px-1 ml-4 cursor-pointer py-1 bg-whitelessbright rounded-lg hover: text-defaultred border border-defaultred"
                 >
                   <X size={24} />
                 </div>
