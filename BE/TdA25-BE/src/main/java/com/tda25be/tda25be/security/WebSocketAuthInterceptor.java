@@ -30,9 +30,13 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor{
             HttpServletRequest httpServletRequest = servletRequest.getServletRequest();
             String sessionToken = null;
             Cookie[] cookies = httpServletRequest.getCookies();
-            for (Cookie cookie : cookies) {
-                if(cookie.getName().equals("logintoken")){
-                    sessionToken = cookie.getValue();
+            if(cookies == null) {
+                sessionToken = httpServletRequest.getHeader("Authorization");
+            }else {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("logintoken")) {
+                        sessionToken = cookie.getValue();
+                    }
                 }
             }
             if (sessionToken != null) {

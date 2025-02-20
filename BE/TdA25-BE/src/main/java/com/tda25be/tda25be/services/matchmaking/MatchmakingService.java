@@ -3,6 +3,7 @@ package com.tda25be.tda25be.services.matchmaking;
 import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
+import com.tda25be.tda25be.repositories.LiveGameRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class MatchmakingService {
     protected final Set<User> matchmakingUsers = ConcurrentHashMap.newKeySet();
     protected final WebSocketUtil webSocketUtil;
+    private final LiveGameRepo liveGameRepo;
 
     public static MatchmakingTypes getMatchmakingType(MatchmakingService service){
         if(service instanceof RankedMatchmakingService){
@@ -37,8 +39,10 @@ public abstract class MatchmakingService {
     }
 
     public boolean isUserMatchmaking(User user) {
-        return matchmakingUsers.contains(user);
+        return matchmakingUsers.stream()
+                .anyMatch(matchmakingUser -> matchmakingUser.getUuid().equals(user.getUuid()));
     }
+
 
     public void matchmake(User user) {
         User opponent = findMatch(user);
@@ -52,13 +56,14 @@ public abstract class MatchmakingService {
             else{
                 liveGame.setPlayerO(user).setPlayerX(opponent);
             }
+            liveGameRepo.save(liveGame);
             notifyPlayers(user, opponent, liveGame);
         }
     }
 
     private void notifyPlayers(User user, User opponent, LiveGame liveGame) {
-        webSocketUtil.sendMessageToUser(user.getUuid(), "/user/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
-        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/user/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy
+        webSocketUtil.sendMessageToUser(user.getUuid(), "/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy
     }
 
     protected abstract boolean isValidMatch(User user, User opponent);
