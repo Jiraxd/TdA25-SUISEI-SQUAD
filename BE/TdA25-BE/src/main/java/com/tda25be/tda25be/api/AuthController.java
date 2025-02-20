@@ -63,7 +63,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Username not specified.");
         }
         if(userRepo.findByEmail(email) != null) return ResponseEntity.badRequest().body("User already exists.");
-        authService.register(email, password, username);
+        User user = authService.register(email, password, username);
+        if(user == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok().build();
     }
 
