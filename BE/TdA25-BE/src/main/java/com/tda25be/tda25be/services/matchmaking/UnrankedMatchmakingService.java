@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UnrankedMatchmakingService extends MatchmakingService {
 
-    public UnrankedMatchmakingService(WebSocketUtil webSocketUtil, LiveGameRepo liveGameRepo) {
-        super(webSocketUtil, liveGameRepo);
+    public UnrankedMatchmakingService(WebSocketUtil webSocketUtil) {
+        super(webSocketUtil);
     }
 
     @Override

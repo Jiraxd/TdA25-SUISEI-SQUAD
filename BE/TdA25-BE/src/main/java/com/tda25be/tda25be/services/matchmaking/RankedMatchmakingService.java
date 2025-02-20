@@ -9,8 +9,8 @@ public class RankedMatchmakingService extends MatchmakingService {
 
     private static final int ELO_THRESHOLD = 200;
 
-    public RankedMatchmakingService(WebSocketUtil webSocketUtil, LiveGameRepo liveGameRepo) {
-        super(webSocketUtil, liveGameRepo);
+    public RankedMatchmakingService(WebSocketUtil webSocketUtil) {
+        super(webSocketUtil);
     }
 
     @Override

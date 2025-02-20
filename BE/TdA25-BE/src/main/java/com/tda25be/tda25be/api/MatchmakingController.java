@@ -20,8 +20,6 @@ import java.util.List;
 @RequestMapping("/api/v1/matchmaking")
 public class MatchmakingController {
     private final List<MatchmakingService> matchmakingServices;
-    private final UserRepo userRepo;
-    private final MatchmakingService matchmakingService;
     private final SessionRepo sessionRepo;
 
     @GetMapping("/start")
@@ -30,6 +28,11 @@ public class MatchmakingController {
         Session session = sessionRepo.findByToken(token).orElse(null);
         if(session == null || session.getUser() == null) return ResponseEntity.badRequest().build();
         User user = session.getUser();
+        for (MatchmakingService matchmakingService : matchmakingServices) {
+            if (matchmakingService.isUserMatchmaking(user)) {
+                return ResponseEntity.ok("Matchmaking is already running");
+            }
+        }
         MatchmakingService matchmakingService = matchmakingServices.stream().filter((service)->{
             if(matchmaking == MatchmakingTypes.ranked && service instanceof RankedMatchmakingService){
                 return true;
@@ -45,7 +48,9 @@ public class MatchmakingController {
         Session session = sessionRepo.findByToken(token).orElse(null);
         if(session == null || session.getUser() == null) return ResponseEntity.badRequest().build();
         User user = session.getUser();
-        matchmakingService.leaveMatchmaking(user);
+        for(MatchmakingService matchmakingService : matchmakingServices) {
+            matchmakingService.leaveMatchmaking(user);
+        }
         return ResponseEntity.ok("Matchmaking stopped");
     }
 }

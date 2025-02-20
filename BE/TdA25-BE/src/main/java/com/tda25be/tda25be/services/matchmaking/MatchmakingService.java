@@ -3,22 +3,19 @@ package com.tda25be.tda25be.services.matchmaking;
 import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
-import com.tda25be.tda25be.repositories.LiveGameRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 @RequiredArgsConstructor
 @Service
 public abstract class MatchmakingService {
     protected final Set<User> matchmakingUsers = ConcurrentHashMap.newKeySet();
     protected final WebSocketUtil webSocketUtil;
-    protected final LiveGameRepo liveGameRepo;
 
     public static MatchmakingTypes getMatchmakingType(MatchmakingService service){
         if(service instanceof RankedMatchmakingService){
