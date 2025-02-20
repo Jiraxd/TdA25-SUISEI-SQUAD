@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 //import { GameFound } from "./game-found";
 import { useRouter } from "next/navigation";
 import { Client } from "@stomp/stompjs";
+import { PrivateGameModal } from "./private-game-modal";
 
 type GameOptionsProps = {
   user: UserProfile | null;
@@ -18,6 +19,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
   const [queueType, setQueueType] = useState<"ranked" | "unranked" | null>(
     null
   );
+  const [showPrivateGameModal, setShowPrivateGameModal] = useState(false);
   const [queueTime, setQueueTime] = useState(0);
   // const [foundGame, setShowFound] = useState(false);
   // const [opponent, setOpponent] = useState<UserProfile | null>(null);
@@ -201,7 +203,8 @@ export default function GameOptions({ user }: GameOptionsProps) {
         {/*END OF RANKED BUTTON */}
         <button
           disabled={inQueue}
-          className="p-4 bg-defaultblue rounded-lg hover:bg-darkerblue  transition-colors flex flex-col items-center justify-center space-y-4"
+          onClick={() => setShowPrivateGameModal(true)}
+          className="p-4 bg-defaultblue rounded-lg hover:bg-darkerblue transition-colors flex flex-col items-center justify-center space-y-4"
         >
           <Lock size={48} className="text-white" />
           <span className="text-2xl font-dosis-bold">
@@ -228,6 +231,11 @@ export default function GameOptions({ user }: GameOptionsProps) {
         timeoutSeconds={30}
       />
    */}
+      <PrivateGameModal
+        isOpen={showPrivateGameModal}
+        onClose={() => setShowPrivateGameModal(false)}
+        language={language}
+      />
     </>
   );
 }
