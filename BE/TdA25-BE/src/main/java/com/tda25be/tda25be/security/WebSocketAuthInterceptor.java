@@ -2,6 +2,7 @@ package com.tda25be.tda25be.security;
 
 import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.repositories.SessionRepo;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -27,9 +28,13 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor{
                                    WebSocketHandler wsHandler, Map<String, Object> attributes){
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpServletRequest = servletRequest.getServletRequest();
-
-            String sessionToken = httpServletRequest.getParameter("Authorization");
-
+            String sessionToken = null;
+            Cookie[] cookies = httpServletRequest.getCookies();
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("logintoken")){
+                    sessionToken = cookie.getValue();
+                }
+            }
             if (sessionToken != null) {
                 Optional<Session> session = sessionRepository.findByToken(sessionToken);
                 if (session.isPresent()) {

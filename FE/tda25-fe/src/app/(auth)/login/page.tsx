@@ -29,9 +29,23 @@ function LoginContent() {
     email: z.string().email({
       message: TranslateText("INVALID_EMAIL", language),
     }),
-    password: z.string().min(8, {
-      message: TranslateText("PASSWORD_REQUIRED", language),
-    }),
+    password: z
+      .string()
+      .min(8, {
+        message: TranslateText("PASSWORD_MIN_LENGTH", language),
+      })
+      .regex(new RegExp(".*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-].*"), {
+        message: TranslateText("PASSWORD_SPECIAL_CHAR", language),
+      })
+      .regex(new RegExp(".*\\d.*"), {
+        message: TranslateText("PASSWORD_NUMBER", language),
+      })
+      .regex(new RegExp(".*[a-z].*"), {
+        message: TranslateText("PASSWORD_LOWERCASE", language),
+      })
+      .regex(new RegExp(".*[A-Z].*"), {
+        message: TranslateText("PASSWORD_UPPERCASE", language),
+      }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

@@ -93,11 +93,9 @@ export default function OnlineGamePage() {
   }, [gameId]);
 
   useEffect(() => {
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const stompClient = new Client({
-      webSocketFactory: () => new SockJS("/app/handshake"),
-      connectHeaders: {
-        Authorization: GetLoginCookie() || "",
-      },
+      brokerURL: `${protocol}//${window.location.host}/app/handshake`,
       onConnect: () => {
         console.log("Connected to game websocket");
         stompClient.subscribe("/user/game-updates", (message) => {
