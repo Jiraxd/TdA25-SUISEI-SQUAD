@@ -19,6 +19,7 @@ import java.util.List;
 public class MatchmakingController {
     private final List<MatchmakingService> matchmakingServices;
     private final UserRepo userRepo;
+    private final MatchmakingService matchmakingService;
 
     @GetMapping("/start")
     public ResponseEntity<String> startMatchmaking(@RequestParam MatchmakingTypes matchmaking , @RequestHeader("Authorization") String token){
@@ -36,6 +37,13 @@ public class MatchmakingController {
         matchmakingService.joinMatchmaking(user);
         matchmakingService.matchmake(user);
         return ResponseEntity.ok("Matchmaking started");
+    }
 
+    @GetMapping("/cancel")
+    public ResponseEntity<String> cancelMatchmaking(@RequestHeader("Authorization") String token){
+        User user = userRepo.findById(token).orElse(null);
+        if(user == null) return ResponseEntity.notFound().build();
+        matchmakingService.leaveMatchmaking(user);
+        return ResponseEntity.ok("Matchmaking stopped");
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Pattern;
+
 @Service
 public class AuthService {
 
@@ -34,6 +36,9 @@ public class AuthService {
         return null;
     }
     public User register(String email, String password, String username, Integer elo) {
+        Boolean correctEmail = AuthService.validateEmail(username);
+        Boolean correctPassword = AuthService.validatePassword(password);
+        if(!correctEmail || !correctPassword) return null;
         if(userRepo.findByEmail(email) != null) return null;
         User user = new User().setUsername(username).setEmail(email).setPasswordHash(passwordEncoder.encode(password)).setElo(elo);
         userRepo.save(user);
@@ -59,5 +64,26 @@ public class AuthService {
         }
         sessionRepo.deleteById(token);
         return true;
+    }
+
+    public static Boolean validatePassword(String password) {
+        if (password.length() < 8) {
+            return false;
+        }
+
+        String specialCharacterRegex = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*"; // Speciální znaky
+        String digitRegex = ".*\\d.*"; // Číslice
+        String lowercaseRegex = ".*[a-z].*"; // Malá písmena
+        String uppercaseRegex = ".*[A-Z].*"; // Velká písmena
+
+        return Pattern.matches(specialCharacterRegex, password) &&
+                Pattern.matches(digitRegex, password) &&
+                Pattern.matches(lowercaseRegex, password) &&
+                Pattern.matches(uppercaseRegex, password);
+    }
+
+    public static Boolean validateEmail(String email) {
+        String regexPattern = "^(.+)@(\\S+)$";
+        return email.matches(regexPattern);
     }
 }
