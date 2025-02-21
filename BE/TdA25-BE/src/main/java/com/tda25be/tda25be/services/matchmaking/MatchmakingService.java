@@ -3,6 +3,7 @@ package com.tda25be.tda25be.services.matchmaking;
 import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
+import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -62,8 +63,8 @@ public abstract class MatchmakingService {
     }
 
     private void notifyPlayers(User user, User opponent, LiveGame liveGame) {
-        webSocketUtil.sendMessageToUser(user.getUuid(), "/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
-        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy
+        webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy
     }
 
     protected abstract boolean isValidMatch(User user, User opponent);

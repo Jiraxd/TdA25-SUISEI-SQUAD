@@ -95,12 +95,12 @@ public class GameController {
         }
     }
 
-    @GetMapping("/liveGame")
-    public ResponseEntity<LiveGame> liveGame(@RequestHeader("Authorization") String token){
+    @GetMapping("/liveGameToken")
+    public ResponseEntity<LiveGame> liveGameToken(@RequestHeader("Authorization") String token){
         if(token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         User user = authService.verify(token);
         if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        LiveGame liveGame = liveGameRepo.findPlayersByUser(user);
+        LiveGame liveGame = liveGameRepo.findLiveGameByUser(user);
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
     }
     @GetMapping("/liveGameById")
@@ -109,5 +109,10 @@ public class GameController {
         LiveGame liveGame = liveGameRepo.findById(id).orElse(null);
         if(liveGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
+    }
+    @GetMapping("/liveGameByUserId/{uuid}")
+    public ResponseEntity<List<LiveGame>> liveGameByUserId(@PathVariable String uuid){
+        if(uuid == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return new ResponseEntity<>(liveGameRepo.findLiveGameByUserId(uuid), HttpStatus.OK);
     }
 }

@@ -2,16 +2,18 @@ package com.tda25be.tda25be.entities;
 
 import com.tda25be.tda25be.deserializers.BoardConverter;
 import com.tda25be.tda25be.models.Board;
-import com.tda25be.tda25be.services.matchmaking.MatchmakingTypes;
+import com.tda25be.tda25be.enums.MatchmakingTypes;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
-import javax.xml.bind.annotation.XmlAccessorOrder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +26,13 @@ public class LiveGame {
     @Id
     @UuidGenerator
     private String uuid;
+    @Column(length = 1024)
     @Convert(converter = BoardConverter.class)
     @NonNull
     private Board board;
+    @ReadOnlyProperty
+    @CreationTimestamp
+    private Timestamp createdAt;
     private MatchmakingTypes matchmakingTypes;
     @ManyToOne
     @NonNull
@@ -34,6 +40,17 @@ public class LiveGame {
     @ManyToOne
     @NonNull
     private User playerO;
+
+    private Long playerOTime = 480000L;
+    private Long playerXTime = 480000L;
+
+    private Long playerOEloBefore = 0L;
+    private Long playerXEloBefore= 0L;
+    private Long playerOEloAfter= 0L;
+    private Long playerXEloAfter= 0L;
+
+    private Boolean finished = false;
+
     public LiveGame(){
     }
     @SneakyThrows
