@@ -25,7 +25,9 @@ export function PrivateGameModal({
   language,
 }: PrivateGameModalProps) {
   const [symbol, setSymbol] = useState<"X" | "O">("X");
-  const [timeLimit, setTimeLimit] = useState<"5" | "8" | "10" | "custom">("8");
+  const [timeLimit, setTimeLimit] = useState<
+    "5" | "8" | "10" | "custom" | "none"
+  >("8");
   const [customMinutes, setCustomMinutes] = useState("5");
   const [customSeconds, setCustomSeconds] = useState("0");
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
@@ -114,6 +116,16 @@ export function PrivateGameModal({
               }
               className="flex flex-col gap-4"
             >
+              <div key={"none"} className="flex items-center space-x-2">
+                <RadioGroupItem
+                  value={"none"}
+                  id={`none`}
+                  className="h-5 w-5 border-2 border-darkshade text-darkshade data-[state=checked]:bg-defaultred data-[state=checked]:border-defaultred [&_span]:hidden"
+                />
+                <Label htmlFor={`none`} className="text-lg cursor-pointer">
+                  {TranslateText("NO_TIME_LIMIT", language)}
+                </Label>
+              </div>
               {[5, 8, 10].map((time) => (
                 <div key={time} className="flex items-center space-x-2">
                   <RadioGroupItem

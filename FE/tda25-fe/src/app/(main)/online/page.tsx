@@ -92,7 +92,7 @@ export default function OnlinePage() {
         className="p-6 text-[#F6F6F6] font-dosis-regular min-w-full max-w-screen h-[calc(100vh-5rem)]"
         style={{ backgroundColor: "var(--whitelessbright)" }}
       >
-        <div className="max-w-4xl mx-auto pb-4">
+        <div className="max-w-4xl mx-auto pb-20">
           <div className="flex justify-between mb-8 items-center">
             <h1 className="text-3xl lg:text-4xl  text-defaultred font-dosis-bold">
               {TranslateText("WELCOME_ONLINE", language)}

@@ -71,10 +71,10 @@ public class AuthService {
             return false;
         }
 
-        String specialCharacterRegex = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*"; // Speciální znaky
-        String digitRegex = ".*\\d.*"; // Číslice
-        String lowercaseRegex = ".*[a-z].*"; // Malá písmena
-        String uppercaseRegex = ".*[A-Z].*"; // Velká písmena
+        String specialCharacterRegex = ".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*";
+        String digitRegex = ".*\\d.*";
+        String lowercaseRegex = ".*[a-z].*";
+        String uppercaseRegex = ".*[A-Z].*";
 
         return Pattern.matches(specialCharacterRegex, password) &&
                 Pattern.matches(digitRegex, password) &&
