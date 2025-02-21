@@ -233,6 +233,9 @@ const translationsCZ: Record<string, string> = {
   USER_ACTION_FAILED: "Akce se nezdařila",
   YOUR_PROFILE: "Váš profil",
   USER_NOT_FOUND: "Uživatel nenalezen",
+  EMAIL_OR_USERNAME: "Email nebo uživatelské jméno",
+  EMAIL_OR_USERNAME_REQUIRED: "Email nebo uživatelské jméno je povinné",
+  EMAIL_OR_USERNAME_PLACEHOLDER: "pepa@priklad.cz nebo pepanovak1",
 };
 
 const translationsEN: Record<string, string> = {
@@ -447,6 +450,9 @@ const translationsEN: Record<string, string> = {
   USER_ACTION_FAILED: "Action failed",
   YOUR_PROFILE: "Your profile",
   USER_NOT_FOUND: "User not found",
+  EMAIL_OR_USERNAME: "Email or Username",
+  EMAIL_OR_USERNAME_REQUIRED: "Email or username is required",
+  EMAIL_OR_USERNAME_PLACEHOLDER: "john@example.com or johndoe",
 };
 
 import Cookies from "js-cookie";
