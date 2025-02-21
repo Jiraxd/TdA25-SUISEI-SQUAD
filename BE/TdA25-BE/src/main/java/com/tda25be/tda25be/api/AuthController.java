@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,15 +28,13 @@ public class AuthController {
         String email = requestBody.get("email");
         String password = requestBody.get("password");
         String deviceName = requestBody.get("deviceName");
-
-        if (email == null || password == null || deviceName == null) {
+        String username = requestBody.get("username");
+        if ((email == null && username == null) || password == null || deviceName == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        Session session = authService.login(email, password, deviceName);
-        if (session == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        Session session = email == null ? authService.loginByUsername(username, password, deviceName) : authService.loginByEmail(email, password, deviceName)
+        if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(session);
     }
 

@@ -30,6 +30,7 @@ public class User {
     @NonNull
     private String passwordHash;
     private Boolean banned = false;
+    @ReadOnlyProperty
     private Boolean admin = false;
     private int elo = 400;
     private int wins = 0;
