@@ -23,6 +23,7 @@ public class LiveGame {
     @Id
     @UuidGenerator
     private String uuid;
+    @Column(length = 1024)
     @Convert(converter = BoardConverter.class)
     @NonNull
     private Board board;
@@ -37,10 +38,10 @@ public class LiveGame {
     private Long playerOTime = 480000L;
     private Long playerXTime = 480000L;
 
-    private Long playerOEloBefore;
-    private Long playerXEloBefore;
-    private Long playerOEloAfter;
-    private Long playerXEloAfter;
+    private Long playerOEloBefore = 0L;
+    private Long playerXEloBefore= 0L;
+    private Long playerOEloAfter= 0L;
+    private Long playerXEloAfter= 0L;
 
     private Boolean finished = false;
 
