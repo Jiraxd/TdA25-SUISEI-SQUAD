@@ -163,7 +163,11 @@ export default function ProfilePage() {
                   value="game-history"
                   className="bg-black p-4 sm:p-6 rounded-b-lg mt-0"
                 >
-                  {loading ? <GameHistorySkeleton /> : <GameHistory />}
+                  {loading ? (
+                    <GameHistorySkeleton />
+                  ) : (
+                    <GameHistory userProfile={user} />
+                  )}
                 </TabsContent>
                 {isCurrentUser && (
                   <TabsContent
