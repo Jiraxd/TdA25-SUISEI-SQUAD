@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/components/languageContext";
-import { GetLoginCookie, TranslateText } from "@/lib/utils";
+import { ClearLoginCookie, GetLoginCookie, TranslateText } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,8 @@ export default function ProfilePage() {
                   variant="destructive"
                   className="bg-defaultred text-lg hover:bg-pink w-full sm:w-auto"
                   onClick={() => {
-                    setIsCurrentUser(false);
+                    ClearLoginCookie();
+                    router.refresh();
                   }}
                 >
                   {TranslateText("LOGOUT", language)}

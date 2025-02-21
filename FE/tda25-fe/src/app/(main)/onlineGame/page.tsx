@@ -102,7 +102,7 @@ export default function OnlineGamePage() {
     const stompClient = new Client({
       brokerURL: `${protocol}//${window.location.host}/app/handshake`,
       onConnect: () => {
-        stompClient.subscribe("/app/ws/user/game-updates", (message) => {
+        stompClient.subscribe("/user/game-updates", (message) => {
           console.log(message);
           const data = JSON.parse(message.body);
           const response = data.body;
