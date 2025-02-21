@@ -2,7 +2,7 @@ package com.tda25be.tda25be.entities;
 
 import com.tda25be.tda25be.deserializers.BoardConverter;
 import com.tda25be.tda25be.models.Board;
-import com.tda25be.tda25be.services.matchmaking.MatchmakingTypes;
+import com.tda25be.tda25be.enums.MatchmakingTypes;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,7 +11,6 @@ import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.UuidGenerator;
 
-import javax.xml.bind.annotation.XmlAccessorOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +33,17 @@ public class LiveGame {
     @ManyToOne
     @NonNull
     private User playerO;
+
+    private Long playerOTime = 480000L;
+    private Long playerXTime = 480000L;
+
+    private Long playerOEloBefore;
+    private Long playerXEloBefore;
+    private Long playerOEloAfter;
+    private Long playerXEloAfter;
+
+    private Boolean finished = false;
+
     public LiveGame(){
     }
     @SneakyThrows

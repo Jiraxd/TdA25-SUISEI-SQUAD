@@ -3,10 +3,10 @@ package com.tda25be.tda25be.services.matchmaking;
 import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
+import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
