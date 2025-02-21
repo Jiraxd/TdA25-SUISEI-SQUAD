@@ -161,7 +161,7 @@ export default function ProfilePage() {
                 </TabsContent>
                 <TabsContent
                   value="game-history"
-                  className="bg-black p-4 sm:p-6 rounded-b-lg mt-0"
+                  className="bg-white border border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
                 >
                   {loading ? (
                     <GameHistorySkeleton />
@@ -172,7 +172,7 @@ export default function ProfilePage() {
                 {isCurrentUser && (
                   <TabsContent
                     value="settings"
-                    className="bg-white border-2 border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
+                    className="bg-white border border-t-0 border-darkshade p-4 sm:p-6 rounded-b-lg mt-0"
                   >
                     {loading ? (
                       <SettingsSkeleton />

@@ -89,7 +89,7 @@ export default function OnlinePage() {
     <>
       <title>{TranslateText("ONLINE_PAGE_TITLE", language)}</title>
       <div
-        className="p-6 text-[#F6F6F6] font-dosis-regular min-w-full max-w-screen h-[calc(100vh-5rem)]"
+        className="p-6 text-[#F6F6F6] font-dosis-regular min-w-full max-w-screen h-[calc(100vh-5rem)] max-w-[100vw]"
         style={{ backgroundColor: "var(--whitelessbright)" }}
       >
         <div className="max-w-4xl mx-auto pb-20">

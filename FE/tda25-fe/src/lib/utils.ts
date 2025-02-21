@@ -221,6 +221,8 @@ const translationsCZ: Record<string, string> = {
   SOMETHING_WENT_WRONG: "Něco se pokazilo, zkuste to prosím znovu",
   CLOSE: "Zavřít",
   NO_TIME_LIMIT: "Bez časového limitu",
+  ELO_OPPONENT_DURING_GAME: "Soupeřovo ELO během hry",
+  CLICK_TO_VIEW_GAME: "Klikněte pro zobrazení hry",
 };
 
 const translationsEN: Record<string, string> = {
@@ -423,6 +425,8 @@ const translationsEN: Record<string, string> = {
   SOMETHING_WENT_WRONG: "Something went wrong, please try again",
   CLOSE: "Close",
   NO_TIME_LIMIT: "No time limit",
+  ELO_OPPONENT_DURING_GAME: "Opponent's ELO during the game",
+  CLICK_TO_VIEW_GAME: "Click to view game",
 };
 
 import Cookies from "js-cookie";
