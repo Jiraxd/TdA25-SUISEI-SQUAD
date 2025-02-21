@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAlertContext } from "@/components/alertContext";
 import { Client } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { useRef } from "react";
 import { LiveGame } from "@/models/LiveGame";
@@ -58,31 +57,6 @@ export default function OnlineGamePage() {
   }, [timeRemaining, currentPlayer, playerSymbol]);
 
   useEffect(() => {
-    // TESTING
-    setUser({
-      uuid: "testuuid",
-      createdAt: new Date(),
-      username: "J1R4",
-      email: "test",
-      elo: 1251,
-      wins: 34,
-      draws: 5,
-      losses: 22,
-      nameColor: "#AB2E58",
-    });
-    setXPlayer("testuuid");
-    setOpponent({
-      uuid: "testuuid2",
-      createdAt: new Date(),
-      username: "OpponentTest",
-      email: "test",
-      elo: 1251,
-      wins: 34,
-      draws: 5,
-      losses: 22,
-      nameColor: "#AB2E58",
-    });
-    setOPlayer("testuuid2");
     async function fetchData() {
       const loginToken = GetLoginCookie();
       if (!loginToken) {
@@ -109,6 +83,7 @@ export default function OnlineGamePage() {
       const livegame: LiveGame = await res.json();
 
       setBoard(livegame.board);
+      setRanked(livegame.matchmakingTyps === "ranked");
       if (livegame.playerX.uuid === userTemp.uuid) {
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
@@ -140,7 +115,6 @@ export default function OnlineGamePage() {
             setWinLane(winningLine);
           } else if (response.type === "Board") {
             setBoard(response.message as Array<Array<"X" | "O" | "">>);
-            // TODO set time from BE
           } else if (response.type === "Time") {
             setTimeRemaining((response.message as number) / 1000);
           } else if (response.type === "Error") {

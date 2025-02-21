@@ -28,8 +28,8 @@ export default function ProfilePage() {
       setLoading(true);
       const loginToken = GetLoginCookie();
       if (!loginToken) {
-        // router.push("/login?redirect=/profile");
-        setUser({
+        router.push("/login?redirect=/profile");
+        /* setUser({
           uuid: "testuuid",
           createdAt: new Date(),
           username: "J1R4",
@@ -42,6 +42,7 @@ export default function ProfilePage() {
         });
         setIsCurrentUser(true);
         setLoading(false);
+        */
         return;
       }
       const data = await fetch(`/api/v1/auth/verify`, {
