@@ -9,8 +9,11 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,9 @@ public class LiveGame {
     @Convert(converter = BoardConverter.class)
     @NonNull
     private Board board;
+    @ReadOnlyProperty
+    @CreationTimestamp
+    private Timestamp createdAt;
     private MatchmakingTypes matchmakingTypes;
     @ManyToOne
     @NonNull
