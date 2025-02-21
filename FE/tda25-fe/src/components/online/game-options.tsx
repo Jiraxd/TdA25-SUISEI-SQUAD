@@ -34,7 +34,7 @@ export default function GameOptions({ user }: GameOptionsProps) {
         console.log("STOMP debug:", str);
       },
       onConnect: () => {
-        client.subscribe("/app/ws/user/matchmaking", (message) => {
+        client.subscribe("/user/queue/matchmaking", (message) => {
           console.log(message);
           const response = JSON.parse(message.body);
           if (response.body.type === "MatchFound") {
