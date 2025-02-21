@@ -75,7 +75,7 @@ export function GameFound({
         onEscapeKeyDown={(e) => {
           e.preventDefault();
         }}
-        className="sm:max-w-md border-2 border-darkshade font-dosis-bold shadow-md shadow-darkshade"
+        className="sm:max-w-md border-2 border-darkshade font-dosis-bold shadow-md shadow-darkshade [&>button]:hidden"
       >
         <DialogHeader>
           <DialogTitle className="text-defaultred text-2xl">

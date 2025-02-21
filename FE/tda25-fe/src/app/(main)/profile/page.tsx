@@ -12,9 +12,11 @@ import SettingsProfile from "@/components/online/profile/settings-display";
 import GameHistory from "@/components/online/profile/game-history";
 import ProfileDisplay from "@/components/online/profile/profile-display";
 import { getNameColor, type UserProfile } from "@/models/UserProfile";
+import { useAlertContext } from "@/components/alertContext";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [profileOwner, setProfileOwner] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   const pathName = usePathname();
@@ -23,13 +25,42 @@ export default function ProfilePage() {
   const { language } = useLanguage();
   const router = useRouter();
 
+  const { updateErrorMessage, updateSuccessMessage } = useAlertContext();
+  const handleBanUnbanUser = async (userId: string, isBanned: boolean) => {
+    try {
+      const response = await fetch(
+        `/api/v1/users/${isBanned ? "unban" : "ban"}/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${GetLoginCookie()}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        updateSuccessMessage(
+          TranslateText(
+            isBanned ? "USER_UNBANNED_SUCCESS" : "USER_BANNED_SUCCESS",
+            language
+          )
+        );
+      } else {
+        updateErrorMessage(TranslateText("USER_ACTION_FAILED", language));
+      }
+    } catch (error) {
+      updateErrorMessage(TranslateText("USER_ACTION_FAILED", language));
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
       const loginToken = GetLoginCookie();
       if (!loginToken) {
-        // router.push("/login?redirect=/profile");
-        setUser({
+        router.push("/login?redirect=/profile");
+        /*setUser({
           uuid: "testuuid",
           createdAt: new Date(),
           username: "J1R4",
@@ -39,10 +70,21 @@ export default function ProfilePage() {
           draws: 5,
           losses: 22,
           nameColor: "#AB2E58",
+          banned: false,
+          admin: true,
         });
         setIsCurrentUser(true);
         setLoading(false);
+*/
         return;
+      }
+      const profile = await fetch(`/api/v1/users/${userId}`);
+
+      if (profile.ok) {
+        const userProfile = await profile.json();
+        setProfileOwner(userProfile);
+      } else {
+        updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
       }
       const data = await fetch(`/api/v1/auth/verify`, {
         headers: {
@@ -57,14 +99,11 @@ export default function ProfilePage() {
         setUser(user);
 
         if (userId && userId === "profile") {
-          setIsCurrentUser(true);
+          router.push(`/profile/${user.id}`);
         } else {
-          const data = await fetch(`/api/v1/users/${userId}`);
-          const profile = await data.json();
-          if (profile?.id === user.id) setIsCurrentUser(true);
+          const userProfile: UserProfile = await profile.json();
+          if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
         }
-      } else {
-        router.push("/login?redirect=/profile");
       }
       setLoading(false);
     }
@@ -84,8 +123,8 @@ export default function ProfilePage() {
                 ) : (
                   <span className="text-darkerblue">
                     {TranslateText("PROFILE_PLAYER", language)}
-                    <span style={{ color: getNameColor(user) }}>
-                      {user?.username}
+                    <span style={{ color: getNameColor(profileOwner) }}>
+                      {profileOwner?.username}
                     </span>
                   </span>
                 )}
@@ -102,7 +141,33 @@ export default function ProfilePage() {
                   {TranslateText("LOGOUT", language)}
                 </Button>
               )}
-              {!isCurrentUser && !loading && (
+              {!isCurrentUser && profileOwner && user && (
+                <div className="space-x-2">
+                  {user.admin && (
+                    <Button
+                      onClick={() =>
+                        handleBanUnbanUser(
+                          profileOwner.uuid,
+                          profileOwner.banned
+                        )
+                      }
+                      className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-red-700"
+                    >
+                      {TranslateText(
+                        profileOwner.banned ? "UNBAN_USER" : "BAN_USER",
+                        language
+                      )}
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => router.push("/profile/" + user.uuid)}
+                    className="px-4 py-2 bg-defaultblue text-white rounded-lg text-xl hover:bg-darkerblue"
+                  >
+                    {TranslateText("YOUR_PROFILE", language)}
+                  </Button>
+                </div>
+              )}
+              {!isCurrentUser && !user && (
                 <div className="space-x-2">
                   <Button
                     onClick={() => router.push("/login?redirect=/profile")}
@@ -156,7 +221,7 @@ export default function ProfilePage() {
                   {loading ? (
                     <ProfileSkeleton />
                   ) : (
-                    <ProfileDisplay user={user!} />
+                    <ProfileDisplay user={profileOwner!} />
                   )}
                 </TabsContent>
                 <TabsContent
@@ -166,7 +231,7 @@ export default function ProfilePage() {
                   {loading ? (
                     <GameHistorySkeleton />
                   ) : (
-                    <GameHistory userProfile={user} />
+                    <GameHistory userProfile={profileOwner} />
                   )}
                 </TabsContent>
                 {isCurrentUser && (
@@ -177,7 +242,7 @@ export default function ProfilePage() {
                     {loading ? (
                       <SettingsSkeleton />
                     ) : (
-                      <SettingsProfile user={user} />
+                      <SettingsProfile user={profileOwner} />
                     )}
                   </TabsContent>
                 )}

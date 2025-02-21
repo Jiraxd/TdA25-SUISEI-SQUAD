@@ -65,85 +65,9 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
 
   useEffect(() => {
     async function fetchData() {
-      //const data = await fetch(`/api/v1/liveGameByUserId/${userProfile?.uuid}`);
-      //const gamestmp: LiveGame[] = await data.json();
-      //setGames(gamestmp.filter((f) => f.finished));
-      setGames([
-        {
-          uuid: "testuuid",
-          board: Array(15)
-            .fill(null)
-            .map(() => Array(15).fill("")),
-          matchmakingTyps: "ranked",
-          playerX: {
-            uuid: "testuuid",
-            createdAt: new Date(),
-            username: "J1R4",
-            email: "test",
-            elo: 1251,
-            wins: 34,
-            draws: 5,
-            losses: 22,
-            nameColor: "#AB2E58",
-          },
-          playerO: {
-            uuid: "test",
-            createdAt: new Date(),
-            username: "testOpponent",
-            email: "test",
-            elo: 1251,
-            wins: 34,
-            draws: 5,
-            losses: 22,
-            nameColor: "#AB2E58",
-          },
-          playerXTime: 10,
-          playerOTime: 10,
-          playerOEloBefore: 1251,
-          playerOEloAfter: 1294,
-          playerXEloBefore: 1251,
-          playerXEloAfter: 1200,
-          finished: true,
-          createdAt: new Date(),
-        },
-        {
-          uuid: "testuuid22",
-          board: Array(15)
-            .fill(null)
-            .map(() => Array(15).fill("")),
-          matchmakingTyps: "ranked",
-          playerX: {
-            uuid: "testuuid",
-            createdAt: new Date(),
-            username: "J1R4",
-            email: "test",
-            elo: 1251,
-            wins: 34,
-            draws: 5,
-            losses: 22,
-            nameColor: "#AB2E58",
-          },
-          playerO: {
-            uuid: "test",
-            createdAt: new Date(),
-            username: "testOpponent",
-            email: "test",
-            elo: 1251,
-            wins: 34,
-            draws: 5,
-            losses: 22,
-            nameColor: "#AB2E58",
-          },
-          playerXTime: 10,
-          playerOTime: 10,
-          playerOEloBefore: 1251,
-          playerOEloAfter: 1294,
-          playerXEloBefore: 1251,
-          playerXEloAfter: 1200,
-          finished: true,
-          createdAt: new Date(),
-        },
-      ]);
+      const data = await fetch(`/api/v1/liveGameByUserId/${userProfile?.uuid}`);
+      const gamestmp: LiveGame[] = await data.json();
+      setGames(gamestmp.filter((f) => f.finished));
     }
     fetchData();
   }, [userProfile]);
