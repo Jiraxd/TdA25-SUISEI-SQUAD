@@ -220,6 +220,7 @@ const translationsCZ: Record<string, string> = {
   COPY: "Kopírovat",
   SOMETHING_WENT_WRONG: "Něco se pokazilo, zkuste to prosím znovu",
   CLOSE: "Zavřít",
+  NO_TIME_LIMIT: "Bez časového limitu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -421,6 +422,7 @@ const translationsEN: Record<string, string> = {
   COPY: "Copy",
   SOMETHING_WENT_WRONG: "Something went wrong, please try again",
   CLOSE: "Close",
+  NO_TIME_LIMIT: "No time limit",
 };
 
 import Cookies from "js-cookie";
