@@ -231,6 +231,7 @@ const translationsCZ: Record<string, string> = {
   USER_BANNED_SUCCESS: "Uživatel byl úspěšně zabanován",
   USER_UNBANNED_SUCCESS: "Uživatel byl úspěšně odbanován",
   USER_ACTION_FAILED: "Akce se nezdařila",
+  YOUR_PROFILE: "Váš profil",
 };
 
 const translationsEN: Record<string, string> = {
@@ -443,6 +444,7 @@ const translationsEN: Record<string, string> = {
   USER_BANNED_SUCCESS: "User has been successfully banned",
   USER_UNBANNED_SUCCESS: "User has been successfully unbanned",
   USER_ACTION_FAILED: "Action failed",
+  YOUR_PROFILE: "Your profile",
 };
 
 import Cookies from "js-cookie";
