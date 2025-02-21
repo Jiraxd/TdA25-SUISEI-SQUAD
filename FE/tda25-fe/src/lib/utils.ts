@@ -223,6 +223,14 @@ const translationsCZ: Record<string, string> = {
   NO_TIME_LIMIT: "Bez časového limitu",
   ELO_OPPONENT_DURING_GAME: "Soupeřovo ELO během hry",
   CLICK_TO_VIEW_GAME: "Klikněte pro zobrazení hry",
+  ADMIN_PANEL: "Administrátorský Panel",
+  SEARCH_USERS: "Vyhledat uživatele",
+  CLEAR: "Vymazat",
+  NO_USERS_FOUND: "Žádní uživatelé nenalezeni",
+  FAILED_TO_FETCH_USERS: "Nepodařilo se načíst uživatele",
+  USER_BANNED_SUCCESS: "Uživatel byl úspěšně zabanován",
+  USER_UNBANNED_SUCCESS: "Uživatel byl úspěšně odbanován",
+  USER_ACTION_FAILED: "Akce se nezdařila",
 };
 
 const translationsEN: Record<string, string> = {
@@ -427,6 +435,14 @@ const translationsEN: Record<string, string> = {
   NO_TIME_LIMIT: "No time limit",
   ELO_OPPONENT_DURING_GAME: "Opponent's ELO during the game",
   CLICK_TO_VIEW_GAME: "Click to view game",
+  ADMIN_PANEL: "Admin Panel",
+  SEARCH_USERS: "Search users",
+  CLEAR: "Clear",
+  NO_USERS_FOUND: "No users found",
+  FAILED_TO_FETCH_USERS: "Failed to fetch users",
+  USER_BANNED_SUCCESS: "User has been successfully banned",
+  USER_UNBANNED_SUCCESS: "User has been successfully unbanned",
+  USER_ACTION_FAILED: "Action failed",
 };
 
 import Cookies from "js-cookie";

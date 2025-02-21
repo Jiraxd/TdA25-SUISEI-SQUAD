@@ -9,6 +9,8 @@ export type UserProfile = {
   losses: number;
   nameColor?: string; // HEX
   profilePicture?: string; // URL to profile picture, optional with default
+  banned: boolean;
+  admin: boolean;
 };
 
 export const DEFAULT_PROFILE_PICTURE = "/images/placeholder-avatar.png";
