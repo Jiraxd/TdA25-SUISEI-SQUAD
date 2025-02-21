@@ -36,13 +36,13 @@ public class LiveGameWsController {
                 Boolean placeO = liveGame.getPlayerO().equals(user);
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
                 if(liveGame.getBoard().getState() == GameState.completed){//TODO implement completed
-                    webSocketUtil.sendMessageToUser(user.getUuid(), "/user/game-updates", "Win", user.getUuid(), HttpStatus.OK);
+                    webSocketUtil.sendMessageToUser(user.getUuid(), "/user/queue/game-updates", "Win", user.getUuid(), HttpStatus.OK);
                 }
                 else{
-                    webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/user/game-updates","Board", liveGame.getBoard().board.toString(), HttpStatus.OK);
+                    webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/user/queue/game-updates","Board", liveGame.getBoard().board.toString(), HttpStatus.OK);
                 }
             } catch (BadRequestException | SemanticErrorException e) {
-                webSocketUtil.sendMessageToUser(user.getUuid(), "/user/game-updates","Error", e.getMessage(), HttpStatus.BAD_REQUEST);
+                webSocketUtil.sendMessageToUser(user.getUuid(), "/user/queue/game-updates","Error", e.getMessage(), HttpStatus.BAD_REQUEST);
             }
         }
     }
