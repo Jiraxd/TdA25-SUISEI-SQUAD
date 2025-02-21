@@ -60,7 +60,7 @@ export function PrivateGameModal({
   return (
     <Dialog open={isOpen}>
       <DialogContent
-        className="bg-white border-2 border-darkshade shadow-darkshade shadow-md"
+        className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
@@ -209,6 +209,7 @@ export function PrivateGameModal({
         <Button
           variant="default"
           className="bg-defaultred text-lg hover:bg-red-700 text-white font-dosis-bold"
+          style={{ display: "inline-flex" }}
           onClick={onClose}
         >
           {TranslateText("CLOSE", language)}

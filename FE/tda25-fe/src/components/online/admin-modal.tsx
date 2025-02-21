@@ -93,6 +93,7 @@ export function AdminModal({ isOpen, onClose, language }: AdminModalProps) {
             </DialogTitle>
             <Button
               variant="default"
+              style={{ display: "inline-flex" }}
               className="bg-defaultred hover:bg-red-700 text-white font-dosis-bold"
               onClick={onClose}
             >
