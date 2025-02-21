@@ -68,4 +68,18 @@ public class UserController {
             userRepo.deleteById(uuid);
             return ResponseEntity.noContent().build();
         }
+        @GetMapping("/ban")
+        public ResponseEntity<String> banUser(String uuid) {
+            Optional<User> userOptional = userRepo.findById(uuid);
+            if(userOptional.isEmpty()) return ResponseEntity.notFound().build();
+            else userOptional.get().setBanned(true);
+            return ResponseEntity.ok("User banned");
+        }
+    @GetMapping("/unban")
+    public ResponseEntity<String> unbanUser(String uuid) {
+        Optional<User> userOptional = userRepo.findById(uuid);
+        if(userOptional.isEmpty()) return ResponseEntity.notFound().build();
+        else userOptional.get().setBanned(false);
+        return ResponseEntity.ok("User unbanned");
+    }
 }

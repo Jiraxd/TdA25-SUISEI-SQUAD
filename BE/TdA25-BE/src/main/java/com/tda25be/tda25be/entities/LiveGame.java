@@ -44,10 +44,10 @@ public class LiveGame {
     private Long playerOTime = 480000L;
     private Long playerXTime = 480000L;
 
-    private Long playerOEloBefore = 0L;
-    private Long playerXEloBefore= 0L;
-    private Long playerOEloAfter= 0L;
-    private Long playerXEloAfter= 0L;
+    private Integer playerOEloBefore = 0;
+    private Integer playerXEloBefore= 0;
+    private Integer playerOEloAfter= 0;
+    private Integer playerXEloAfter= 0;
 
     private Boolean finished = false;
 
