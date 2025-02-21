@@ -16,6 +16,7 @@ import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { useRef } from "react";
+import { LiveGame } from "@/models/LiveGame";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -38,7 +39,7 @@ export default function OnlineGamePage() {
   const [winLane, setWinLane] = useState<number[][]>([]);
   const [timeRemaining, setTimeRemaining] = useState<number>(480);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
-  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O" | null>(null);
+  const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
   const controls = useAnimation();
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
   const [client, setClient] = useState<Client | null>(null);
@@ -84,15 +85,41 @@ export default function OnlineGamePage() {
     setOPlayer("testuuid2");
     async function fetchData() {
       const loginToken = GetLoginCookie();
-      const res = await fetch(`/api/v1/liveGame/${gameId}`, {
+      if (!loginToken) {
+        return;
+      }
+      const data = await fetch(`/api/v1/auth/verify`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${loginToken}`,
+        },
+        credentials: "include",
+      });
+
+      const userTemp: UserProfile = await data.json();
+      setUser(userTemp);
+
+      const res = await fetch(`/api/v1/liveGameById/${gameId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `${loginToken}`,
         },
       });
-      const data = await res.json();
-      console.log(data);
+      const livegame: LiveGame = await res.json();
+
+      setBoard(livegame.board);
+      if (livegame.playerX.uuid === userTemp.uuid) {
+        setXPlayer(livegame.playerX.uuid);
+        setOPlayer(livegame.playerO.uuid);
+        setPlayerSymbol("X");
+        setOpponent(livegame.playerO);
+      } else {
+        setXPlayer(livegame.playerX.uuid);
+        setOPlayer(livegame.playerO.uuid);
+        setPlayerSymbol("O");
+        setOpponent(livegame.playerX);
+      }
     }
     fetchData();
   }, [gameId]);
@@ -114,6 +141,8 @@ export default function OnlineGamePage() {
           } else if (response.type === "Board") {
             setBoard(response.message as Array<Array<"X" | "O" | "">>);
             // TODO set time from BE
+          } else if (response.type === "Time") {
+            setTimeRemaining((response.message as number) / 1000);
           } else if (response.type === "Error") {
             updateErrorMessage(
               TranslateText(response.message as string, language)
