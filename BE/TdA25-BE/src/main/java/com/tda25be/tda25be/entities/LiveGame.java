@@ -9,8 +9,11 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,9 +26,13 @@ public class LiveGame {
     @Id
     @UuidGenerator
     private String uuid;
+    @Column(length = 1024)
     @Convert(converter = BoardConverter.class)
     @NonNull
     private Board board;
+    @ReadOnlyProperty
+    @CreationTimestamp
+    private Timestamp createdAt;
     private MatchmakingTypes matchmakingTypes;
     @ManyToOne
     @NonNull
@@ -37,10 +44,10 @@ public class LiveGame {
     private Long playerOTime = 480000L;
     private Long playerXTime = 480000L;
 
-    private Long playerOEloBefore;
-    private Long playerXEloBefore;
-    private Long playerOEloAfter;
-    private Long playerXEloAfter;
+    private Long playerOEloBefore = 0L;
+    private Long playerXEloBefore= 0L;
+    private Long playerOEloAfter= 0L;
+    private Long playerXEloAfter= 0L;
 
     private Boolean finished = false;
 
