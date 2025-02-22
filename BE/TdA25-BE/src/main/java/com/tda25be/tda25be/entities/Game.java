@@ -33,11 +33,10 @@ public class Game {
     private Difficulty difficulty;
     @Getter
     @Column(length = 1024)
-    @Convert(converter = BoardConverter.class)
-    private Board board;
+    private String board;
 
     public Game setBoard(@NonNull Board board) {
-        this.board = board;
+        this.board = board.board.toString();
         return this;
     }
 
