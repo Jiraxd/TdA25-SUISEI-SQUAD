@@ -241,6 +241,12 @@ const translationsCZ: Record<string, string> = {
   PASSWORD_INVALID_REGISTER: "Heslo není ve správném formátu.",
   ADMIN: "Tento uživatel je administrátor!",
   BANNED_USER: "Tento uživatel je zabanován!",
+  USERNAME_EXISTS: "Uživatelské jméno již existuje",
+  EMAIL_EXISTS: "Email již existuje",
+  PASSWORD_NO_MATCH: "Hesla se neshodují",
+  PASSWORD_NOT_STRONG_ENOUGH: "Heslo není dostatečně silné",
+  INVALID_NAME_COLOR: "Neplatná barva jména",
+  FAILED_SETTINGS_UPDATE: "Nastavení se nepodařilo aktualizovat",
 };
 
 const translationsEN: Record<string, string> = {
@@ -463,6 +469,12 @@ const translationsEN: Record<string, string> = {
   PASSWORD_INVALID_REGISTER: "Password is not in the correct format.",
   ADMIN: "This user is an administrator!",
   BANNED_USER: "This user is banned!",
+  USERNAME_EXISTS: "Username already exists",
+  EMAIL_EXISTS: "Email already exists",
+  PASSWORD_NO_MATCH: "Passwords do not match",
+  PASSWORD_NOT_STRONG_ENOUGH: "Password is not strong enough",
+  INVALID_NAME_COLOR: "Invalid name color",
+  FAILED_SETTINGS_UPDATE: "Failed to update settings",
 };
 
 import Cookies from "js-cookie";

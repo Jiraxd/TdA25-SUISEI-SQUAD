@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useLanguage } from "@/components/languageContext";
-import { language, TranslateText } from "@/lib/utils";
+import { GetLoginCookie, language, TranslateText } from "@/lib/utils";
 import { type UserProfile } from "@/models/UserProfile";
 import { useState } from "react";
 import {
@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Edit } from "lucide-react";
+import { useAlertContext } from "@/components/alertContext";
+import { useRouter } from "next/navigation";
 
 interface SettingsProfileProps {
   user: UserProfile | null;
@@ -93,6 +95,8 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
     user?.profilePicture || ""
   );
 
+  const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
+
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(createSettingsFormSchema(language)),
     defaultValues: {
@@ -105,8 +109,50 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
     },
   });
 
-  function onSubmit(data: SettingsFormValues) {
-    console.log(data);
+  const router = useRouter();
+
+  async function onSubmit(data: SettingsFormValues) {
+    const res = await fetch("/api/v1/users/settings", {
+      method: "POST",
+      headers: {
+        Authorization: GetLoginCookie() || "",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: data.username,
+        email: data.email,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+        nameColor: data.nameColor,
+      }),
+    });
+    if (res.status === 302) {
+      updateErrorMessage(TranslateText("FAILED_SETTINGS_UPDATE", language));
+      return;
+    }
+    if (res.ok) {
+      updateSuccessMessage(TranslateText("SETTINGS_UPDATED", language));
+    } else {
+      const errorText = await res.text();
+      updateErrorMessage(TranslateText(errorText, language));
+      return;
+    }
+    if (data.profilePicture) {
+      await fetch("/api/v1/users/profilePicture", {
+        method: "POST",
+        headers: {
+          Authorization: GetLoginCookie() || "",
+        },
+        body: (() => {
+          const formData = new FormData();
+          if (data.profilePicture) {
+            formData.append("profilePicture", data.profilePicture);
+          }
+          return formData;
+        })(),
+      });
+    }
+    router.refresh();
   }
 
   if (!user) return null;
