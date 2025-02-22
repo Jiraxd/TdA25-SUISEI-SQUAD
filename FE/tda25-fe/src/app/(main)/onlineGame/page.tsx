@@ -2,7 +2,12 @@
 
 import { useLanguage } from "@/components/languageContext";
 import { LoadingCircle } from "@/components/loadingCircle";
-import { checkWinner, GetLoginCookie, TranslateText } from "@/lib/utils";
+import {
+  byteArrayToImageUrl,
+  checkWinner,
+  GetLoginCookie,
+  TranslateText,
+} from "@/lib/utils";
 import { UserProfile } from "@/models/UserProfile";
 import { motion, useAnimation } from "framer-motion";
 import { SwordsIcon, FlagIcon, AlarmClockIcon } from "lucide-react";
@@ -375,10 +380,7 @@ export default function OnlineGamePage() {
                   <CardContent className="flex flex-col items-center gap-4">
                     <Avatar className="w-24 h-24">
                       <AvatarImage
-                        src={
-                          opponent?.profilePicture ||
-                          "/images/placeholder-avatar.png"
-                        }
+                        src={byteArrayToImageUrl(opponent?.profilePicture)}
                         alt={opponent?.username || "Unknown"}
                         className="object-cover"
                       />

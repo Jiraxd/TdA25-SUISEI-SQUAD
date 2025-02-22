@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useLanguage } from "@/components/languageContext";
-import { language, TranslateText } from "@/lib/utils";
+import { byteArrayToImageUrl, GetLoginCookie, language, TranslateText } from "@/lib/utils";
 import { type UserProfile } from "@/models/UserProfile";
 import { useState } from "react";
 import {
@@ -18,12 +18,15 @@ import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Edit } from "lucide-react";
+import { useAlertContext } from "@/components/alertContext";
+import { useRouter } from "next/navigation";
 
 interface SettingsProfileProps {
   user: UserProfile | null;
 }
 
 const availableColors = [
+  "#1a1a1a",
   "#caaa1c",
   "#78ca1c",
   "#2ca420",
@@ -43,17 +46,26 @@ const createSettingsFormSchema = (language: language) =>
         .min(3, TranslateText("USERNAME_MIN_LENGTH", language))
         .max(20, TranslateText("USERNAME_MAX_LENGTH", language)),
       email: z.string().email(TranslateText("INVALID_EMAIL", language)),
-      currentPassword: z
-        .string()
-        .min(6, TranslateText("PASSWORD_MIN_LENGTH", language)),
+      currentPassword: z.string(),
       newPassword: z
         .string()
-        .min(6, TranslateText("PASSWORD_MIN_LENGTH", language))
+        .min(8, {
+          message: TranslateText("PASSWORD_MIN_LENGTH", language),
+        })
+        .regex(new RegExp(".*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-].*"), {
+          message: TranslateText("PASSWORD_SPECIAL_CHAR", language),
+        })
+        .regex(new RegExp(".*\\d.*"), {
+          message: TranslateText("PASSWORD_NUMBER", language),
+        })
+        .regex(new RegExp(".*[a-z].*"), {
+          message: TranslateText("PASSWORD_LOWERCASE", language),
+        })
+        .regex(new RegExp(".*[A-Z].*"), {
+          message: TranslateText("PASSWORD_UPPERCASE", language),
+        })
         .optional(),
-      confirmPassword: z
-        .string()
-        .min(6, TranslateText("PASSWORD_MIN_LENGTH", language))
-        .optional(),
+      confirmPassword: z.string().optional(),
       profilePicture: z.instanceof(File).optional(),
       nameColor: z
         .string()
@@ -76,12 +88,14 @@ type SettingsFormValues = z.infer<ReturnType<typeof createSettingsFormSchema>>;
 export default function SettingsProfile({ user }: SettingsProfileProps) {
   const { language } = useLanguage();
   const [currentColor, setCurrentColor] = useState(
-    user?.nameColor || "#000000"
+    user?.nameColor || "#1A1A1A"
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(
-    user?.profilePicture || ""
+    byteArrayToImageUrl(user?.profilePicture)
   );
+
+  const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(createSettingsFormSchema(language)),
@@ -91,12 +105,54 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      nameColor: user?.nameColor || "#000000",
+      nameColor: user?.nameColor || "#1a1a1a",
     },
   });
 
-  function onSubmit(data: SettingsFormValues) {
-    console.log(data);
+  const router = useRouter();
+
+  async function onSubmit(data: SettingsFormValues) {
+    const res = await fetch("/api/v1/users/settings", {
+      method: "POST",
+      headers: {
+        Authorization: GetLoginCookie() || "",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: data.username,
+        email: data.email,
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+        nameColor: data.nameColor,
+      }),
+    });
+    if (res.status === 302) {
+      updateErrorMessage(TranslateText("FAILED_SETTINGS_UPDATE", language));
+      return;
+    }
+    if (res.ok) {
+      updateSuccessMessage(TranslateText("SETTINGS_UPDATED", language));
+    } else {
+      const errorText = await res.text();
+      updateErrorMessage(TranslateText(errorText, language));
+      return;
+    }
+    if (data.profilePicture) {
+      await fetch("/api/v1/users/profilePicture", {
+        method: "POST",
+        headers: {
+          Authorization: GetLoginCookie() || "",
+        },
+        body: (() => {
+          const formData = new FormData();
+          if (data.profilePicture) {
+            formData.append("profilePicture", data.profilePicture);
+          }
+          return formData;
+        })(),
+      });
+    }
+    router.refresh();
   }
 
   if (!user) return null;
@@ -117,7 +173,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                   <div className="relative w-20 h-20">
                     <Avatar className="w-20 h-20 overflow-hidden">
                       <AvatarImage
-                        src={previewUrl || "/images/placeholder-avatar.png"}
+                        src={previewUrl}
                         alt={value?.name || "profile_picture"}
                         style={{
                           objectFit: "cover",
@@ -155,7 +211,9 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                         variant="ghost"
                         className="text-defaultred hover:text-red-700"
                         onClick={() => {
-                          setPreviewUrl(user.profilePicture || "");
+                          setPreviewUrl(
+                            byteArrayToImageUrl(user.profilePicture)
+                          );
                           form.setValue("profilePicture", undefined);
                         }}
                       >

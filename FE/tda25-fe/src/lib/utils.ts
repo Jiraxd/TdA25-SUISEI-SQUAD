@@ -160,7 +160,7 @@ const translationsCZ: Record<string, string> = {
   PROFILE_SETTINGS: "Nastavení profilu",
   USERNAME_MIN_LENGTH: "Uživatelské jméno musí mít alespoň 3 znaky",
   USERNAME_MAX_LENGTH: "Uživatelské jméno nesmí být delší než 20 znaků",
-  CURRENT_PASSWORD: "Současné heslo",
+  CURRENT_PASSWORD: "Současné heslo (Povinné pro aktualizaci nastavení)",
   PASSWORDS_DO_NOT_MATCH: "Hesla se neshodují",
   INVALID_COLOR: "Prosím zadejte platný kód barvy",
   NAME_COLOR: "Barva jména",
@@ -241,6 +241,12 @@ const translationsCZ: Record<string, string> = {
   PASSWORD_INVALID_REGISTER: "Heslo není ve správném formátu.",
   ADMIN: "Tento uživatel je administrátor!",
   BANNED_USER: "Tento uživatel je zabanován!",
+  USERNAME_EXISTS: "Uživatelské jméno již existuje",
+  EMAIL_EXISTS: "Email již existuje",
+  PASSWORD_NO_MATCH: "Hesla se neshodují",
+  PASSWORD_NOT_STRONG_ENOUGH: "Heslo není dostatečně silné",
+  INVALID_NAME_COLOR: "Neplatná barva jména",
+  FAILED_SETTINGS_UPDATE: "Nastavení se nepodařilo aktualizovat",
 };
 
 const translationsEN: Record<string, string> = {
@@ -382,7 +388,7 @@ const translationsEN: Record<string, string> = {
   PROFILE_SETTINGS: "Profile Settings",
   USERNAME_MIN_LENGTH: "Username must be at least 3 characters",
   USERNAME_MAX_LENGTH: "Username must not exceed 20 characters",
-  CURRENT_PASSWORD: "Current Password",
+  CURRENT_PASSWORD: "Current Password (Required to make changes)",
   PASSWORDS_DO_NOT_MATCH: "Passwords do not match",
   INVALID_COLOR: "Please enter a valid color code",
   NAME_COLOR: "Name Color",
@@ -463,6 +469,12 @@ const translationsEN: Record<string, string> = {
   PASSWORD_INVALID_REGISTER: "Password is not in the correct format.",
   ADMIN: "This user is an administrator!",
   BANNED_USER: "This user is banned!",
+  USERNAME_EXISTS: "Username already exists",
+  EMAIL_EXISTS: "Email already exists",
+  PASSWORD_NO_MATCH: "Passwords do not match",
+  PASSWORD_NOT_STRONG_ENOUGH: "Password is not strong enough",
+  INVALID_NAME_COLOR: "Invalid name color",
+  FAILED_SETTINGS_UPDATE: "Failed to update settings",
 };
 
 import Cookies from "js-cookie";
@@ -481,6 +493,11 @@ export function SetLoginCookie(token: string): void {
 
 export function GetLoginCookie(): string | null {
   return Cookies.get("logintoken") || null;
+}
+
+export function byteArrayToImageUrl(byteArray: string | null | undefined) {
+  if (!byteArray) return "/images/placeholder-avatar.png";
+  return `data:image/jpeg;base64,${byteArray}`;
 }
 
 export function checkWinner(board: string[][]): {

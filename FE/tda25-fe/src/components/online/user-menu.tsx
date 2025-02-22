@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, User, LogOut, WrenchIcon } from "lucide-react";
 import { useLanguage } from "../languageContext";
-import { ClearLoginCookie, TranslateText } from "@/lib/utils";
+import {
+  byteArrayToImageUrl,
+  ClearLoginCookie,
+  TranslateText,
+} from "@/lib/utils";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -58,9 +62,7 @@ export default function UserMenu({ userProfile }: ProfileProps) {
             className="font-dosis-medium flex items-center space-x-2 px-4 py-2 bg-darkerblue text-white rounded-lg text-xl hover:bg-darkerblue/80"
           >
             <img
-              src={
-                userProfile?.profilePicture || "/images/placeholder-avatar.png"
-              }
+              src={byteArrayToImageUrl(userProfile?.profilePicture)}
               alt="Profile"
               className="w-6 h-6 rounded-full"
             />
