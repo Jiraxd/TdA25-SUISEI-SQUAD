@@ -24,6 +24,7 @@ interface SettingsProfileProps {
 }
 
 const availableColors = [
+  "#1a1a1a",
   "#caaa1c",
   "#78ca1c",
   "#2ca420",
@@ -43,17 +44,26 @@ const createSettingsFormSchema = (language: language) =>
         .min(3, TranslateText("USERNAME_MIN_LENGTH", language))
         .max(20, TranslateText("USERNAME_MAX_LENGTH", language)),
       email: z.string().email(TranslateText("INVALID_EMAIL", language)),
-      currentPassword: z
-        .string()
-        .min(6, TranslateText("PASSWORD_MIN_LENGTH", language)),
+      currentPassword: z.string(),
       newPassword: z
         .string()
-        .min(6, TranslateText("PASSWORD_MIN_LENGTH", language))
+        .min(8, {
+          message: TranslateText("PASSWORD_MIN_LENGTH", language),
+        })
+        .regex(new RegExp(".*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-].*"), {
+          message: TranslateText("PASSWORD_SPECIAL_CHAR", language),
+        })
+        .regex(new RegExp(".*\\d.*"), {
+          message: TranslateText("PASSWORD_NUMBER", language),
+        })
+        .regex(new RegExp(".*[a-z].*"), {
+          message: TranslateText("PASSWORD_LOWERCASE", language),
+        })
+        .regex(new RegExp(".*[A-Z].*"), {
+          message: TranslateText("PASSWORD_UPPERCASE", language),
+        })
         .optional(),
-      confirmPassword: z
-        .string()
-        .min(6, TranslateText("PASSWORD_MIN_LENGTH", language))
-        .optional(),
+      confirmPassword: z.string().optional(),
       profilePicture: z.instanceof(File).optional(),
       nameColor: z
         .string()
@@ -76,7 +86,7 @@ type SettingsFormValues = z.infer<ReturnType<typeof createSettingsFormSchema>>;
 export default function SettingsProfile({ user }: SettingsProfileProps) {
   const { language } = useLanguage();
   const [currentColor, setCurrentColor] = useState(
-    user?.nameColor || "#000000"
+    user?.nameColor || "#1A1A1A"
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(
@@ -91,7 +101,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      nameColor: user?.nameColor || "#000000",
+      nameColor: user?.nameColor || "#1a1a1a",
     },
   });
 
