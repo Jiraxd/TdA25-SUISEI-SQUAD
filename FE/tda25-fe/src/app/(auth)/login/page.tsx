@@ -26,45 +26,32 @@ function LoginContent() {
 
   const [formError, setFormError] = useState<string | null>(null);
   const formSchema = z.object({
-    email: z.string().email({
-      message: TranslateText("INVALID_EMAIL", language),
+    emailOrUsername: z.string().min(1, {
+      message: TranslateText("EMAIL_OR_USERNAME_REQUIRED", language),
     }),
-    password: z
-      .string()
-      .min(8, {
-        message: TranslateText("PASSWORD_MIN_LENGTH", language),
-      })
-      .regex(new RegExp(".*[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-].*"), {
-        message: TranslateText("PASSWORD_SPECIAL_CHAR", language),
-      })
-      .regex(new RegExp(".*\\d.*"), {
-        message: TranslateText("PASSWORD_NUMBER", language),
-      })
-      .regex(new RegExp(".*[a-z].*"), {
-        message: TranslateText("PASSWORD_LOWERCASE", language),
-      })
-      .regex(new RegExp(".*[A-Z].*"), {
-        message: TranslateText("PASSWORD_UPPERCASE", language),
-      }),
+    password: z.string(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      emailOrUsername: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setFormError(null);
+
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.emailOrUsername);
+
     const response = await fetch("/api/v1/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: values.email,
+        [isEmail ? "email" : "username"]: values.emailOrUsername,
         password: values.password,
         deviceName: window.navigator.userAgent,
       }),
@@ -98,15 +85,18 @@ function LoginContent() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="email"
+                name="emailOrUsername"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-darkshade font-dosis-bold">
-                      {TranslateText("EMAIL", language)}
+                      {TranslateText("EMAIL_OR_USERNAME", language)}
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="john@example.com"
+                        placeholder={TranslateText(
+                          "EMAIL_OR_USERNAME_PLACEHOLDER",
+                          language
+                        )}
                         {...field}
                         className="bg-white placeholder:text-gray-500 text-black border border-darkshade"
                       />

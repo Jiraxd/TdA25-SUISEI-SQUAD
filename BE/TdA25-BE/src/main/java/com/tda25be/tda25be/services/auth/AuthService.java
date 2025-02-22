@@ -23,9 +23,7 @@ public class AuthService {
         this.sessionRepo = sessionRepo;
         this.passwordEncoder = passwordEncoder;
     }
-
-    public Session login(String email, String password, String deviceName) {
-        User user = userRepo.findByEmail(email);
+    private Session login(User user, String password, String deviceName){
         if (user == null) return null;
         if (passwordEncoder.matches(password, user.getPasswordHash())) {
             Session session = sessionRepo.findByUserAndDeviceName(user, deviceName);
@@ -34,6 +32,16 @@ public class AuthService {
             return session;
         }
         return null;
+    }
+
+    public Session loginByUsername(String username, String password, String deviceName) {
+        User user = userRepo.findByUsername(username);
+        return login(user, password, deviceName);
+    }
+
+    public Session loginByEmail(String email, String password, String deviceName) {
+        User user = userRepo.findByEmail(email);
+        return login(user, password, deviceName);
     }
     public User register(String email, String password, String username, Integer elo) {
         Boolean correctEmail = AuthService.validateEmail(email);

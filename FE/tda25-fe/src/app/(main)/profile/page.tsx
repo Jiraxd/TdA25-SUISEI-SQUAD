@@ -58,7 +58,7 @@ export default function ProfilePage() {
     async function fetchData() {
       setLoading(true);
       const loginToken = GetLoginCookie();
-      if (!loginToken) {
+      if (!loginToken && userId === "profile") {
         router.push("/login?redirect=/profile");
         /*setUser({
           uuid: "testuuid",

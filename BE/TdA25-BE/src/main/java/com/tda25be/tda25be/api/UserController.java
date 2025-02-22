@@ -6,8 +6,11 @@ import com.tda25be.tda25be.repositories.SessionRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.requests.UserCreateRequest;
 import com.tda25be.tda25be.services.auth.AuthService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.support.ResourceTransactionManager;
 import org.springframework.web.bind.annotation.*;
@@ -69,17 +72,26 @@ public class UserController {
             return ResponseEntity.noContent().build();
         }
         @GetMapping("/ban")
-        public ResponseEntity<String> banUser(String uuid) {
+        public ResponseEntity<String> banUser(@RequestParam String uuid, @RequestHeader("Authorization") String token) {
+            if(token == null || token.isEmpty()) return ResponseEntity.badRequest().build();
+            User requester = authService.verify(token);
+            if(requester == null) return ResponseEntity.badRequest().build();
+            if(!requester.getAdmin()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             Optional<User> userOptional = userRepo.findById(uuid);
             if(userOptional.isEmpty()) return ResponseEntity.notFound().build();
             else userOptional.get().setBanned(true);
             return ResponseEntity.ok("User banned");
         }
     @GetMapping("/unban")
-    public ResponseEntity<String> unbanUser(String uuid) {
+    public ResponseEntity<String> unbanUser(@RequestParam String uuid, @RequestHeader("Authorization") String token) {
+        if(token == null || token.isEmpty()) return ResponseEntity.badRequest().build();
+        User requester = authService.verify(token);
+        if(requester == null) return ResponseEntity.badRequest().build();
+        if(!requester.getAdmin()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         Optional<User> userOptional = userRepo.findById(uuid);
         if(userOptional.isEmpty()) return ResponseEntity.notFound().build();
         else userOptional.get().setBanned(false);
         return ResponseEntity.ok("User unbanned");
     }
+
 }
