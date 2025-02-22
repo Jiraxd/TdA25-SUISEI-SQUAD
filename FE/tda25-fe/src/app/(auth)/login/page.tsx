@@ -63,7 +63,12 @@ function LoginContent() {
       SetLoginCookie(data.token);
       router.push(redirect);
     } else {
-      setFormError(TranslateText("LOGIN_FAILED", language));
+      const errorText = await response.text();
+      setFormError(
+        errorText
+          ? TranslateText(errorText, language)
+          : TranslateText("LOGIN_FAILED", language)
+      );
     }
   }
 

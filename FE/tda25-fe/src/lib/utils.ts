@@ -236,6 +236,8 @@ const translationsCZ: Record<string, string> = {
   EMAIL_OR_USERNAME: "Email nebo uživatelské jméno",
   EMAIL_OR_USERNAME_REQUIRED: "Email nebo uživatelské jméno je povinné",
   EMAIL_OR_USERNAME_PLACEHOLDER: "pepa@priklad.cz nebo pepanovak1",
+  INVALID_CREDENTIALS: "Neplatné přihlašovací údaje",
+  USER_ALREADY_EXISTS: "Uživatel již existuje",
 };
 
 const translationsEN: Record<string, string> = {
@@ -453,6 +455,8 @@ const translationsEN: Record<string, string> = {
   EMAIL_OR_USERNAME: "Email or Username",
   EMAIL_OR_USERNAME_REQUIRED: "Email or username is required",
   EMAIL_OR_USERNAME_PLACEHOLDER: "john@example.com or johndoe",
+  INVALID_CREDENTIALS: "Invalid credentials",
+  USER_ALREADY_EXISTS: "User already exists",
 };
 
 import Cookies from "js-cookie";
