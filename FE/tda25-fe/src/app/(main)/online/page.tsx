@@ -106,6 +106,11 @@ export default function OnlinePage() {
         style={{ backgroundColor: "var(--whitelessbright)" }}
       >
         <div className="max-w-4xl mx-auto pb-20">
+          {user?.banned && (
+            <div className="text-2xl lg:text-3xl w-full text-center  text-defaultred font-dosis-bold">
+              {TranslateText("YOU_BAN", language)}
+            </div>
+          )}
           <div className="flex justify-between mb-8 items-center">
             <h1 className="text-3xl lg:text-4xl  text-defaultred font-dosis-bold">
               {TranslateText("WELCOME_ONLINE", language)}

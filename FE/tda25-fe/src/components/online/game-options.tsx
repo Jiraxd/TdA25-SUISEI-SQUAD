@@ -74,6 +74,10 @@ export default function GameOptions({ user }: GameOptionsProps) {
   }, [inQueue]);
 
   async function handleCancelQueue() {
+    if (user?.banned) {
+      updateErrorMessage(TranslateText("BANNED_USER", language));
+      return;
+    }
     const loginToken = GetLoginCookie();
     const data = await fetch(`/api/v1/matchmaking/cancel`, {
       headers: {
@@ -93,6 +97,10 @@ export default function GameOptions({ user }: GameOptionsProps) {
   async function handleClickMatchmaking(ranked: "unranked" | "ranked") {
     if (user === null) {
       updateErrorMessage(TranslateText("USER_NOT_LOGGED_IN", language));
+      return;
+    }
+    if (user.banned) {
+      updateErrorMessage(TranslateText("BANNED_USER", language));
       return;
     }
     updateSuccessMessage(TranslateText("MATCHMAKING_REQUEST_SENT", language));
