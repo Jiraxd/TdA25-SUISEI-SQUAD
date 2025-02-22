@@ -239,6 +239,8 @@ const translationsCZ: Record<string, string> = {
   INVALID_CREDENTIALS: "Neplatné přihlašovací údaje",
   USER_ALREADY_EXISTS: "Uživatel již existuje",
   PASSWORD_INVALID_REGISTER: "Heslo není ve správném formátu.",
+  ADMIN: "Tento uživatel je administrátor!",
+  BANNED_USER: "Tento uživatel je zabanován!",
 };
 
 const translationsEN: Record<string, string> = {
@@ -366,7 +368,7 @@ const translationsEN: Record<string, string> = {
   LOGIN_TITLE: "Login",
   REGISTER_TITLE: "Registration",
   GO_BACK: "Go back",
-  REGISTER_FAILED: "Error registering",
+  REGISTER_FAILED: "Registration failed",
   ONLINE_PAGE_TITLE: "Tic Tac Toe | Online",
   USERNAME: "Username",
   USERNAME_REQUIRED: "Username is required.",
@@ -459,6 +461,8 @@ const translationsEN: Record<string, string> = {
   INVALID_CREDENTIALS: "Invalid credentials",
   USER_ALREADY_EXISTS: "User already exists",
   PASSWORD_INVALID_REGISTER: "Password is not in the correct format.",
+  ADMIN: "This user is an administrator!",
+  BANNED_USER: "This user is banned!",
 };
 
 import Cookies from "js-cookie";
