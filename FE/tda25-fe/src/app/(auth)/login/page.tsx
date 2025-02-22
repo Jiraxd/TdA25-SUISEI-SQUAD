@@ -63,12 +63,11 @@ function LoginContent() {
       SetLoginCookie(data.token);
       router.push(redirect);
     } else {
-      const errorText = await response.text();
-      setFormError(
-        errorText
-          ? TranslateText(errorText, language)
-          : TranslateText("LOGIN_FAILED", language)
-      );
+      if (response.status === 401) {
+        setFormError(TranslateText("INVALID_CREDENTIALS", language));
+        return;
+      }
+      setFormError(TranslateText("LOGIN_FAILED", language));
     }
   }
 

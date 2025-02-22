@@ -238,6 +238,7 @@ const translationsCZ: Record<string, string> = {
   EMAIL_OR_USERNAME_PLACEHOLDER: "pepa@priklad.cz nebo pepanovak1",
   INVALID_CREDENTIALS: "Neplatné přihlašovací údaje",
   USER_ALREADY_EXISTS: "Uživatel již existuje",
+  PASSWORD_INVALID_REGISTER: "Heslo není ve správném formátu.",
 };
 
 const translationsEN: Record<string, string> = {
@@ -457,6 +458,7 @@ const translationsEN: Record<string, string> = {
   EMAIL_OR_USERNAME_PLACEHOLDER: "john@example.com or johndoe",
   INVALID_CREDENTIALS: "Invalid credentials",
   USER_ALREADY_EXISTS: "User already exists",
+  PASSWORD_INVALID_REGISTER: "Password is not in the correct format.",
 };
 
 import Cookies from "js-cookie";
