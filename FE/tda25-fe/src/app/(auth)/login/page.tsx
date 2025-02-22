@@ -63,6 +63,10 @@ function LoginContent() {
       SetLoginCookie(data.token);
       router.push(redirect);
     } else {
+      if (response.status === 401) {
+        setFormError(TranslateText("INVALID_CREDENTIALS", language));
+        return;
+      }
       setFormError(TranslateText("LOGIN_FAILED", language));
     }
   }

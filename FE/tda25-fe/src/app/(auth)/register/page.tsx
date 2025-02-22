@@ -77,16 +77,13 @@ function RegisterPageContent() {
       },
       body: JSON.stringify(values),
     });
-    console.log(response);
-    setFormSuccess(TranslateText("REGISTER_SUCCESS", language));
-    return;
     if (response.ok) {
       setFormSuccess(TranslateText("REGISTER_SUCCESS", language));
     } else {
-      const errorText = await response.json();
+      const errorText = await response.text();
       setFormError(
-        errorText.error
-          ? TranslateText(errorText.error, language)
+        errorText
+          ? TranslateText(errorText, language)
           : TranslateText("REGISTER_FAILED", language)
       );
     }

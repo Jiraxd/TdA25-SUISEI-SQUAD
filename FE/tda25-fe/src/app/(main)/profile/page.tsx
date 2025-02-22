@@ -13,6 +13,7 @@ import GameHistory from "@/components/online/profile/game-history";
 import ProfileDisplay from "@/components/online/profile/profile-display";
 import { getNameColor, type UserProfile } from "@/models/UserProfile";
 import { useAlertContext } from "@/components/alertContext";
+import { BanIcon, WrenchIcon } from "lucide-react";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -126,6 +127,24 @@ export default function ProfilePage() {
                     <span style={{ color: getNameColor(profileOwner) }}>
                       {profileOwner?.username}
                     </span>
+                    {profileOwner?.banned && (
+                      <>
+                        <BanIcon className="w-6 h-6" />
+                        <span className="text-defaultred">
+                          {" "}
+                          {TranslateText("BANNED_USER", language)}
+                        </span>
+                      </>
+                    )}
+                    {profileOwner?.admin && (
+                      <>
+                        <WrenchIcon className="w-6 h-6" />
+                        <span className="text-defaultred">
+                          {" "}
+                          {TranslateText("ADMIN", language)}
+                        </span>
+                      </>
+                    )}
                   </span>
                 )}
               </CardTitle>
