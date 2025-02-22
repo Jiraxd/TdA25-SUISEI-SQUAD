@@ -44,9 +44,7 @@ public class AuthService {
         return login(user, password, deviceName);
     }
     public User register(String email, String password, String username, Integer elo) {
-        Boolean correctEmail = AuthService.validateEmail(email);
-        Boolean correctPassword = AuthService.validatePassword(password);
-        if(!correctEmail || !correctPassword) return null;
+
         if(userRepo.findByEmail(email) != null) return null;
         User user = new User().setUsername(username).setEmail(email).setPasswordHash(passwordEncoder.encode(password)).setElo(elo);
         userRepo.save(user);

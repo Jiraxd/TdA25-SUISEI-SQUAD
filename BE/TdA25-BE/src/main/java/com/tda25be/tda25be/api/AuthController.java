@@ -33,7 +33,7 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
 
-        Session session = email == null ? authService.loginByUsername(username, password, deviceName) : authService.loginByEmail(email, password, deviceName)
+        Session session = email == null ? authService.loginByUsername(username, password, deviceName) : authService.loginByEmail(email, password, deviceName);
         if (session == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(session);
     }
@@ -59,9 +59,12 @@ public class AuthController {
         } else if (username == null) {
             return ResponseEntity.badRequest().body("Username not specified.");
         }
-        if(userRepo.findByEmail(email) != null) return ResponseEntity.badRequest().body("User already exists.");
+        Boolean correctEmail = AuthService.validateEmail(email);
+        Boolean correctPassword = AuthService.validatePassword(password);
+        if(!correctEmail || !correctPassword) return ResponseEntity.badRequest().body("PASSWORD_INVALID_REGISTER");
+        if(userRepo.findByEmail(email) != null || userRepo.findByUsername(username) != null) return ResponseEntity.badRequest().body("USER_ALREADY_EXISTS");
         User user = authService.register(email, password, username);
-        if(user == null) return ResponseEntity.badRequest().build();
+        if(user == null) return ResponseEntity.badRequest().body("REGISTER_FAILED");
         return ResponseEntity.ok().build();
     }
 
