@@ -13,6 +13,7 @@ import GameHistory from "@/components/online/profile/game-history";
 import ProfileDisplay from "@/components/online/profile/profile-display";
 import { getNameColor, type UserProfile } from "@/models/UserProfile";
 import { useAlertContext } from "@/components/alertContext";
+import { BanIcon, WrenchIcon } from "lucide-react";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -83,29 +84,29 @@ export default function ProfilePage() {
       if (profile.ok) {
         const userProfile = await profile.json();
         setProfileOwner(userProfile);
+
+        const data = await fetch(`/api/v1/auth/verify`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${loginToken}`,
+          },
+          credentials: "include",
+        });
+
+        if (data.ok) {
+          const user = await data.json();
+          setUser(user);
+
+          if (userId && userId === "profile") {
+            router.push(`/profile/${user.id}`);
+          } else {
+            if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
+          }
+        }
+        setLoading(false);
       } else {
         updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
       }
-      const data = await fetch(`/api/v1/auth/verify`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${loginToken}`,
-        },
-        credentials: "include",
-      });
-
-      if (data.ok) {
-        const user = await data.json();
-        setUser(user);
-
-        if (userId && userId === "profile") {
-          router.push(`/profile/${user.id}`);
-        } else {
-          const userProfile: UserProfile = await profile.json();
-          if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
-        }
-      }
-      setLoading(false);
     }
     fetchData();
   }, [userId]);
@@ -126,6 +127,24 @@ export default function ProfilePage() {
                     <span style={{ color: getNameColor(profileOwner) }}>
                       {profileOwner?.username}
                     </span>
+                    {profileOwner?.banned && (
+                      <>
+                        <BanIcon className="w-6 h-6" />
+                        <span className="text-defaultred">
+                          {" "}
+                          {TranslateText("BANNED_USER", language)}
+                        </span>
+                      </>
+                    )}
+                    {profileOwner?.admin && (
+                      <>
+                        <WrenchIcon className="w-6 h-6" />
+                        <span className="text-defaultred">
+                          {" "}
+                          {TranslateText("ADMIN", language)}
+                        </span>
+                      </>
+                    )}
                   </span>
                 )}
               </CardTitle>
