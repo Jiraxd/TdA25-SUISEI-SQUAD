@@ -104,9 +104,9 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
     }
     @GetMapping("/liveGameById/{uuid}")
-    public ResponseEntity<LiveGame> liveGameById(@PathVariable String id){
-        if(id == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        LiveGame liveGame = liveGameRepo.findById(id).orElse(null);
+    public ResponseEntity<LiveGame> liveGameById(@PathVariable String uuid){
+        if(uuid == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        LiveGame liveGame = liveGameRepo.findById(uuid).orElse(null);
         if(liveGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
     }
