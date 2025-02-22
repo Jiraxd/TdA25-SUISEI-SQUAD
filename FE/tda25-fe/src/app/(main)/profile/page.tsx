@@ -88,11 +88,11 @@ export default function ProfilePage() {
       });
 
       if (data.ok) {
-        const user = await data.json();
-        setUser(user);
+        const usertmp = await data.json();
+        setUser(usertmp);
 
         if (userId && userId === "profile") {
-          router.push(`/profile/${user.id}`);
+          router.push(`/profile/${usertmp.id}`);
           return;
         }
 
@@ -102,13 +102,19 @@ export default function ProfilePage() {
           const userProfile = await profile.json();
           setProfileOwner(userProfile);
 
-          if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
+          if (userProfile.uuid === usertmp.uuid) setIsCurrentUser(true);
         } else {
           updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
         }
         setLoading(false);
       } else {
-        updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
+        const profile = await fetch(`/api/v1/users/${userId}`);
+        if (profile.ok) {
+          const userProfile = await profile.json();
+          setProfileOwner(userProfile);
+          setIsCurrentUser(false);
+        } else updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
+        setLoading(false);
       }
     }
     fetchData();

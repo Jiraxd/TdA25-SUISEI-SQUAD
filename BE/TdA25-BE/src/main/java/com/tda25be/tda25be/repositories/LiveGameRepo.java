@@ -13,6 +13,6 @@ public interface LiveGameRepo extends JpaRepository<LiveGame, String> {
     List<LiveGame>  findLiveGameByUser(@NonNull User user);
     @Query("SELECT lg FROM LiveGame lg WHERE :userId = lg.playerO.uuid OR :userId = lg.playerX.uuid")
     List<LiveGame> findLiveGameByUserId(@NonNull String userId);
-    @Query("SELECT lg FROM LiveGame lg WHERE :user = lg.playerO OR :user = lg.playerX AND lg.finished = false")
+    @Query("SELECT lg FROM LiveGame lg WHERE (:user = lg.playerO OR :user = lg.playerX) AND lg.finished = false")
     LiveGame findLiveGameByUserAndFinished(@NonNull User user);
 }
