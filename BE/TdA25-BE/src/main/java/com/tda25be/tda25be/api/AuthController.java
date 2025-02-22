@@ -59,8 +59,8 @@ public class AuthController {
         } else if (username == null) {
             return ResponseEntity.badRequest().body("Username not specified.");
         }
-        Boolean correctEmail = AuthService.validateEmail(email);
-        Boolean correctPassword = AuthService.validatePassword(password);
+        Boolean correctEmail = authService.validateEmail(email);
+        Boolean correctPassword = authService.validatePassword(password);
         if(!correctEmail || !correctPassword) return ResponseEntity.badRequest().body("PASSWORD_INVALID_REGISTER");
         if(userRepo.findByEmail(email) != null || userRepo.findByUsername(username) != null) return ResponseEntity.badRequest().body("USER_ALREADY_EXISTS");
         User user = authService.register(email, password, username);
