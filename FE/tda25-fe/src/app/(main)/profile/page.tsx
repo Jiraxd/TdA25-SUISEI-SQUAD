@@ -128,22 +128,22 @@ export default function ProfilePage() {
                       {profileOwner?.username}
                     </span>
                     {profileOwner?.banned && (
-                      <>
+                      <div className="flex items-center space-x-2 ml-4">
                         <BanIcon className="w-6 h-6" />
                         <span className="text-defaultred">
                           {" "}
                           {TranslateText("BANNED_USER", language)}
                         </span>
-                      </>
+                      </div>
                     )}
                     {profileOwner?.admin && (
-                      <>
+                      <div className="flex items-center space-x-2 ml-4">
                         <WrenchIcon className="w-6 h-6" />
                         <span className="text-defaultred">
                           {" "}
                           {TranslateText("ADMIN", language)}
                         </span>
-                      </>
+                      </div>
                     )}
                   </span>
                 )}

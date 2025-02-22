@@ -69,7 +69,7 @@ export default function UserMenu({ userProfile }: ProfileProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-56 bg-darkshade border-defaultblue"
+          className="w-56 bg-defaultblue border-darkshade border"
           align="end"
           sideOffset={5}
         >
