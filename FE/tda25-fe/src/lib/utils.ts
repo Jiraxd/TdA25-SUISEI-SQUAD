@@ -247,6 +247,8 @@ const translationsCZ: Record<string, string> = {
   PASSWORD_NOT_STRONG_ENOUGH: "Heslo není dostatečně silné",
   INVALID_NAME_COLOR: "Neplatná barva jména",
   FAILED_SETTINGS_UPDATE: "Nastavení se nepodařilo aktualizovat",
+  YOU_BAN: "Jsi zabanován!",
+  OFFER_DRAW: "Nabídnout remízu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -475,6 +477,8 @@ const translationsEN: Record<string, string> = {
   PASSWORD_NOT_STRONG_ENOUGH: "Password is not strong enough",
   INVALID_NAME_COLOR: "Invalid name color",
   FAILED_SETTINGS_UPDATE: "Failed to update settings",
+  YOU_BANNED: "You are banned!",
+  OFFER_DRAW: "Offer draw",
 };
 
 import Cookies from "js-cookie";
