@@ -1,5 +1,6 @@
 package com.tda25be.tda25be.models;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.tda25be.tda25be.enums.GameState;
 import com.tda25be.tda25be.error.SemanticErrorException;
 import org.apache.coyote.BadRequestException;
@@ -25,7 +26,7 @@ public class Board {
         if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
         this.board = board;
     }
-
+    @JsonValue
     public List<List<String>> board;
     public boolean oTurn = false;
     private boolean nextWin = false;
