@@ -495,6 +495,11 @@ export function GetLoginCookie(): string | null {
   return Cookies.get("logintoken") || null;
 }
 
+export function byteArrayToImageUrl(byteArray: string | null | undefined) {
+  if (!byteArray) return "/images/placeholder-avatar.png";
+  return `data:image/jpeg;base64,${byteArray}`;
+}
+
 export function checkWinner(board: string[][]): {
   winner: boolean;
   winningLine: number[][];
