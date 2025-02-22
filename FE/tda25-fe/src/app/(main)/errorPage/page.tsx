@@ -5,6 +5,14 @@ import { Suspense } from "react";
 import NotFound from "../not-found";
 
 export default function ErrorPage() {
+  return (
+    <Suspense>
+      <ErrorPageContent />
+    </Suspense>
+  );
+}
+
+function ErrorPageContent() {
   const params = useSearchParams();
   let error = params.get("code");
 
