@@ -10,7 +10,12 @@ import {
 } from "@/lib/utils";
 import { UserProfile } from "@/models/UserProfile";
 import { motion, useAnimation } from "framer-motion";
-import { SwordsIcon, FlagIcon, AlarmClockIcon } from "lucide-react";
+import {
+  SwordsIcon,
+  FlagIcon,
+  AlarmClockIcon,
+  HandshakeIcon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -425,8 +430,8 @@ export default function OnlineGamePage() {
                         // TODO draw
                       }}
                     >
-                      <FlagIcon className="mr-2 h-4 w-4" />
-                      {TranslateText("SURRENDER", language)}
+                      <HandshakeIcon className="mr-2 h-4 w-4" />
+                      {TranslateText("OFFER_DRAW", language)}
                     </Button>
                     <Button
                       className="w-full mt-4 bg-defaultred hover:bg-red-700"
