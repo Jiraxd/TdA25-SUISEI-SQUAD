@@ -95,18 +95,26 @@ public class GameController {
         }
     }
 
+    @GetMapping("currentLiveGame")
+    public ResponseEntity<LiveGame> getCurrentLiveGame(@RequestHeader("Authorization") String token){
+        User user = authService.verify(token);
+        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        LiveGame livegame = liveGameRepo.findLiveGameByUserAndFinished(user);
+        return livegame == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(livegame);
+    }
+
     @GetMapping("/liveGameToken")
-    public ResponseEntity<LiveGame> liveGameToken(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<LiveGame>> liveGameToken(@RequestHeader("Authorization") String token){
         if(token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         User user = authService.verify(token);
         if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        LiveGame liveGame = liveGameRepo.findLiveGameByUser(user);
+        List<LiveGame> liveGame = liveGameRepo.findLiveGameByUser(user);
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
     }
-    @GetMapping("/liveGameById")
-    public ResponseEntity<LiveGame> liveGameById(@RequestParam String id){
-        if(id == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        LiveGame liveGame = liveGameRepo.findById(id).orElse(null);
+    @GetMapping("/liveGameById/{uuid}")
+    public ResponseEntity<LiveGame> liveGameById(@PathVariable String uuid){
+        if(uuid == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        LiveGame liveGame = liveGameRepo.findById(uuid).orElse(null);
         if(liveGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
     }
