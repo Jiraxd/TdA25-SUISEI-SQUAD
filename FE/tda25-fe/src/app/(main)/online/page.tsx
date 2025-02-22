@@ -58,6 +58,19 @@ export default function OnlinePage() {
         setUser(user);
       }
 
+      const currentGame = await fetch(`/api/v1/currentLiveGame`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${loginToken}`,
+        },
+        credentials: "include",
+      });
+
+      if (currentGame.ok) {
+        const game = await currentGame.json();
+        router.push(`/liveGame/${game.gameId}`);
+      }
+
       setLoading(false);
     }
     fetchData();
