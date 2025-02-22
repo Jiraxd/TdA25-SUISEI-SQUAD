@@ -79,29 +79,32 @@ export default function ProfilePage() {
 */
         return;
       }
-      const profile = await fetch(`/api/v1/users/${userId}`);
+      const data = await fetch(`/api/v1/auth/verify`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${loginToken}`,
+        },
+        credentials: "include",
+      });
 
-      if (profile.ok) {
-        const userProfile = await profile.json();
-        setProfileOwner(userProfile);
+      if (data.ok) {
+        const user = await data.json();
+        setUser(user);
 
-        const data = await fetch(`/api/v1/auth/verify`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${loginToken}`,
-          },
-          credentials: "include",
-        });
+        if (userId && userId === "profile") {
+          router.push(`/profile/${user.id}`);
+          return;
+        }
 
-        if (data.ok) {
-          const user = await data.json();
-          setUser(user);
+        const profile = await fetch(`/api/v1/users/${userId}`);
 
-          if (userId && userId === "profile") {
-            router.push(`/profile/${user.id}`);
-          } else {
-            if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
-          }
+        if (profile.ok) {
+          const userProfile = await profile.json();
+          setProfileOwner(userProfile);
+
+          if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
+        } else {
+          updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
         }
         setLoading(false);
       } else {

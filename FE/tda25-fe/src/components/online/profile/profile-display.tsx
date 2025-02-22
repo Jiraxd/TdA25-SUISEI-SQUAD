@@ -1,12 +1,8 @@
-import {
-  type UserProfile,
-  getNameColor,
-  getProfilePicture,
-} from "@/models/UserProfile"; // Adjust the import path as needed
+import { type UserProfile, getNameColor } from "@/models/UserProfile"; // Adjust the import path as needed
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/components/languageContext";
-import { TranslateText } from "@/lib/utils";
+import { byteArrayToImageUrl, TranslateText } from "@/lib/utils";
 import { getNextRank, getRankByElo } from "@/models/Rank";
 
 type ProfileDisplayProps = {
@@ -30,7 +26,10 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar className="w-20 h-20">
-            <AvatarImage src={getProfilePicture(user)} alt={user.username} />
+            <AvatarImage
+              src={byteArrayToImageUrl(user.profilePicture)}
+              alt={user.username}
+            />
           </Avatar>
           <div>
             <CardTitle

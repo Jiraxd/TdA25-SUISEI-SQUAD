@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useLanguage } from "@/components/languageContext";
-import { GetLoginCookie, language, TranslateText } from "@/lib/utils";
+import { byteArrayToImageUrl, GetLoginCookie, language, TranslateText } from "@/lib/utils";
 import { type UserProfile } from "@/models/UserProfile";
 import { useState } from "react";
 import {
@@ -92,7 +92,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(
-    user?.profilePicture || ""
+    byteArrayToImageUrl(user?.profilePicture)
   );
 
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
@@ -173,7 +173,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                   <div className="relative w-20 h-20">
                     <Avatar className="w-20 h-20 overflow-hidden">
                       <AvatarImage
-                        src={previewUrl || "/images/placeholder-avatar.png"}
+                        src={previewUrl}
                         alt={value?.name || "profile_picture"}
                         style={{
                           objectFit: "cover",
@@ -211,7 +211,9 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                         variant="ghost"
                         className="text-defaultred hover:text-red-700"
                         onClick={() => {
-                          setPreviewUrl(user.profilePicture || "");
+                          setPreviewUrl(
+                            byteArrayToImageUrl(user.profilePicture)
+                          );
                           form.setValue("profilePicture", undefined);
                         }}
                       >
