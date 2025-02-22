@@ -79,43 +79,31 @@ export default function ProfilePage() {
 */
         return;
       }
-      const data = await fetch(`/api/v1/auth/verify`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${loginToken}`,
-        },
-        credentials: "include",
-      });
 
-      if (data.ok) {
-        const usertmp = await data.json();
-        setUser(usertmp);
+      const profile = await fetch(`/api/v1/users/${userId}`);
 
-        if (userId && userId === "profile") {
-          router.push(`/profile/${usertmp.id}`);
-          return;
-        }
+      if (profile.ok) {
+        const userProfile = await profile.json();
+        setProfileOwner(userProfile);
 
-        const profile = await fetch(`/api/v1/users/${userId}`);
+        const data = await fetch(`/api/v1/auth/verify`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${loginToken}`,
+          },
+        });
 
-        if (profile.ok) {
-          const userProfile = await profile.json();
-          setProfileOwner(userProfile);
-
+        if (data.ok) {
+          const usertmp = await data.json();
+          setUser(usertmp);
           if (userProfile.uuid === usertmp.uuid) setIsCurrentUser(true);
         } else {
-          updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
-        }
-        setLoading(false);
-      } else {
-        const profile = await fetch(`/api/v1/users/${userId}`);
-        if (profile.ok) {
-          const userProfile = await profile.json();
-          setProfileOwner(userProfile);
           setIsCurrentUser(false);
-        } else updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
-        setLoading(false);
+        }
+      } else {
+        updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
       }
+      setLoading(false);
     }
     fetchData();
   }, [userId]);
