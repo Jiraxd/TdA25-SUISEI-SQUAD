@@ -419,7 +419,15 @@ export default function OnlineGamePage() {
                         </span>
                       </div>
                     </div>
-
+                    <Button
+                      className="w-full mt-4 bg-defaultblue hover:bg-darkerblue"
+                      onClick={() => {
+                        // TODO draw
+                      }}
+                    >
+                      <FlagIcon className="mr-2 h-4 w-4" />
+                      {TranslateText("SURRENDER", language)}
+                    </Button>
                     <Button
                       className="w-full mt-4 bg-defaultred hover:bg-red-700"
                       onClick={() => {
