@@ -17,7 +17,7 @@ export default function ErrorPage() {
         color: "var(--darkshade)",
       }}
     >
-      <div>{"This is an error page!"}</div>
+      <div>{"Whooops! Looks like something went wrong :c"}</div>
       <Suspense>
         <ErrorCode />
       </Suspense>
