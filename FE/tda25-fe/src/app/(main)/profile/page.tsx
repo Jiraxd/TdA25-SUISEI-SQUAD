@@ -84,29 +84,29 @@ export default function ProfilePage() {
       if (profile.ok) {
         const userProfile = await profile.json();
         setProfileOwner(userProfile);
+
+        const data = await fetch(`/api/v1/auth/verify`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${loginToken}`,
+          },
+          credentials: "include",
+        });
+
+        if (data.ok) {
+          const user = await data.json();
+          setUser(user);
+
+          if (userId && userId === "profile") {
+            router.push(`/profile/${user.id}`);
+          } else {
+            if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
+          }
+        }
+        setLoading(false);
       } else {
         updateErrorMessage(TranslateText("USER_NOT_FOUND", language));
       }
-      const data = await fetch(`/api/v1/auth/verify`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${loginToken}`,
-        },
-        credentials: "include",
-      });
-
-      if (data.ok) {
-        const user = await data.json();
-        setUser(user);
-
-        if (userId && userId === "profile") {
-          router.push(`/profile/${user.id}`);
-        } else {
-          const userProfile: UserProfile = await profile.json();
-          if (userProfile.uuid === user.uuid) setIsCurrentUser(true);
-        }
-      }
-      setLoading(false);
     }
     fetchData();
   }, [userId]);
