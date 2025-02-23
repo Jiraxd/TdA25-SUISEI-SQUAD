@@ -252,6 +252,9 @@ const translationsCZ: Record<string, string> = {
   YOU_WON: "Vyhrál jsi!",
   YOU_LOST: "Prohrál jsi!",
   BACK_TO_ONLINE: "Zpět do online menu",
+  SURRENDER_ERROR: "Chyba při vzdávání se",
+  DRAW_REQUEST: "Žádost o remízu",
+  IS_REQUESTING_DRAW: "žádá o remízu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -485,6 +488,9 @@ const translationsEN: Record<string, string> = {
   YOU_WON: "You won!",
   YOU_LOST: "You lost",
   BACK_TO_ONLINE: "Back to online menu",
+  SURRENDER_ERROR: "Failed to surrender",
+  DRAW_REQUEST: "Draw request",
+  IS_REQUESTING_DRAW: "is requesting a draw",
 };
 
 import Cookies from "js-cookie";
