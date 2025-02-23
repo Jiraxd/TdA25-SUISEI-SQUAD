@@ -62,7 +62,7 @@ export default function OnlineGamePage() {
     playerTimeRemaining: 0,
     opponentTimeRemaining: 0,
   });
-  const [showDrawDialog, setShowDrawDialog] = useState<boolean>(true);
+  const [showDrawDialog, setShowDrawDialog] = useState<boolean>(false);
   const [xPlayer, setXPlayer] = useState<string>("");
   const [oPlayer, setOPlayer] = useState<string>("");
   const [opponent, setOpponent] = useState<UserProfile | null>(null);
