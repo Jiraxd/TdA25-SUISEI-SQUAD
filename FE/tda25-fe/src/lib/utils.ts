@@ -249,6 +249,9 @@ const translationsCZ: Record<string, string> = {
   FAILED_SETTINGS_UPDATE: "Nastavení se nepodařilo aktualizovat",
   YOU_BAN: "Jsi zabanován!",
   OFFER_DRAW: "Nabídnout remízu",
+  YOU_WON: "Vyhrál jsi!",
+  YOU_LOST: "Prohrál jsi!",
+  BACK_TO_ONLINE: "Zpět do online menu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -479,6 +482,9 @@ const translationsEN: Record<string, string> = {
   FAILED_SETTINGS_UPDATE: "Failed to update settings",
   YOU_BANNED: "You are banned!",
   OFFER_DRAW: "Offer draw",
+  YOU_WON: "You won!",
+  YOU_LOST: "You lost",
+  BACK_TO_ONLINE: "Back to online menu",
 };
 
 import Cookies from "js-cookie";
