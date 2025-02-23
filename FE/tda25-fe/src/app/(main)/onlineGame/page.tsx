@@ -62,6 +62,7 @@ export default function OnlineGamePage() {
     playerTimeRemaining: 0,
     opponentTimeRemaining: 0,
   });
+  const [showDrawDialog, setShowDrawDialog] = useState<boolean>(true);
   const [xPlayer, setXPlayer] = useState<string>("");
   const [oPlayer, setOPlayer] = useState<string>("");
   const [opponent, setOpponent] = useState<UserProfile | null>(null);
@@ -158,6 +159,8 @@ export default function OnlineGamePage() {
             setBoard(response.message as Array<Array<"X" | "O" | "">>);
           } else if (response.type === "Time") {
             setTimeRemaining((response.message as number) / 1000);
+          } else if (response.type === "Draw") {
+            setShowDrawDialog(true);
           } else if (response.type === "Error") {
             updateErrorMessage(
               TranslateText(response.message as string, language)
@@ -453,8 +456,17 @@ export default function OnlineGamePage() {
                     <div className="flex flex-col items-center space-y-1">
                       <Button
                         className="w-full mt-4 bg-defaultblue hover:bg-darkerblue"
-                        onClick={() => {
-                          // TODO draw
+                        onClick={async () => {
+                          const data = await fetch("/api/v1/draw", {
+                            headers: {
+                              Authorization: GetLoginCookie() || "",
+                            },
+                          });
+                          if (!data.ok) {
+                            updateErrorMessage(
+                              TranslateText("DRAW_ERROR", language)
+                            );
+                          }
                         }}
                       >
                         <HandshakeIcon className="mr-2 h-4 w-4" />
@@ -462,8 +474,17 @@ export default function OnlineGamePage() {
                       </Button>
                       <Button
                         className="w-full mt-4 bg-defaultred hover:bg-red-700"
-                        onClick={() => {
-                          // TODO surrender
+                        onClick={async () => {
+                          const data = await fetch("/api/v1/surrender", {
+                            headers: {
+                              Authorization: GetLoginCookie() || "",
+                            },
+                          });
+                          if (!data.ok) {
+                            updateErrorMessage(
+                              TranslateText("SURRENDER_ERROR", language)
+                            );
+                          }
                         }}
                       >
                         <FlagIcon className="mr-2 h-4 w-4" />
@@ -475,6 +496,61 @@ export default function OnlineGamePage() {
               </div>
             </div>
           </div>
+        )}
+        {showDrawDialog && (
+          <Dialog open={showDrawDialog} onOpenChange={setShowDrawDialog}>
+            <DialogContent
+              onPointerDownOutside={(e) => e.preventDefault()}
+              onEscapeKeyDown={(e) => e.preventDefault()}
+              className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden text-black font-dosis-bold"
+            >
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-dosis-bold text-center">
+                  {TranslateText("DRAW_REQUEST", language)}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="py-4 text-center text-lg">
+                <p>
+                  {opponent?.username}{" "}
+                  {TranslateText("IS_REQUESTING_DRAW", language)}
+                </p>
+              </div>
+              <DialogFooter>
+                <Button
+                  className="w-full bg-defaultblue hover:bg-darkerblue text-lg"
+                  onClick={async () => {
+                    const data = await fetch("/api/v1/draw", {
+                      headers: {
+                        Authorization: GetLoginCookie() || "",
+                      },
+                    });
+                    if (!data.ok) {
+                      updateErrorMessage(TranslateText("DRAW_ERROR", language));
+                    }
+                    setShowDrawDialog(false);
+                  }}
+                >
+                  {TranslateText("ACCEPT", language)}
+                </Button>
+                <Button
+                  className="w-full bg-defaultred hover:bg-red-700 text-lg"
+                  onClick={async () => {
+                    const data = await fetch("/api/v1/decline", {
+                      headers: {
+                        Authorization: GetLoginCookie() || "",
+                      },
+                    });
+                    if (!data.ok) {
+                      updateErrorMessage(TranslateText("DRAW_ERROR", language));
+                    }
+                    setShowDrawDialog(false);
+                  }}
+                >
+                  {TranslateText("DECLINE", language)}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
         {showWinDialog && gameResult && (
           <Dialog open={showWinDialog} onOpenChange={setShowWinDialog}>
