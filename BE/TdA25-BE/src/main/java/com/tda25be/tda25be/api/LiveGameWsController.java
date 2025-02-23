@@ -8,6 +8,7 @@ import com.tda25be.tda25be.enums.GameState;
 import com.tda25be.tda25be.error.SemanticErrorException;
 import com.tda25be.tda25be.models.Move;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
+import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -27,11 +28,12 @@ public class LiveGameWsController {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
     private final AuthService authService;
+    private final UserRepo userRepo;
 
     @MessageMapping()
     public void makeMove(@Payload Move move, Principal principal){
-        LiveGame liveGame = liveGameRepo.getReferenceById(move.gameId);
         if(principal == null) return;
+        LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(userRepo.getReferenceById(principal.getName()));
         User user = authService.verify(principal.getName());
         if(liveGame.getUsers().contains(user)) {
             try {
@@ -49,7 +51,7 @@ public class LiveGameWsController {
                 }
             } catch (BadRequestException | SemanticErrorException e) {
                 webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates","Error", e.getMessage(), HttpStatus.BAD_REQUEST);
-            }//TODO time every 5 secs
+            }
         }
     }
 

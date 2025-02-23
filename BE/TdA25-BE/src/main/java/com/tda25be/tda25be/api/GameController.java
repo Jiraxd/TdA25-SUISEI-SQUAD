@@ -3,7 +3,6 @@ package com.tda25be.tda25be.api;
 import com.tda25be.tda25be.entities.Game;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
-import com.tda25be.tda25be.error.ResourceNotFound;
 import com.tda25be.tda25be.error.SemanticErrorException;
 import com.tda25be.tda25be.models.Board;
 import com.tda25be.tda25be.models.GameRequest;
@@ -17,9 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.parsers.SAXParser;
-import java.io.StringReader;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -94,11 +90,11 @@ public class GameController {
         return ResponseEntity.ok(newGame);
     }
 
-    @GetMapping("currentLiveGame")
+    @GetMapping("/currentLiveGame")
     public ResponseEntity<LiveGame> getCurrentLiveGame(@RequestHeader("Authorization") String token){
         User user = authService.verify(token);
         if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        LiveGame livegame = liveGameRepo.findLiveGameByUserAndFinished(user);
+        LiveGame livegame = liveGameRepo.findLiveGameByUserAndInProgress(user);
         return livegame == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(livegame);
     }
 
