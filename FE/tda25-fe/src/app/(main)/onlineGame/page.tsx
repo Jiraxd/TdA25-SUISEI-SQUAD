@@ -48,7 +48,7 @@ export default function OnlineGamePage() {
   const [board, setBoard] = useState<Array<Array<"X" | "O" | "">>>(
     Array.from({ length: 15 }, () => Array(15).fill(""))
   );
-  const [showWinDialog, setShowWinDialog] = useState(true);
+  const [showWinDialog, setShowWinDialog] = useState(false);
   const [gameResult, setGameResult] = useState<{
     winner: "X" | "O" | "draw" | null;
     playerEloChange: number;
@@ -143,9 +143,17 @@ export default function OnlineGamePage() {
           const response = data.body;
 
           if (response.type === "Win") {
-            setWinner(response.message as "X" | "O" | "draw");
+            setWinner(response.message.result as "X" | "O" | "draw");
             const { winner, winningLine } = checkWinner(board);
             setWinLane(winningLine);
+            setGameResult({
+              winner: response.message.result,
+              playerEloChange: response.message.playerEloChange,
+              opponentEloChange: response.message.opponentEloChange,
+              playerTimeRemaining: response.message.playerTimeRemaining,
+              opponentTimeRemaining: response.message.opponentTimeRemaining,
+            });
+            setShowWinDialog(true);
           } else if (response.type === "Board") {
             setBoard(response.message as Array<Array<"X" | "O" | "">>);
           } else if (response.type === "Time") {
