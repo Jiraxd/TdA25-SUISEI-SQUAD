@@ -85,5 +85,10 @@ public class AuthController {
         }
         return ResponseEntity.ok("Session deleted successfully");
     }
-
+    @GetMapping("/sessions")
+    public ResponseEntity<List<Session>> getSessions(@RequestHeader("Authorization") String token) {
+        User user = authService.verify(token);
+        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(sessionRepo.findByUser((user)));
+    }
 }

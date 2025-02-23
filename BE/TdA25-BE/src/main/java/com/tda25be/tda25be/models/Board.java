@@ -11,6 +11,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Board {
+    @JsonValue
+    public List<List<String>> board;
+    private boolean oTurn = false;
+    private boolean nextWin = false;
+    public String winner = null;
+    public Board(List<List<String>> board) throws BadRequestException, SemanticErrorException {
+        this.setBoard(board);
+    }
+
     public void setBoard(List<List<String>> board) throws BadRequestException, SemanticErrorException {
         if (board == null) throw new BadRequestException("Board wasn't specified");
         if(board.size() != 15) throw new SemanticErrorException("Board isn't 15x15");
@@ -26,14 +35,6 @@ public class Board {
         if(xAmount < oAmount) throw new SemanticErrorException("Wrong starting player");
         this.board = board;
     }
-    @JsonValue
-    public List<List<String>> board;
-    public boolean oTurn = false;
-    private boolean nextWin = false;
-
-    public Board(List<List<String>> board) throws BadRequestException, SemanticErrorException {
-        this.setBoard(board);
-    }
 
     public GameState getState(){
         nextWin = false;
@@ -48,12 +49,15 @@ public class Board {
         }
         if(xAmount > oAmount) oTurn = true;
         if(xAmount == oAmount) oTurn = false;
-
+        String winner = checkWinner();
+        if(!Objects.equals(winner, "")){
+            this.winner = winner;
+            return GameState.completed;
+        }
         for (int y = 0; y < board.size(); y++) {
             List<String> row = board.get(y);
             for (int x = 0; x < row.size(); x++) {
                 if(checkNeighbours(x,y)) {
-                    System.out.println("line found at X: " + x + " Y:" +y);
                     return GameState.endgame;
                 }
             }
@@ -109,10 +113,41 @@ public class Board {
         }
         return streak;
     }
+    public String checkWinner() {
+
+        int size = 15;
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                String player = board.get(row).get(col);
+                if (!player.equals(".")) {
+                    if (checkDirection(board, row, col, 1, 0, player) || // Horizontal
+                            checkDirection(board, row, col, 0, 1, player) || // Vertical
+                            checkDirection(board, row, col, 1, 1, player) || // Diagonal (")
+                            checkDirection(board, row, col, 1, -1, player)) { // Diagonal (/)
+                        return player;
+                    }
+                }
+            }
+        }
+        return "";
+    }
+
+    private static boolean checkDirection(List<List<String>> board, int row, int col, int dRow, int dCol, String player) {
+        int count = 0;
+        for (int i = 0; i < 5; i++) {
+            int newRow = row + i * dRow;
+            int newCol = col + i * dCol;
+            if (newRow < 0 || newRow >= 15 || newCol < 0 || newCol >= 15 || !board.get(newRow).get(newCol).equals(player)) {
+                return false;
+            }
+            count++;
+        }
+        return count == 5;
+    }
 
     public void playMove(int x, int y, Boolean placeO) throws BadRequestException, SemanticErrorException {
         List<List<String>> newBoard = board.stream()
-                .map(ArrayList::new) // Create a new ArrayList for each inner list
+                .map(ArrayList::new)
                 .collect(Collectors.toList());
             String symbol = placeO ? "O" : "X";
             if(newBoard.get(y).get(x).isEmpty()) throw new SemanticErrorException("The cell is already occupied");

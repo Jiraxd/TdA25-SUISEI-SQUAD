@@ -50,7 +50,6 @@ export default function OnlinePage() {
           "Content-Type": "application/json",
           Authorization: `${loginToken}`,
         },
-        credentials: "include",
       });
 
       if (data.ok) {
@@ -63,12 +62,11 @@ export default function OnlinePage() {
           "Content-Type": "application/json",
           Authorization: `${loginToken}`,
         },
-        credentials: "include",
       });
 
       if (currentGame.ok) {
         const game = await currentGame.json();
-        router.push(`/liveGame/${game.gameId}`);
+        router.push(`/onlineGame/${game.gameId}`);
       }
 
       setLoading(false);

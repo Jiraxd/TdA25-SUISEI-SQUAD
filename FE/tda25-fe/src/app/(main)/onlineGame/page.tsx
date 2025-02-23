@@ -16,7 +16,7 @@ import {
   AlarmClockIcon,
   HandshakeIcon,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,14 @@ import { Client } from "@stomp/stompjs";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { useRef } from "react";
 import { LiveGame } from "@/models/LiveGame";
+// Add these imports at the top
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -40,6 +48,21 @@ export default function OnlineGamePage() {
   const [board, setBoard] = useState<Array<Array<"X" | "O" | "">>>(
     Array.from({ length: 15 }, () => Array(15).fill(""))
   );
+  const [showWinDialog, setShowWinDialog] = useState(false);
+  const [gameResult, setGameResult] = useState<{
+    winner: "X" | "O" | "draw" | null;
+    playerEloChange: number;
+    opponentEloChange: number;
+    playerTimeRemaining: number;
+    opponentTimeRemaining: number;
+  } | null>({
+    winner: "draw",
+    playerEloChange: 0,
+    opponentEloChange: 0,
+    playerTimeRemaining: 0,
+    opponentTimeRemaining: 0,
+  });
+  const [showDrawDialog, setShowDrawDialog] = useState<boolean>(true);
   const [xPlayer, setXPlayer] = useState<string>("");
   const [oPlayer, setOPlayer] = useState<string>("");
   const [opponent, setOpponent] = useState<UserProfile | null>(null);
@@ -53,6 +76,7 @@ export default function OnlineGamePage() {
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
   const [client, setClient] = useState<Client | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   useEffect(() => {
     if (
       timeRemaining > 0 &&
@@ -120,13 +144,23 @@ export default function OnlineGamePage() {
           const response = data.body;
 
           if (response.type === "Win") {
-            setWinner(response.message as "X" | "O" | "draw");
+            setWinner(response.message.result as "X" | "O" | "draw");
             const { winner, winningLine } = checkWinner(board);
             setWinLane(winningLine);
+            setGameResult({
+              winner: response.message.result,
+              playerEloChange: response.message.playerEloChange,
+              opponentEloChange: response.message.opponentEloChange,
+              playerTimeRemaining: response.message.playerTimeRemaining,
+              opponentTimeRemaining: response.message.opponentTimeRemaining,
+            });
+            setShowWinDialog(true);
           } else if (response.type === "Board") {
             setBoard(response.message as Array<Array<"X" | "O" | "">>);
           } else if (response.type === "Time") {
             setTimeRemaining((response.message as number) / 1000);
+          } else if (response.type === "Draw") {
+            setShowDrawDialog(true);
           } else if (response.type === "Error") {
             updateErrorMessage(
               TranslateText(response.message as string, language)
@@ -156,16 +190,11 @@ export default function OnlineGamePage() {
       client.publish({
         destination: `/app/ws/makeMove`,
         body: JSON.stringify({
-          X: rowIndex,
-          Y: colIndex,
+          x: rowIndex,
+          y: colIndex,
         }),
-        headers: {
-          Authorization: GetLoginCookie() || "",
-          "Content-Type": "application/json",
-        },
       });
     } catch (error) {
-      console.error("Move error:", error);
       updateErrorMessage(TranslateText("MOVE_ERROR", language));
     }
   }
@@ -424,29 +453,199 @@ export default function OnlineGamePage() {
                         </span>
                       </div>
                     </div>
-                    <Button
-                      className="w-full mt-4 bg-defaultblue hover:bg-darkerblue"
-                      onClick={() => {
-                        // TODO draw
-                      }}
-                    >
-                      <HandshakeIcon className="mr-2 h-4 w-4" />
-                      {TranslateText("OFFER_DRAW", language)}
-                    </Button>
-                    <Button
-                      className="w-full mt-4 bg-defaultred hover:bg-red-700"
-                      onClick={() => {
-                        // TODO surrender
-                      }}
-                    >
-                      <FlagIcon className="mr-2 h-4 w-4" />
-                      {TranslateText("SURRENDER", language)}
-                    </Button>
+                    <div className="flex flex-col items-center space-y-1">
+                      <Button
+                        className="w-full mt-4 bg-defaultblue hover:bg-darkerblue"
+                        onClick={async () => {
+                          const data = await fetch("/api/v1/draw", {
+                            headers: {
+                              Authorization: GetLoginCookie() || "",
+                            },
+                          });
+                          if (!data.ok) {
+                            updateErrorMessage(
+                              TranslateText("DRAW_ERROR", language)
+                            );
+                          }
+                        }}
+                      >
+                        <HandshakeIcon className="mr-2 h-4 w-4" />
+                        {TranslateText("OFFER_DRAW", language)}
+                      </Button>
+                      <Button
+                        className="w-full mt-4 bg-defaultred hover:bg-red-700"
+                        onClick={async () => {
+                          const data = await fetch("/api/v1/surrender", {
+                            headers: {
+                              Authorization: GetLoginCookie() || "",
+                            },
+                          });
+                          if (!data.ok) {
+                            updateErrorMessage(
+                              TranslateText("SURRENDER_ERROR", language)
+                            );
+                          }
+                        }}
+                      >
+                        <FlagIcon className="mr-2 h-4 w-4" />
+                        {TranslateText("SURRENDER", language)}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
             </div>
           </div>
+        )}
+        {showDrawDialog && (
+          <Dialog open={showDrawDialog} onOpenChange={setShowDrawDialog}>
+            <DialogContent
+              onPointerDownOutside={(e) => e.preventDefault()}
+              onEscapeKeyDown={(e) => e.preventDefault()}
+              className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden text-black font-dosis-bold"
+            >
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-dosis-bold text-center">
+                  {TranslateText("DRAW_REQUEST", language)}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="py-4 text-center text-lg">
+                <p>
+                  {opponent?.username}{" "}
+                  {TranslateText("IS_REQUESTING_DRAW", language)}
+                </p>
+              </div>
+              <DialogFooter>
+                <Button
+                  className="w-full bg-defaultblue hover:bg-darkerblue text-lg"
+                  onClick={async () => {
+                    const data = await fetch("/api/v1/draw", {
+                      headers: {
+                        Authorization: GetLoginCookie() || "",
+                      },
+                    });
+                    if (!data.ok) {
+                      updateErrorMessage(TranslateText("DRAW_ERROR", language));
+                    }
+                    setShowDrawDialog(false);
+                  }}
+                >
+                  {TranslateText("ACCEPT", language)}
+                </Button>
+                <Button
+                  className="w-full bg-defaultred hover:bg-red-700 text-lg"
+                  onClick={async () => {
+                    const data = await fetch("/api/v1/decline", {
+                      headers: {
+                        Authorization: GetLoginCookie() || "",
+                      },
+                    });
+                    if (!data.ok) {
+                      updateErrorMessage(TranslateText("DRAW_ERROR", language));
+                    }
+                    setShowDrawDialog(false);
+                  }}
+                >
+                  {TranslateText("DECLINE", language)}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+        {showWinDialog && gameResult && (
+          <Dialog open={showWinDialog} onOpenChange={setShowWinDialog}>
+            <DialogContent
+              onPointerDownOutside={(e) => e.preventDefault()}
+              onEscapeKeyDown={(e) => e.preventDefault()}
+              className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden text-black font-dosis-bold"
+            >
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-dosis-bold text-center">
+                  {gameResult.winner === "draw"
+                    ? TranslateText("GAME_DRAW", language)
+                    : gameResult.winner === playerSymbol
+                    ? TranslateText("YOU_WON", language)
+                    : TranslateText("YOU_LOST", language)}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="grid grid-cols-2 gap-4 py-4">
+                <div className="text-center">
+                  <div className="font-dosis-bold text-lg">
+                    {user?.username}
+                  </div>
+                  <div className="flex justify-center my-2">
+                    {playerSymbol === "X" ? (
+                      <img className="w-8 h-8" src="/icons/X_cervene.svg" />
+                    ) : (
+                      <img className="w-8 h-8" src="/icons/O_modre.svg" />
+                    )}
+                  </div>
+                  <div
+                    className={`text-lg ${
+                      gameResult.playerEloChange >= 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {gameResult.playerEloChange >= 0 ? "+" : ""}
+                    {gameResult.playerEloChange} ELO
+                  </div>
+                  <div className="text-darkshade mt-2">
+                    {Math.floor(gameResult.playerTimeRemaining / 60)}:
+                    {(gameResult.playerTimeRemaining % 60)
+                      .toString()
+                      .padStart(2, "0")}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="font-dosis-bold text-lg">
+                    {opponent?.username}
+                  </div>
+                  <div className="flex justify-center my-2">
+                    {playerSymbol === "X" ? (
+                      <img className="w-8 h-8" src="/icons/O_modre.svg" />
+                    ) : (
+                      <img className="w-8 h-8" src="/icons/X_cervene.svg" />
+                    )}
+                  </div>
+                  <div
+                    className={`text-lg ${
+                      gameResult.opponentEloChange >= 0
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {gameResult.opponentEloChange >= 0 ? "+" : ""}
+                    {gameResult.opponentEloChange} ELO
+                  </div>
+                  <div className="text-darkshade mt-2">
+                    {Math.floor(gameResult.opponentTimeRemaining / 60)}:
+                    {(gameResult.opponentTimeRemaining % 60)
+                      .toString()
+                      .padStart(2, "0")}
+                  </div>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  className="w-full bg-defaultblue hover:bg-darkerblue text-lg"
+                  onClick={() => {
+                    router.push("/online");
+                  }}
+                >
+                  {TranslateText("BACK_TO_ONLINE", language)}
+                </Button>
+                <Button
+                  className="w-full bg-defaultred hover:bg-red-700 text-lg"
+                  onClick={() => {
+                    setShowWinDialog(false);
+                  }}
+                >
+                  {TranslateText("CLOSE", language)}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         )}
       </motion.div>
     </>
