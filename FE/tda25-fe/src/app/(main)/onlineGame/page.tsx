@@ -187,16 +187,11 @@ export default function OnlineGamePage() {
       client.publish({
         destination: `/app/ws/makeMove`,
         body: JSON.stringify({
-          X: rowIndex,
-          Y: colIndex,
+          x: rowIndex,
+          y: colIndex,
         }),
-        headers: {
-          Authorization: GetLoginCookie() || "",
-          "Content-Type": "application/json",
-        },
       });
     } catch (error) {
-      console.error("Move error:", error);
       updateErrorMessage(TranslateText("MOVE_ERROR", language));
     }
   }
