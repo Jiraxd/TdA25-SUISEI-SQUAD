@@ -183,21 +183,20 @@ export default function OnlineGamePage() {
 
   async function handleClick(rowIndex: number, colIndex: number) {
     if (!client) {
-      console.log("test return 1");
       return;
     }
     if (board[rowIndex][colIndex] !== "" || winner || !client.active) {
-      console.log("test return 2");
       return;
     }
 
     try {
       client.publish({
-        destination: `/ws/makeMove`,
+        destination: "/app/ws/makeMove",
         body: JSON.stringify({
           x: rowIndex,
           y: colIndex,
         }),
+        headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
       updateErrorMessage(TranslateText("MOVE_ERROR", language));
