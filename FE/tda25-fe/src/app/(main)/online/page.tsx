@@ -54,6 +54,7 @@ export default function OnlinePage() {
 
       if (data.ok) {
         const user = await data.json();
+        console.log(user);
         setUser(user);
       }
 
@@ -66,6 +67,7 @@ export default function OnlinePage() {
 
       if (currentGame.ok) {
         const game = await currentGame.json();
+        console.log(game);
         router.push(`/onlineGame/${game.gameId}`);
       }
 
