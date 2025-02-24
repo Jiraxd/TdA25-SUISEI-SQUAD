@@ -68,7 +68,7 @@ public class AuthService {
         if (token == null || token.isEmpty() || sessionRepo.findByToken(token).isEmpty()) {
         return false;
     }
-        sessionRepo.deleteById(token);
+        sessionRepo.deleteByToken(token);
         return true;
     }
     public boolean logoutById(String uuid) {
