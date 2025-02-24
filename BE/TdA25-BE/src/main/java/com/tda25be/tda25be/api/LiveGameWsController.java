@@ -35,8 +35,10 @@ public class LiveGameWsController {
     public void makeMove(@Payload Move move, @AuthenticationPrincipal Principal principal) {
         if(principal == null) return;
         long currentMillis = System.currentTimeMillis();
-        LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(userRepo.getReferenceById(principal.getName()));
         User user = authService.verify(principal.getName());
+        if(user == null) return;
+        LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
+        if(liveGame == null) sendError("Player isnt in a game", user);
         if(liveGame.getUsers().contains(user)) {
             try {
                 boolean placeO = liveGame.getPlayerO().equals(user);
@@ -69,9 +71,13 @@ public class LiveGameWsController {
                     webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Board", liveGame.getBoard().board.toString(), HttpStatus.OK);
                 }
             } catch (BadRequestException | SemanticErrorException e) {
-                webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates","Error", e.getMessage(), HttpStatus.BAD_REQUEST);
+                sendError(e, user);
             }
         }
+    }
+
+    private void sendError(String message, User user) {
+        webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates","Error", message, HttpStatus.BAD_REQUEST);
     }
 
     private void win(LiveGame liveGame, User user) {
