@@ -119,7 +119,7 @@ export default function ProfilePage() {
                 {loading ? (
                   <Skeleton className="h-10 w-64 bg-gray-700" />
                 ) : (
-                  <span className="text-darkerblue">
+                  <div className="text-darkerblue flex-col flex justify-center items-center">
                     {TranslateText("PROFILE_PLAYER", language)}
                     <span style={{ color: getNameColor(profileOwner) }}>
                       {profileOwner?.username}
@@ -142,7 +142,7 @@ export default function ProfilePage() {
                         </span>
                       </div>
                     )}
-                  </span>
+                  </div>
                 )}
               </CardTitle>
               {isCurrentUser && !loading && (
