@@ -36,7 +36,6 @@ public class LiveGameWsController {
     public void makeMove(@Payload Move move, @AuthenticationPrincipal Principal principal) {
         if(principal == null) return;
         if(!(principal instanceof UserPrincipal userPrincipal)) return;
-        long currentMillis = System.currentTimeMillis();
         User user = authService.verify(userPrincipal.getToken());
         if(user == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
@@ -51,22 +50,14 @@ public class LiveGameWsController {
                 if(liveGame.getBoard().isOTurn() != placeO) {
                     throw new BadRequestException("Its not your turn");
                 }
-                long diff = currentMillis-liveGame.getLastMoveAt();
-                if(placeO) {
-                    liveGame.setPlayerOTime(liveGame.getPlayerOTime() + diff);
-                    liveGame.setLastMoveAt(currentMillis);
-                    if(liveGame.getPlayerOTime()<0) {
-                        win(liveGame, liveGame.getPlayerX());
-                        return;
-                    }
+                liveGame.updateTime();
+                if(liveGame.getPlayerOTime() < 0){
+                    win(liveGame, liveGame.getPlayerX());
+                    return;
                 }
-                else{
-                    liveGame.setPlayerXTime(liveGame.getPlayerXTime() - diff);
-                    liveGame.setLastMoveAt(currentMillis);
-                    if(liveGame.getPlayerOTime()<0) {
-                        win(liveGame, liveGame.getPlayerO());
-                        return;
-                    }
+                else if(liveGame.getPlayerXTime() < 0){
+                    win(liveGame, liveGame.getPlayerO());
+                    return;
                 }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
                 liveGameRepo.save(liveGame);
@@ -123,10 +114,10 @@ public class LiveGameWsController {
     private void checkTimeOut(){
         List<LiveGame> liveGames = liveGameRepo.findAll();
         for(LiveGame liveGame : liveGames){
-            if(liveGame.getBoard().isOTurn() && liveGame.getPlayerOTime() < System.currentTimeMillis()- liveGame.getLastMoveAt()){
+            if(liveGame.getBoard().isOTurn() && liveGame.getPlayerOTime() < System.currentTimeMillis()- liveGame.getLastTimeUpdateAt()){
                 win(liveGame, liveGame.getPlayerX());
             }
-            else if(!liveGame.getBoard().isOTurn() && liveGame.getPlayerXTime() < System.currentTimeMillis()- liveGame.getLastMoveAt()){
+            else if(!liveGame.getBoard().isOTurn() && liveGame.getPlayerXTime() < System.currentTimeMillis()- liveGame.getLastTimeUpdateAt()){
                 win(liveGame, liveGame.getPlayerO());
             }
         }
