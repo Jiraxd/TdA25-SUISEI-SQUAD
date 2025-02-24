@@ -42,7 +42,8 @@ public class WebSocketAuthInterceptor implements HandshakeInterceptor{
             if (sessionToken != null) {
                 Optional<Session> session = sessionRepository.findByToken(sessionToken);
                 if (session.isPresent()) {
-                    attributes.put("user", session.get().getToken());
+                    attributes.put("user", session.get().getUuid());
+                    attributes.put("token", session.get().getToken());
                     return true;
                 }
             }

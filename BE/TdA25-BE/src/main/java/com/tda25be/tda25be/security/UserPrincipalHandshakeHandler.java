@@ -13,8 +13,9 @@ public class UserPrincipalHandshakeHandler extends DefaultHandshakeHandler {
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler,
                                       Map<String, Object> attributes) {
         String userUuid = (String) attributes.get("user");
+        String token = (String) attributes.get("token");
         if (userUuid != null) {
-            return new UserPrincipal(userUuid);
+            return new UserPrincipal(userUuid, token);
         }
         return null;
     }

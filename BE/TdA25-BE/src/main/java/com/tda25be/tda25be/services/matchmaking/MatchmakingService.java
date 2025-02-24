@@ -57,6 +57,8 @@ public class MatchmakingService {
 
             matchmakingUsers.remove(userList.get(0));
             matchmakingUsers.remove(userList.get(1));
+            userList.remove(0);
+            userList.remove(1);
 
             LiveGame liveGame = new LiveGame(ranked ? MatchmakingTypes.ranked : MatchmakingTypes.unranked);
             if (Math.round(Math.random()) != 0) {
@@ -71,6 +73,6 @@ public class MatchmakingService {
 
     private void notifyPlayers(User user, User opponent, LiveGame liveGame) {
         webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
-        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
     }
 }
