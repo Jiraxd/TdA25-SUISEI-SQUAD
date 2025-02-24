@@ -62,9 +62,9 @@ public class MatchmakingService {
 
             LiveGame liveGame = new LiveGame(ranked ? MatchmakingTypes.ranked : MatchmakingTypes.unranked);
             if (Math.round(Math.random()) != 0) {
-                liveGame.setPlayerO(player2).setPlayerX(player1);
+                liveGame.setPlayerO(player2).setPlayerX(player1).setPlayerOEloBefore(player2.getElo()).setPlayerXEloBefore (player1.getElo());
             } else {
-                liveGame.setPlayerO(player1).setPlayerX(player2);
+                liveGame.setPlayerO(player1).setPlayerX(player2).setPlayerOEloBefore(player1.getElo()).setPlayerXEloBefore(player2.getElo());
             }
             liveGameRepo.save(liveGame);
             notifyPlayers(player1, player2, liveGame);
