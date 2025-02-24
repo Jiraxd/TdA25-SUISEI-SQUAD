@@ -176,8 +176,8 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
       });
 
       if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText);
+        updateErrorMessage(TranslateText("FAILED_SETTINGS_UPDATE", language));
+        return;
       }
 
       updateSuccessMessage(TranslateText("SETTINGS_UPDATED", language));
