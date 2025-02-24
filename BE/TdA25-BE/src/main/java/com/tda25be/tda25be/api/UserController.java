@@ -82,7 +82,8 @@ public class UserController {
         if (!requester.getAdmin()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         Optional<User> userOptional = userRepo.findById(uuid);
         if (userOptional.isEmpty()) return ResponseEntity.notFound().build();
-        else userOptional.get().setBanned(true);
+        User user = userOptional.get().setBanned(true);
+        userRepo.save(user);
         return ResponseEntity.ok("User banned");
     }
 
@@ -142,6 +143,7 @@ public class UserController {
         try {
             user.setProfilePicture(file.getBytes());
         } catch (IOException e) {
+            System.out.println(e);
             return ResponseEntity.internalServerError().body("IO_EXCEPTION");
         }
         return ResponseEntity.ok("Profile picture updated");
