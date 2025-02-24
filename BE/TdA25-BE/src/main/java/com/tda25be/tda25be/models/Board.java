@@ -154,4 +154,17 @@ public class Board {
             newBoard.get(y).set(x, symbol);
             setBoard(newBoard);
     }
+    public boolean isOTurn(){
+        int xAmount = 0;
+        int oAmount = 0;
+        for (List<String> row : board) {
+            for (String symbol: row) {
+                if(Objects.equals(symbol, "X")) xAmount++;
+                else if (Objects.equals(symbol, "O")) oAmount++;
+            }
+        }
+        if(xAmount > oAmount) return true;
+        if(xAmount == oAmount) return false;
+        return false;
+    }
 }

@@ -38,7 +38,10 @@ public class LiveGameWsController {
         User user = authService.verify(principal.getName());
         if(liveGame.getUsers().contains(user)) {
             try {
-                Boolean placeO = liveGame.getPlayerO().equals(user);
+                boolean placeO = liveGame.getPlayerO().equals(user);
+                if(liveGame.getBoard().isOTurn() != placeO) {
+                    throw new BadRequestException("Its not your turn");
+                }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
                 if(liveGame.getBoard().getState() == GameState.completed){
                     User winner = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
