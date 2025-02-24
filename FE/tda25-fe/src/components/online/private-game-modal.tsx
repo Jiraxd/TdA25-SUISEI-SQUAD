@@ -59,11 +59,7 @@ export function PrivateGameModal({
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent
-        className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden"
-        onPointerDownOutside={(e) => e.preventDefault()}
-        onEscapeKeyDown={(e) => e.preventDefault()}
-      >
+      <DialogContent className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden">
         <DialogHeader>
           <div className="flex justify-between items-center border-b border-darkshade pb-4">
             <DialogTitle className="text-2xl font-dosis-bold text-defaultred">

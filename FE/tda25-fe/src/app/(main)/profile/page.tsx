@@ -146,10 +146,12 @@ export default function ProfilePage() {
                 {loading ? (
                   <Skeleton className="h-10 w-64 bg-gray-700" />
                 ) : (
-                  <div className="text-darkerblue flex-col flex justify-center items-center">
-                    {TranslateText("PROFILE_PLAYER", language)}
-                    <span style={{ color: getNameColor(profileOwner) }}>
-                      {profileOwner?.username}
+                  <div className="text-darkerblue flex-col flex justify-start items-center">
+                    <span>
+                      {TranslateText("PROFILE_PLAYER", language)}
+                      <span style={{ color: getNameColor(profileOwner) }}>
+                        {profileOwner?.username}
+                      </span>
                     </span>
                     {profileOwner?.banned && (
                       <div className="flex items-center space-x-2 ml-4">
@@ -218,13 +220,17 @@ export default function ProfilePage() {
               {!isCurrentUser && !user && (
                 <div className="space-x-2">
                   <Button
-                    onClick={() => router.push("/login?redirect=/profile")}
+                    onClick={() =>
+                      router.push("/login?redirect=/profile/" + userId)
+                    }
                     className="px-4 py-2 bg-defaultred text-white rounded-lg text-xl hover:bg-red-700"
                   >
                     {TranslateText("LOG_IN", language)}
                   </Button>
                   <Button
-                    onClick={() => router.push("/register?redirect=/profile")}
+                    onClick={() =>
+                      router.push("/register?redirect=/profile/" + userId)
+                    }
                     className="px-4 py-2 bg-defaultblue text-white rounded-lg text-xl hover:bg-darkerblue"
                   >
                     {TranslateText("CREATE_ACCOUNT", language)}
