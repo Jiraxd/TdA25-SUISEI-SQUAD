@@ -66,7 +66,7 @@ public class MatchmakingService {
             } else {
                 liveGame.setPlayerO(player1).setPlayerX(player2).setPlayerOEloBefore(player1.getElo()).setPlayerXEloBefore(player2.getElo());
             }
-            liveGameRepo.save(liveGame);
+            liveGameRepo.saveAndFlush(liveGame);
             notifyPlayers(player1, player2, liveGame);
         }
     }
