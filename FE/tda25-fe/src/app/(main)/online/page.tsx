@@ -66,7 +66,7 @@ export default function OnlinePage() {
 
       if (currentGame.ok) {
         const game = await currentGame.json();
-        router.push(`/onlineGame/${game.gameId}`);
+        router.push(`/onlineGame/${game.uuid}`);
       }
 
       setLoading(false);

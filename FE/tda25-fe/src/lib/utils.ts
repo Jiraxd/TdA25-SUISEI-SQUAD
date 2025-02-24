@@ -127,6 +127,8 @@ const translationsCZ: Record<string, string> = {
   POINTS_NEEDED: "Potřebné ELO body do další úrovně",
   RANDOM_GAME: "Normální hra",
   RANKED_RANDOM_GAME: "Hodnocená hra",
+  RANKED: "HODNOCENÁ",
+  UNRANKED: "NEHODNOCENÁ",
   PRIVATE_GAME: "Soukromá hra",
   PROFILE_PLAYER: "Profil uživatele: ",
   SETTINGS: "Nastavení",
@@ -255,6 +257,7 @@ const translationsCZ: Record<string, string> = {
   SURRENDER_ERROR: "Chyba při vzdávání se",
   DRAW_REQUEST: "Žádost o remízu",
   IS_REQUESTING_DRAW: "žádá o remízu",
+  GAME_TYPE: "Typ hry",
 };
 
 const translationsEN: Record<string, string> = {
@@ -364,6 +367,8 @@ const translationsEN: Record<string, string> = {
   CURRENT_RANK: "Current Rank",
   RANDOM_GAME: "Normal Game",
   RANKED_RANDOM_GAME: "Ranked Game",
+  RANKED: "RANKED",
+  UNRANKED: "UNRANKED",
   PRIVATE_GAME: "Private Game",
   PROFILE_PLAYER: "Profile of player: ",
   SETTINGS: "Settings",
@@ -491,6 +496,7 @@ const translationsEN: Record<string, string> = {
   SURRENDER_ERROR: "Failed to surrender",
   DRAW_REQUEST: "Draw request",
   IS_REQUESTING_DRAW: "is requesting a draw",
+  GAME_TYPE: "Game type",
 };
 
 import Cookies from "js-cookie";

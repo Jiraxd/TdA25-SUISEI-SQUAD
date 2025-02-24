@@ -2,7 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useLanguage } from "@/components/languageContext";
-import { byteArrayToImageUrl, GetLoginCookie, language, TranslateText } from "@/lib/utils";
+import {
+  byteArrayToImageUrl,
+  GetLoginCookie,
+  language,
+  TranslateText,
+} from "@/lib/utils";
 import { type UserProfile } from "@/models/UserProfile";
 import { useState } from "react";
 import {
@@ -15,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Edit } from "lucide-react";
 import { useAlertContext } from "@/components/alertContext";
@@ -83,6 +88,11 @@ const createSettingsFormSchema = (language: language) =>
       }
     );
 
+export type Session = {
+  uuid: string;
+  deviceName: string;
+  signedAt: string;
+};
 type SettingsFormValues = z.infer<ReturnType<typeof createSettingsFormSchema>>;
 
 export default function SettingsProfile({ user }: SettingsProfileProps) {
@@ -94,6 +104,27 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
   const [previewUrl, setPreviewUrl] = useState<string>(
     byteArrayToImageUrl(user?.profilePicture)
   );
+  const [sessions, setSessions] = useState<Session[]>([]);
+
+  useEffect(() => {
+    async function fetchSessions() {
+      try {
+        const response = await fetch("/api/v1/auth/sessions", {
+          headers: {
+            Authorization: GetLoginCookie() || "",
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setSessions(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch sessions:", error);
+      }
+    }
+
+    fetchSessions();
+  }, []);
 
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
 
@@ -352,6 +383,56 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
           </div>
         </form>
       </Form>
+      <div className="mt-8">
+        <h3 className="text-xl font-semibold mb-4">
+          {TranslateText("ACTIVE_SESSIONS", language)}
+        </h3>
+        <div className="space-y-4">
+          {sessions.map((session) => (
+            <div
+              key={session.uuid}
+              className="p-4 border border-darkshade rounded-lg flex justify-between items-center"
+            >
+              <div>
+                <p className="font-medium">{session.deviceName}</p>
+                <p className="text-sm text-gray-500">
+                  {new Date(session.signedAt).toLocaleString()}
+                </p>
+              </div>
+              <Button
+                variant="destructive"
+                onClick={async () => {
+                  try {
+                    const response = await fetch(
+                      `/api/v1/auth/sessions/${session.uuid}`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          Authorization: GetLoginCookie() || "",
+                        },
+                      }
+                    );
+                    if (response.ok) {
+                      setSessions(
+                        sessions.filter((s) => s.uuid !== session.uuid)
+                      );
+                      updateSuccessMessage(
+                        TranslateText("SESSION_TERMINATED", language)
+                      );
+                    }
+                  } catch (error) {
+                    updateErrorMessage(
+                      TranslateText("SESSION_TERMINATION_FAILED", language)
+                    );
+                  }
+                }}
+              >
+                {TranslateText("TERMINATE", language)}
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
