@@ -10,6 +10,7 @@ import com.tda25be.tda25be.models.OrganizationResponse;
 import com.tda25be.tda25be.repositories.GameRepository;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
+import com.tda25be.tda25be.services.liveGameService.LiveGameService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class GameController {
     private final GameRepository gameRepository;
     private final LiveGameRepo liveGameRepo;
     private final AuthService authService;
+    private final LiveGameService liveGameService;
 
     @GetMapping(path = "/test")
     public OrganizationResponse api() {
@@ -122,5 +124,18 @@ public class GameController {
         if(uuid == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return new ResponseEntity<>(liveGameRepo.findLiveGameByUserId(uuid), HttpStatus.OK);
     }
-
+    @GetMapping("/surrender")
+    public ResponseEntity<String> surrender(@RequestHeader("Authorization") String token){
+        User user = authService.verify(token);
+        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        LiveGame livegame = liveGameRepo.findLiveGameByUserAndInProgress(user);
+        if(livegame == null) return ResponseEntity.notFound().build();
+        if(livegame.getPlayerO().getUuid().equals(user.getUuid())){
+             liveGameService.win(livegame, "X");
+        }
+        else if(livegame.getPlayerX().getUuid().equals(user.getUuid())){
+            liveGameService.win(livegame, "O");
+        }
+        return ResponseEntity.ok().build();
+    }
 }
