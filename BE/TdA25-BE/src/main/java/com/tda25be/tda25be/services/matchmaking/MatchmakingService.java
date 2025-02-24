@@ -6,21 +6,23 @@ import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.models.UserWithTimeStamp;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-@RequiredArgsConstructor
-@Service
 public class MatchmakingService {
     protected final Set<UserWithTimeStamp> matchmakingUsers = ConcurrentHashMap.newKeySet();
     protected final WebSocketUtil webSocketUtil;
     private final LiveGameRepo liveGameRepo;
     private final Boolean ranked;
+
+    public MatchmakingService(WebSocketUtil webSocketUtil, LiveGameRepo liveGameRepo, Boolean ranked) {
+        this.webSocketUtil = webSocketUtil;
+        this.liveGameRepo = liveGameRepo;
+        this.ranked = ranked;
+    }
 
     public void joinMatchmaking(User user) {
         matchmakingUsers.add(new UserWithTimeStamp(user));
@@ -28,7 +30,7 @@ public class MatchmakingService {
 
     public void leaveMatchmaking(User user) {
         if(!isUserMatchmaking(user)) return;
-        matchmakingUsers.remove(user);
+        matchmakingUsers.removeIf(userWithTimeStamp -> userWithTimeStamp.user.equals(user));
     }
 
     public boolean isUserMatchmaking(User user) {
