@@ -182,8 +182,14 @@ export default function OnlineGamePage() {
   }, []);
 
   async function handleClick(rowIndex: number, colIndex: number) {
-    if (!client) return;
-    if (board[rowIndex][colIndex] !== "" || winner || !client.active) return;
+    if (!client) {
+      console.log("test return 1");
+      return;
+    }
+    if (board[rowIndex][colIndex] !== "" || winner || !client.active) {
+      console.log("test return 2");
+      return;
+    }
 
     try {
       client.publish({
@@ -362,8 +368,8 @@ export default function OnlineGamePage() {
                     style={{
                       backgroundColor: "var(--darkshade)",
                       borderColor: "var(--darkshade)",
-                      width: "min(90vw, 60vh)",
-                      height: "min(90vw, 60vh)",
+                      width: "min(95vw, 70vh)",
+                      height: "min(95vw, 70vh)",
                     }}
                     initial="hidden"
                     animate={controls}
