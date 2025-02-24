@@ -26,7 +26,6 @@ import { Client } from "@stomp/stompjs";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { useRef } from "react";
 import { LiveGame } from "@/models/LiveGame";
-// Add these imports at the top
 import {
   Dialog,
   DialogContent,
@@ -216,13 +215,13 @@ export default function OnlineGamePage() {
             <div className="container px-4 py-8 flex w-full flex-col items-center justify-center">
               <div className="flex items-center w-full justify-center">
                 <h1
-                  className="text-2xl md:text-4xl py-4 flex items-center text-center text-darkshade"
+                  className="text-2xl md:text-xl py-4 flex items-center text-center text-darkshade"
                   style={{
                     width: boardRef.current?.offsetWidth,
                     minWidth: boardRef.current?.offsetWidth,
                   }}
                 >
-                  <span className="text-left w-[42%] flex-row flex items-center align-middle gap-2">
+                  <span className="text-left w-[42%] flex-row flex items-center text-xl md:text-lg align-middle gap-2">
                     {xPlayer === user?.uuid ? (
                       <img
                         className="w-[8%] h-[8%]"
@@ -238,7 +237,7 @@ export default function OnlineGamePage() {
                     {user?.username || "Unknown"}
                   </span>
                   <SwordsIcon className="w-[16%]" size={32} />
-                  <span className="text-right w-[42%] flex-row flex  items-center justify-end align-middle gap-2">
+                  <span className="text-right w-[42%] flex-row flex text-xl md:text-lg items-center justify-end align-middle gap-2">
                     {opponent?.username || "Unknown"}
                     {oPlayer === opponent?.uuid ? (
                       <img
@@ -275,6 +274,16 @@ export default function OnlineGamePage() {
                   </CardHeader>
                   <CardContent className="flex flex-col items-center gap-4">
                     <div className="w-full space-y-4 text-darkshade">
+                      <div className="flex flex-col items-center space-y-2">
+                        <span className="text-lg">
+                          {TranslateText("GAME_TYPE", language)}
+                        </span>
+                        {ranked ? (
+                          <span>{TranslateText("RANKED", language)}</span>
+                        ) : (
+                          <span>{TranslateText("UNRANKED", language)}</span>
+                        )}
+                      </div>
                       <div className="flex flex-col items-center space-y-2">
                         <span className="text-lg">
                           {TranslateText("YOUR_SYMBOL", language)}
