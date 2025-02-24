@@ -71,7 +71,7 @@ public class LiveGameWsController {
                     webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Board", liveGame.getBoard().board.toString(), HttpStatus.OK);
                 }
             } catch (BadRequestException | SemanticErrorException e) {
-                sendError(e, user);
+                sendError(e.getMessage(), user);
             }
         }
     }
