@@ -59,23 +59,23 @@ public class AuthService {
         if (token == null || token.isEmpty()) {
             return null;
         }
-        return sessionRepo.findById(token)
+        return sessionRepo.findByToken(token)
                 .map(Session::getUser)
                 .orElse(null);
     }
 
     public boolean logout(String token) {
-        if (token == null || token.isEmpty() || !sessionRepo.existsById(token)) {
+        if (token == null || token.isEmpty() || sessionRepo.findByToken(token).isEmpty()) {
         return false;
     }
         sessionRepo.deleteById(token);
         return true;
     }
     public boolean logoutById(String uuid) {
-        if (uuid == null || uuid.isEmpty() || sessionRepo.findByToken(uuid).isEmpty()) {
+        if (uuid == null || uuid.isEmpty() || sessionRepo.findById(uuid).isEmpty()) {
             return false;
         }
-        sessionRepo.deleteByToken(uuid);
+        sessionRepo.deleteById(uuid);
         return true;
     }
 
