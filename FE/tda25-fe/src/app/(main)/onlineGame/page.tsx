@@ -33,7 +33,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import WebSocket from "ws";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -137,11 +136,7 @@ export default function OnlineGamePage() {
     const token = GetLoginCookie() || "";
     const stompClient = new Client({
       webSocketFactory: () =>
-        new WebSocket("wss://1f1362ea.app.deploy.tourde.app/app/handshake", {
-          headers: {
-            Authorization: token,
-          },
-        }),
+        new WebSocket("wss://1f1362ea.app.deploy.tourde.app/app/handshake"),
       connectHeaders: {
         Authorization: token,
       },
@@ -178,6 +173,7 @@ export default function OnlineGamePage() {
         });
       },
       onStompError: (error) => {
+        console.log(error);
         updateErrorMessage(TranslateText("GAME_CONNECTION_ERROR", language));
       },
     });
@@ -209,6 +205,7 @@ export default function OnlineGamePage() {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
+      console.log(error);
       updateErrorMessage(TranslateText("MOVE_ERROR", language));
     }
   }
