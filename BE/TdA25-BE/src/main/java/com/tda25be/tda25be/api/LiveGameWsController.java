@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,15 +24,15 @@ import java.security.Principal;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-@Controller()
+@Controller
 public class LiveGameWsController {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
     private final AuthService authService;
     private final UserRepo userRepo;
 
-    @MessageMapping("/ws/makeMove")
-    public void makeMove(@Payload Move move, Principal principal){
+    @MessageMapping("/makeMove")
+    public void makeMove(@Payload Move move, @AuthenticationPrincipal Principal principal) {
         if(principal == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(userRepo.getReferenceById(principal.getName()));
         User user = authService.verify(principal.getName());
@@ -71,6 +72,7 @@ public class LiveGameWsController {
     private void modifyElo(User player, double Ea, EloGameState state){
         double playerElo = player.getElo();
         double playerWR = (double) (player.getWins() + player.getDraws()) / (player.getLosses() + player.getDraws() + player.getWins());
+        playerWR = Double.isNaN(playerWR) ? 0 : playerWR;
         double score = switch (state) {
             case win -> 1;
             case loss -> 0;

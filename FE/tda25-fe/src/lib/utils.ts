@@ -258,6 +258,10 @@ const translationsCZ: Record<string, string> = {
   DRAW_REQUEST: "Žádost o remízu",
   IS_REQUESTING_DRAW: "žádá o remízu",
   GAME_TYPE: "Typ hry",
+  ACTIVE_SESSIONS: "Aktivní přihlášení",
+  SESSION_TERMINATED: "Zařízení bylo úspěšně odhlášeno",
+  SESSION_TERMINATION_FAILED: "Nepodařilo se ukončit přihlášení",
+  TERMINATE: "Odhlásit",
 };
 
 const translationsEN: Record<string, string> = {
@@ -497,6 +501,10 @@ const translationsEN: Record<string, string> = {
   DRAW_REQUEST: "Draw request",
   IS_REQUESTING_DRAW: "is requesting a draw",
   GAME_TYPE: "Game type",
+  ACTIVE_SESSIONS: "Login Sessions",
+  SESSION_TERMINATED: "Session logged out successfully",
+  SESSION_TERMINATION_FAILED: "Failed to logout session",
+  TERMINATE: "Log out",
 };
 
 import Cookies from "js-cookie";

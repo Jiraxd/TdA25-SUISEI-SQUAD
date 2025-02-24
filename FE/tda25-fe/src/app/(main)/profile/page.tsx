@@ -149,7 +149,12 @@ export default function ProfilePage() {
                 <Button
                   variant="destructive"
                   className="bg-defaultred text-lg hover:bg-pink w-full sm:w-auto"
-                  onClick={() => {
+                  onClick={async () => {
+                    await fetch("/api/v1/auth/logout", {
+                      headers: {
+                        Authorization: `${GetLoginCookie()}`,
+                      },
+                    });
                     ClearLoginCookie();
                     router.refresh();
                   }}
