@@ -37,7 +37,6 @@ public class MatchmakingController {
             } else return matchmaking == MatchmakingTypes.unranked && service instanceof UnrankedMatchmakingService;
         }).findFirst().get();
         matchmakingService.joinMatchmaking(user);
-        matchmakingService.matchmake(user);
         return ResponseEntity.ok("Matchmaking started");
     }
 
