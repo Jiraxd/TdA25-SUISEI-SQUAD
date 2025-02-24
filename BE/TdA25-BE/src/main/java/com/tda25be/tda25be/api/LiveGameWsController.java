@@ -85,8 +85,8 @@ public class LiveGameWsController {
         evalMatch(winner, loser, false);
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
         liveGameRepo.saveAndFlush(liveGame);
-        webSocketUtil.sendMessageToUser(winner.getUuid(), "/queue/game-updates", "End", "", HttpStatus.OK);
-        webSocketUtil.sendMessageToUser(loser.getUuid(), "/queue/game-updates", "End", "", HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(winner.getUuid(), "/queue/game-updates", "End", symbolWin, HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(loser.getUuid(), "/queue/game-updates", "End", symbolWin, HttpStatus.OK);
     }
     private void draw(LiveGame liveGame) {
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
@@ -125,10 +125,12 @@ public class LiveGameWsController {
     private void checkTimeOut(){
         List<LiveGame> liveGames = liveGameRepo.findAll();
         for(LiveGame liveGame : liveGames){
-            if(liveGame.getBoard().isOTurn() && liveGame.getPlayerOTime() < System.currentTimeMillis()- liveGame.getLastTimeUpdateAt()){
+            if(liveGame.getFinished()) continue;
+            liveGame.updateTime();
+            if(liveGame.getPlayerOTime()< 0){
                 win(liveGame, "X");
             }
-            else if(!liveGame.getBoard().isOTurn() && liveGame.getPlayerXTime() < System.currentTimeMillis()- liveGame.getLastTimeUpdateAt()){
+            if(liveGame.getPlayerXTime()< 0){
                 win(liveGame, "O");
             }
         }
