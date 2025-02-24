@@ -255,6 +255,7 @@ const translationsCZ: Record<string, string> = {
   SURRENDER_ERROR: "Chyba při vzdávání se",
   DRAW_REQUEST: "Žádost o remízu",
   IS_REQUESTING_DRAW: "žádá o remízu",
+  GAME_TYPE: "Typ hry",
 };
 
 const translationsEN: Record<string, string> = {
@@ -491,6 +492,7 @@ const translationsEN: Record<string, string> = {
   SURRENDER_ERROR: "Failed to surrender",
   DRAW_REQUEST: "Draw request",
   IS_REQUESTING_DRAW: "is requesting a draw",
+  GAME_TYPE: "Game type",
 };
 
 import Cookies from "js-cookie";
