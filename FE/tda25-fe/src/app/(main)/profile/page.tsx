@@ -108,6 +108,33 @@ export default function ProfilePage() {
     fetchData();
   }, [userId]);
 
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const handleDeleteProfile = async () => {
+    if (!deleteConfirmation) {
+      setDeleteConfirmation(true);
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/v1/users/${user?.uuid}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${GetLoginCookie()}`,
+        },
+      });
+
+      if (response.ok) {
+        ClearLoginCookie();
+        router.push("/online");
+      } else {
+        updateErrorMessage(TranslateText("DELETE_ACCOUNT_FAILED", language));
+      }
+    } catch (error) {
+      updateErrorMessage(TranslateText("DELETE_ACCOUNT_FAILED", language));
+    }
+  };
+
   return (
     <>
       <title>{TranslateText("PROFILE_PAGE_TITLE", language)}</title>
@@ -119,7 +146,7 @@ export default function ProfilePage() {
                 {loading ? (
                   <Skeleton className="h-10 w-64 bg-gray-700" />
                 ) : (
-                  <span className="text-darkerblue">
+                  <div className="text-darkerblue flex-col flex justify-center items-center">
                     {TranslateText("PROFILE_PLAYER", language)}
                     <span style={{ color: getNameColor(profileOwner) }}>
                       {profileOwner?.username}
@@ -142,7 +169,7 @@ export default function ProfilePage() {
                         </span>
                       </div>
                     )}
-                  </span>
+                  </div>
                 )}
               </CardTitle>
               {isCurrentUser && !loading && (
@@ -263,7 +290,30 @@ export default function ProfilePage() {
                     {loading ? (
                       <SettingsSkeleton />
                     ) : (
-                      <SettingsProfile user={profileOwner} />
+                      <>
+                        <SettingsProfile user={profileOwner} />
+                        {isCurrentUser && (
+                          <div className="mt-8 border-t border-darkshade pt-8">
+                            <Button
+                              variant="destructive"
+                              className={`w-full ${
+                                deleteConfirmation
+                                  ? "bg-red-700 hover:bg-red-800"
+                                  : "bg-defaultred hover:bg-red-700"
+                              } text-white text-lg`}
+                              onClick={handleDeleteProfile}
+                              onMouseLeave={() => setDeleteConfirmation(false)}
+                            >
+                              {TranslateText(
+                                deleteConfirmation
+                                  ? "ARE_YOU_SURE"
+                                  : "DELETE_ACCOUNT",
+                                language
+                              )}
+                            </Button>
+                          </div>
+                        )}
+                      </>
                     )}
                   </TabsContent>
                 )}

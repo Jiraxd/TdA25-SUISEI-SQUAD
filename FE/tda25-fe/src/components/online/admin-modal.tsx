@@ -140,7 +140,7 @@ export function AdminModal({ isOpen, onClose, language }: AdminModalProps) {
                       href={`/profile/${user.uuid}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-lg font-dosis-medium hover:text-defaultblue"
+                      className="text-lg font-dosis-medium text-defaultblue hover:text-darkerblue"
                     >
                       {user.username}
                     </a>

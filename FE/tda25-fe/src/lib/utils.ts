@@ -263,6 +263,11 @@ const translationsCZ: Record<string, string> = {
   SESSION_TERMINATION_FAILED: "Nepodařilo se ukončit přihlášení",
   TERMINATE: "Odhlásit",
   CONFIRM_PASSWORD: "Potvrďte heslo (pouze při změně hesla)",
+  BAN_USER: "Zabanovat uživatele",
+  UNBAN_USER: "Odbanovat uživatele",
+  DELETE_ACCOUNT: "Smazat účet",
+  ARE_YOU_SURE: "Jste si jisti? Klikněte znovu pro potvrzení",
+  DELETE_ACCOUNT_FAILED: "Nepodařilo se smazat účet",
 };
 
 const translationsEN: Record<string, string> = {
@@ -507,6 +512,9 @@ const translationsEN: Record<string, string> = {
   SESSION_TERMINATION_FAILED: "Failed to logout session",
   TERMINATE: "Log out",
   CONFIRM_PASSWORD: "Confirm password (only when changing password)",
+  DELETE_ACCOUNT: "Delete Account",
+  ARE_YOU_SURE: "Are you sure? Click again to confirm",
+  DELETE_ACCOUNT_FAILED: "Failed to delete account",
 };
 
 import Cookies from "js-cookie";
