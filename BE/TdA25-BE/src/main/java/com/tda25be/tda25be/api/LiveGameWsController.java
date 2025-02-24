@@ -9,6 +9,7 @@ import com.tda25be.tda25be.error.SemanticErrorException;
 import com.tda25be.tda25be.models.Move;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
+import com.tda25be.tda25be.security.UserPrincipal;
 import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -34,8 +35,9 @@ public class LiveGameWsController {
     @MessageMapping("/makeMove")
     public void makeMove(@Payload Move move, @AuthenticationPrincipal Principal principal) {
         if(principal == null) return;
+        if(!(principal instanceof UserPrincipal userPrincipal)) return;
         long currentMillis = System.currentTimeMillis();
-        User user = authService.verify(principal.getName());
+        User user = authService.verify(userPrincipal.getToken());
         if(user == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
         if(liveGame == null) sendError("Player isnt in a game", user);
