@@ -13,14 +13,14 @@ import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -34,6 +34,7 @@ public class LiveGameWsController {
     @MessageMapping("/makeMove")
     public void makeMove(@Payload Move move, @AuthenticationPrincipal Principal principal) {
         if(principal == null) return;
+        long currentMillis = System.currentTimeMillis();
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(userRepo.getReferenceById(principal.getName()));
         User user = authService.verify(principal.getName());
         if(liveGame.getUsers().contains(user)) {
@@ -42,14 +43,27 @@ public class LiveGameWsController {
                 if(liveGame.getBoard().isOTurn() != placeO) {
                     throw new BadRequestException("Its not your turn");
                 }
+                long diff = currentMillis-liveGame.getLastMoveAt();
+                if(placeO) {
+                    liveGame.setPlayerOTime(liveGame.getPlayerOTime() + diff);
+                    liveGame.setLastMoveAt(currentMillis);
+                    if(liveGame.getPlayerOTime()<0) {
+                        win(liveGame, liveGame.getPlayerX());
+                        return;
+                    }
+                }
+                else{
+                    liveGame.setPlayerXTime(liveGame.getPlayerXTime() - diff);
+                    liveGame.setLastMoveAt(currentMillis);
+                    if(liveGame.getPlayerOTime()<0) {
+                        win(liveGame, liveGame.getPlayerO());
+                        return;
+                    }
+                }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
                 liveGameRepo.save(liveGame);
                 if(liveGame.getBoard().getState() == GameState.completed){
-                    User winner = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
-                    User loser = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
-                    evalMatch(winner, loser, false);
-                    liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
-                    webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates", "Win", user.getUuid(), HttpStatus.OK);
+                    win(liveGame, user);
                 }
                 else{
                     webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Board", liveGame.getBoard().board.toString(), HttpStatus.OK);
@@ -58,6 +72,14 @@ public class LiveGameWsController {
                 webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates","Error", e.getMessage(), HttpStatus.BAD_REQUEST);
             }
         }
+    }
+
+    private void win(LiveGame liveGame, User user) {
+        User winner = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
+        User loser = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
+        evalMatch(winner, loser, false);
+        liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
+        webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates", "Win", user.getUuid(), HttpStatus.OK);
     }
 
     public void evalMatch(User winner, User loser, boolean draw){
@@ -84,5 +106,17 @@ public class LiveGameWsController {
         };
         playerElo = playerElo + 40*(score - Ea)*(1+0.5*(0.5-playerWR));
         player.setElo((int) Math.ceil(playerElo));
+    }
+    @Scheduled(fixedDelay = 5000)
+    private void checkTimeOut(){
+        List<LiveGame> liveGames = liveGameRepo.findAll();
+        for(LiveGame liveGame : liveGames){
+            if(liveGame.getBoard().isOTurn() && liveGame.getPlayerOTime() < System.currentTimeMillis()- liveGame.getLastMoveAt()){
+                win(liveGame, liveGame.getPlayerX());
+            }
+            else if(!liveGame.getBoard().isOTurn() && liveGame.getPlayerXTime() < System.currentTimeMillis()- liveGame.getLastMoveAt()){
+                win(liveGame, liveGame.getPlayerO());
+            }
+        }
     }
 }

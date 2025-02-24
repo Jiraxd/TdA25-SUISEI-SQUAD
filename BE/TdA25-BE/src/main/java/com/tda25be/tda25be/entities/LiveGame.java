@@ -40,7 +40,7 @@ public class LiveGame {
     @ManyToOne
     @NonNull
     private User playerO;
-
+    private Long lastMoveAt = System.currentTimeMillis();
     private Long playerOTime = 480000L;
     private Long playerXTime = 480000L;
 
