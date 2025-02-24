@@ -85,10 +85,20 @@ public class AuthController {
         }
         return ResponseEntity.ok("Session deleted successfully");
     }
+
+    @GetMapping("/logout/{uuid}")
+    public ResponseEntity<String> logoutBySessionId(@PathVariable String uuid) {
+
+        if (!authService.logoutById(uuid)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok("Session deleted successfully");
+    }
+
     @GetMapping("/sessions")
     public ResponseEntity<List<Session>> getSessions(@RequestHeader("Authorization") String token) {
         User user = authService.verify(token);
         if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok(sessionRepo.findByUser((user)));
+        return ResponseEntity.ok(sessionRepo.findSessionByUserNoToken((user)));
     }
 }

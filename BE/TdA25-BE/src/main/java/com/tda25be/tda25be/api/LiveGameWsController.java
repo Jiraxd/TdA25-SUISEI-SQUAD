@@ -72,6 +72,7 @@ public class LiveGameWsController {
     private void modifyElo(User player, double Ea, EloGameState state){
         double playerElo = player.getElo();
         double playerWR = (double) (player.getWins() + player.getDraws()) / (player.getLosses() + player.getDraws() + player.getWins());
+        playerWR = Double.isNaN(playerWR) ? 0 : playerWR;
         double score = switch (state) {
             case win -> 1;
             case loss -> 0;
