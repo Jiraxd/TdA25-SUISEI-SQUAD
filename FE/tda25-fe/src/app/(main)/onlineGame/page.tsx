@@ -34,11 +34,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-type WSMessage = {
-  type: "Win" | "Board" | "Error";
-  message: string | Array<Array<"X" | "O" | "">>;
-};
-
 export default function OnlineGamePage() {
   const pathName = usePathname();
   const { language } = useLanguage();
@@ -66,7 +61,7 @@ export default function OnlineGamePage() {
   const [oPlayer, setOPlayer] = useState<string>("");
   const [opponent, setOpponent] = useState<UserProfile | null>(null);
   const [ranked, setRanked] = useState<boolean>(false);
-  const [winner, setWinner] = useState<"X" | "O" | "draw" | null>(null);
+  const [winner, setWinner] = useState<"X" | "O" | "Draw" | null>(null);
   const [winLane, setWinLane] = useState<number[][]>([]);
   const [timeRemaining, setTimeRemaining] = useState<number>(480);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
@@ -129,11 +124,13 @@ export default function OnlineGamePage() {
         setOPlayer(livegame.playerO.uuid);
         setPlayerSymbol("X");
         setOpponent(livegame.playerO);
+        setTimeRemaining(livegame.playerXTime / 1000);
       } else {
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setPlayerSymbol("O");
         setOpponent(livegame.playerX);
+        setTimeRemaining(livegame.playerOTime / 1000);
       }
     }
     fetchData();
@@ -149,33 +146,66 @@ export default function OnlineGamePage() {
       },
       debug: (msg) => console.log("STOMP:", msg),
       onConnect: () => {
-        stompClient.subscribe("/user/queue/game-updates", (message) => {
+        stompClient.subscribe("/user/queue/game-updates", async (message) => {
           console.log(message);
           const data = JSON.parse(message.body);
           const response = data.body;
 
-          if (response.type === "Win") {
-            setWinner(response.message.result as "X" | "O" | "draw");
+          if (response.type === "End") {
+            setWinner(response.message as "X" | "O" | "Draw");
             const { winner, winningLine } = checkWinner(board);
             setWinLane(winningLine);
-            setGameResult({
-              winner: response.message.result,
-              playerEloChange: response.message.playerEloChange,
-              opponentEloChange: response.message.opponentEloChange,
-              playerTimeRemaining: response.message.playerTimeRemaining,
-              opponentTimeRemaining: response.message.opponentTimeRemaining,
+            const res = await fetch(`/api/v1/liveGameById/${gameId}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`,
+              },
             });
-            setShowWinDialog(true);
-          } else if (response.type === "Board") {
-            setBoard(response.message as Array<Array<"X" | "O" | "">>);
-          } else if (response.type === "Time") {
-            setTimeRemaining((response.message as number) / 1000);
+            if (res.ok) {
+              const livegame: LiveGame = await res.json();
+              setGameResult({
+                winner: response.message,
+                playerEloChange:
+                  playerSymbol === "X"
+                    ? livegame.playerXEloAfter - livegame.playerXEloBefore
+                    : livegame.playerOEloAfter - livegame.playerOEloBefore,
+
+                opponentEloChange:
+                  playerSymbol === "O"
+                    ? livegame.playerXEloAfter - livegame.playerXEloBefore
+                    : livegame.playerOEloAfter - livegame.playerOEloBefore,
+
+                playerTimeRemaining:
+                  playerSymbol === "X"
+                    ? livegame.playerXTime
+                    : livegame.playerOTime,
+                opponentTimeRemaining:
+                  playerSymbol === "O"
+                    ? livegame.playerXTime
+                    : livegame.playerOTime,
+              });
+              setShowWinDialog(true);
+            }
+          } else if (response.type === "Update") {
+            const res = await fetch(`/api/v1/liveGameById/${gameId}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `${token}`,
+              },
+            });
+            if (res.ok) {
+              const livegame: LiveGame = await res.json();
+              setBoard(livegame.board);
+              setTimeRemaining(
+                playerSymbol === "X"
+                  ? livegame.playerXTime / 1000
+                  : livegame.playerOTime / 1000
+              );
+            }
           } else if (response.type === "Draw") {
             setShowDrawDialog(true);
-          } else if (response.type === "Error") {
-            updateErrorMessage(
-              TranslateText(response.message as string, language)
-            );
           }
         });
       },
@@ -198,7 +228,12 @@ export default function OnlineGamePage() {
     if (!client) {
       return;
     }
-    if (board[rowIndex][colIndex] !== "" || winner || !client.active) {
+    if (
+      board[rowIndex][colIndex] !== "" ||
+      winner ||
+      !client.active ||
+      currentPlayer !== playerSymbol
+    ) {
       return;
     }
 
