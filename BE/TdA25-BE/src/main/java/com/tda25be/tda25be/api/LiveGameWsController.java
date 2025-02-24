@@ -33,7 +33,6 @@ public class LiveGameWsController {
 
     @MessageMapping("/makeMove")
     public void makeMove(@Payload Move move, @AuthenticationPrincipal Principal principal) {
-        System.out.println("XD");
         if(principal == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(userRepo.getReferenceById(principal.getName()));
         User user = authService.verify(principal.getName());
