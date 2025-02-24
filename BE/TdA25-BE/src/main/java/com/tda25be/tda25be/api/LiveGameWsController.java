@@ -52,20 +52,22 @@ public class LiveGameWsController {
                 }
                 liveGame.updateTime();
                 if(liveGame.getPlayerOTime() < 0){
-                    win(liveGame, liveGame.getPlayerX());
+                    win(liveGame, "X");
                     return;
                 }
                 else if(liveGame.getPlayerXTime() < 0){
-                    win(liveGame, liveGame.getPlayerO());
+                    win(liveGame, "O");
                     return;
                 }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
                 liveGameRepo.save(liveGame);
                 if(liveGame.getBoard().getState() == GameState.completed){
-                    win(liveGame, user);
+                    if(placeO) win(liveGame, "O");
+                    else win(liveGame, "X");
                 }
                 else{
-                    webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Board", liveGame.getBoard().board.toString(), HttpStatus.OK);
+                    liveGameRepo.saveAndFlush(liveGame);
+                    webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Update", liveGame.getBoard().board.toString(), HttpStatus.OK);
                 }
             } catch (BadRequestException | SemanticErrorException e) {
                 sendError(e.getMessage(), user);
@@ -77,12 +79,21 @@ public class LiveGameWsController {
         webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates","Error", message, HttpStatus.BAD_REQUEST);
     }
 
-    private void win(LiveGame liveGame, User user) {
-        User winner = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
-        User loser = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
+    private void win(LiveGame liveGame, String symbolWin) {
+        User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
+        User loser = Objects.equals(symbolWin, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
         evalMatch(winner, loser, false);
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
-        webSocketUtil.sendMessageToUser(user.getUuid(), "/queue/game-updates", "Win", user.getUuid(), HttpStatus.OK);
+        liveGameRepo.saveAndFlush(liveGame);
+        webSocketUtil.sendMessageToUser(winner.getUuid(), "/queue/game-updates", "End", symbolWin, HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(loser.getUuid(), "/queue/game-updates", "End", symbolWin, HttpStatus.OK);
+    }
+    private void draw(LiveGame liveGame) {
+        liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
+        evalMatch(liveGame.getPlayerX(), liveGame.getPlayerO(), true);
+        liveGameRepo.saveAndFlush(liveGame);
+        webSocketUtil.sendMessageToUser(liveGame.getPlayerX().getUuid(), "/queue/game-updates", "End", "Draw", HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(liveGame.getPlayerO().getUuid(), "/queue/game-updates", "End", "Draw", HttpStatus.OK);
     }
 
     public void evalMatch(User winner, User loser, boolean draw){
@@ -114,11 +125,13 @@ public class LiveGameWsController {
     private void checkTimeOut(){
         List<LiveGame> liveGames = liveGameRepo.findAll();
         for(LiveGame liveGame : liveGames){
-            if(liveGame.getBoard().isOTurn() && liveGame.getPlayerOTime() < System.currentTimeMillis()- liveGame.getLastTimeUpdateAt()){
-                win(liveGame, liveGame.getPlayerX());
+            if(liveGame.getFinished()) continue;
+            liveGame.updateTime();
+            if(liveGame.getPlayerOTime()< 0){
+                win(liveGame, "X");
             }
-            else if(!liveGame.getBoard().isOTurn() && liveGame.getPlayerXTime() < System.currentTimeMillis()- liveGame.getLastTimeUpdateAt()){
-                win(liveGame, liveGame.getPlayerO());
+            if(liveGame.getPlayerXTime()< 0){
+                win(liveGame, "O");
             }
         }
     }

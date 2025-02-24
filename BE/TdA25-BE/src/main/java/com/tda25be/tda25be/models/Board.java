@@ -114,7 +114,6 @@ public class Board {
         return streak;
     }
     public String checkWinner() {
-
         int size = 15;
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {

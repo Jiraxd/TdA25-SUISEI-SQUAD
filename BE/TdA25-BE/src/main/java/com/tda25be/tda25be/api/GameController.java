@@ -100,7 +100,6 @@ public class GameController {
         liveGameRepo.save(livegame);
         return ResponseEntity.ok(livegame);
     }
-
     @GetMapping("/liveGameToken")
     public ResponseEntity<List<LiveGame>> liveGameToken(@RequestHeader("Authorization") String token){
         if(token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -121,4 +120,5 @@ public class GameController {
         if(uuid == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return new ResponseEntity<>(liveGameRepo.findLiveGameByUserId(uuid), HttpStatus.OK);
     }
+
 }
