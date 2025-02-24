@@ -40,8 +40,11 @@ public class LiveGameWsController {
         User user = authService.verify(userPrincipal.getToken());
         if(user == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
-        if(liveGame == null) sendError("Player isnt in a game", user);
-        Boolean userInGame = liveGame.getUsers().stream().anyMatch((user1 -> Objects.equals(user.getUuid(), user1.getUuid())));
+        if(liveGame == null) {
+            sendError("Player isnt in a game", user);
+            return;
+        }
+        boolean userInGame = liveGame.getUsers().stream().anyMatch((user1 -> Objects.equals(user.getUuid(), user1.getUuid())));
         if(userInGame) {
             try {
                 boolean placeO = liveGame.getPlayerO().getUuid().equals(user.getUuid());

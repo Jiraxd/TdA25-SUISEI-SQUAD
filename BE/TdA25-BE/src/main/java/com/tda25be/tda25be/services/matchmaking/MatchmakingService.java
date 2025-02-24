@@ -58,7 +58,7 @@ public class MatchmakingService {
             matchmakingUsers.remove(userList.get(0));
             matchmakingUsers.remove(userList.get(1));
             userList.remove(0);
-            userList.remove(1);
+            userList.remove(0);
 
             LiveGame liveGame = new LiveGame(ranked ? MatchmakingTypes.ranked : MatchmakingTypes.unranked);
             if (Math.round(Math.random()) != 0) {
