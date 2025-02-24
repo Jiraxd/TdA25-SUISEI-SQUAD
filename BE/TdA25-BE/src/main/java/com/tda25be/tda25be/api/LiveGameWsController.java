@@ -60,7 +60,6 @@ public class LiveGameWsController {
                     return;
                 }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
-                liveGameRepo.save(liveGame);
                 if(liveGame.getBoard().getState() == GameState.completed){
                     if(placeO) win(liveGame, "O");
                     else win(liveGame, "X");

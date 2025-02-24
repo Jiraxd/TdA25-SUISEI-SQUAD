@@ -46,7 +46,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
         newGame.setName(game.getName()).setDifficulty(game.getDifficulty()).setGameState(board.getState()).setBoard(board);
-        gameRepository.save(newGame);
+        gameRepository.saveAndFlush(newGame);
         return ResponseEntity.status(HttpStatus.CREATED).body(newGame);
     }
 
@@ -86,7 +86,7 @@ public class GameController {
             return ResponseEntity.badRequest().build();
         }
         newGame.setName(game.getName()).setDifficulty(game.getDifficulty()).setGameState(board.getState()).setBoard(board).setUuid(uuid);
-        gameRepository.save(newGame);
+        gameRepository.saveAndFlush(newGame);
         return ResponseEntity.ok(newGame);
     }
 
@@ -97,7 +97,7 @@ public class GameController {
         LiveGame livegame = liveGameRepo.findLiveGameByUserAndInProgress(user);
         if(livegame == null) return ResponseEntity.notFound().build();
         livegame.updateTime();
-        liveGameRepo.save(livegame);
+        liveGameRepo.saveAndFlush(livegame);
         return ResponseEntity.ok(livegame);
     }
     @GetMapping("/liveGameToken")
@@ -113,6 +113,8 @@ public class GameController {
         if(uuid == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         LiveGame liveGame = liveGameRepo.findById(uuid).orElse(null);
         if(liveGame == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        liveGame.updateTime();
+        liveGameRepo.saveAndFlush(liveGame);
         return ResponseEntity.status(HttpStatus.OK).body(liveGame);
     }
     @GetMapping("/liveGameByUserId/{uuid}")
