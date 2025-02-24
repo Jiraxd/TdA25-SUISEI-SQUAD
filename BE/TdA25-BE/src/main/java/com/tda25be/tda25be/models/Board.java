@@ -146,6 +146,7 @@ public class Board {
     }
 
     public void playMove(int x, int y, Boolean placeO) throws BadRequestException, SemanticErrorException {
+        System.out.println(x + " " + y + " " + placeO);
         List<List<String>> newBoard = board.stream()
                 .map(ArrayList::new)
                 .collect(Collectors.toList());
@@ -153,6 +154,7 @@ public class Board {
             if(newBoard.get(y).get(x).isEmpty()) throw new SemanticErrorException("The cell is already occupied");
             newBoard.get(y).set(x, symbol);
             setBoard(newBoard);
+            System.out.println(newBoard.toString());
     }
     public boolean isOTurn(){
         int xAmount = 0;

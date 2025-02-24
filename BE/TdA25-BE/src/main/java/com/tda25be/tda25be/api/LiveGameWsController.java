@@ -43,6 +43,7 @@ public class LiveGameWsController {
                     throw new BadRequestException("Its not your turn");
                 }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
+                liveGameRepo.save(liveGame);
                 if(liveGame.getBoard().getState() == GameState.completed){
                     User winner = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
                     User loser = Objects.equals(liveGame.getBoard().winner, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
