@@ -6,6 +6,7 @@ import { useLanguage } from "../languageContext";
 import {
   byteArrayToImageUrl,
   ClearLoginCookie,
+  GetLoginCookie,
   TranslateText,
 } from "@/lib/utils";
 import { Button } from "../ui/button";
@@ -49,7 +50,13 @@ export default function UserMenu({ userProfile }: ProfileProps) {
       </div>
     );
   }
-  function handleLogOut() {
+  async function handleLogOut() {
+    await fetch("/api/v1/auth/logout", {
+      headers: {
+        Authorization: `${GetLoginCookie()}`,
+      },
+    });
+
     ClearLoginCookie();
     router.refresh();
   }
