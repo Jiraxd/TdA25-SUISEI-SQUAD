@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -17,6 +18,8 @@ import java.util.Base64;
 public class Session {
     @Id
     @NonNull
+    @UuidGenerator
+    private String uuid;
     private String token;
     private String deviceName;
     @ManyToOne(fetch = FetchType.EAGER)
