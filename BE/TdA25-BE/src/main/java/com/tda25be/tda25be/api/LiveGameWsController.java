@@ -30,7 +30,7 @@ public class LiveGameWsController {
     private final AuthService authService;
     private final UserRepo userRepo;
 
-    @MessageMapping()
+    @MessageMapping("/ws/makeMove")
     public void makeMove(@Payload Move move, Principal principal){
         if(principal == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(userRepo.getReferenceById(principal.getName()));
