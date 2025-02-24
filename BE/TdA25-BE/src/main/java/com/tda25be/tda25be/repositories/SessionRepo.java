@@ -13,6 +13,5 @@ public interface SessionRepo extends JpaRepository<Session, String> {
     Session findByUserAndDeviceName(User user, String deviceName);
     Optional<Session> findByToken(String token);
     List<Session> findByUser(User user);
-
     void deleteByToken(String token);
 }
