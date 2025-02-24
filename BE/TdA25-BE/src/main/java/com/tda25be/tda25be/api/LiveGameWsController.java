@@ -14,18 +14,21 @@ import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-@Controller
+@Controller("/api/v1")
 public class LiveGameWsController {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
@@ -72,6 +75,21 @@ public class LiveGameWsController {
                 sendError(e.getMessage(), user);
             }
         }
+    }
+
+    @GetMapping("/surrender")
+    public ResponseEntity<String> surrender(@RequestHeader("Authorization") String token){
+        User user = authService.verify(token);
+        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        LiveGame livegame = liveGameRepo.findLiveGameByUserAndInProgress(user);
+        if(livegame == null) return ResponseEntity.notFound().build();
+        if(livegame.getPlayerO().getUuid().equals(user.getUuid())){
+            win(livegame, "X");
+        }
+        else if(livegame.getPlayerX().getUuid().equals(user.getUuid())){
+            win(livegame, "O");
+        }
+        return ResponseEntity.ok().build();
     }
 
     private void sendError(String message, User user) {

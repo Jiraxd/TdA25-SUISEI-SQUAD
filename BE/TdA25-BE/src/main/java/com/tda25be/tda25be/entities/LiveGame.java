@@ -76,7 +76,7 @@ public class LiveGame {
         long currentMillis = System.currentTimeMillis();
         long diff = currentMillis-this.getLastTimeUpdateAt();
         if(board.isOTurn()) {
-            this.setPlayerOTime(this.getPlayerOTime() + diff);
+            this.setPlayerOTime(this.getPlayerOTime() - diff);
             this.setLastTimeUpdateAt(currentMillis);
 
         }
