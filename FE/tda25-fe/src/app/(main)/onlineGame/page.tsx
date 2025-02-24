@@ -193,7 +193,7 @@ export default function OnlineGamePage() {
 
     try {
       client.publish({
-        destination: `/app/ws/makeMove`,
+        destination: `/ws/makeMove`,
         body: JSON.stringify({
           x: rowIndex,
           y: colIndex,
