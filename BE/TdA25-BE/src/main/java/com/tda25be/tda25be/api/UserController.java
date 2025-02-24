@@ -146,4 +146,11 @@ public class UserController {
         }
         return ResponseEntity.ok("Profile picture updated");
     }
+    @DeleteMapping("/user")
+    public ResponseEntity<String> deleteUserToken(@RequestHeader("Authorization") String token){
+        User user = authService.verify(token);
+        if(user == null) return ResponseEntity.badRequest().build();
+        userRepo.deleteById(user.getUuid());
+        return ResponseEntity.ok("User deleted");
+    }
 }
