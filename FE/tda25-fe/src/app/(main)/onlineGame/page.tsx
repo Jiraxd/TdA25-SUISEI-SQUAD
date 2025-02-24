@@ -113,8 +113,15 @@ export default function OnlineGamePage() {
           Authorization: `${loginToken}`,
         },
       });
+      if (!res.ok) {
+        router.push("/online");
+        return;
+      }
       const livegame: LiveGame = await res.json();
-
+      if (livegame.finished) {
+        router.push("/online");
+        return;
+      }
       setBoard(livegame.board);
       setRanked(livegame.matchmakingTyps === "ranked");
       if (livegame.playerX.uuid === userTemp.uuid) {
