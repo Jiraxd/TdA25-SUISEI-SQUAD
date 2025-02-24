@@ -33,6 +33,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import WebSocket from "ws";
 
 type WSMessage = {
   type: "Win" | "Board" | "Error";
@@ -133,9 +134,18 @@ export default function OnlineGamePage() {
   }, [gameId]);
 
   useEffect(() => {
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const token = GetLoginCookie() || "";
     const stompClient = new Client({
-      brokerURL: `${protocol}//${window.location.host}/app/handshake`,
+      webSocketFactory: () =>
+        new WebSocket("wss://1f1362ea.app.deploy.tourde.app/app/handshake", {
+          headers: {
+            Authorization: token,
+          },
+        }),
+      connectHeaders: {
+        Authorization: token,
+      },
+      debug: (msg) => console.log("STOMP:", msg),
       onConnect: () => {
         stompClient.subscribe("/user/queue/game-updates", (message) => {
           console.log(message);
