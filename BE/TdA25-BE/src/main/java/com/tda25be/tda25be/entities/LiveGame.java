@@ -40,7 +40,7 @@ public class LiveGame {
     @ManyToOne
     @NonNull
     private User playerO;
-    private Long lastMoveAt = System.currentTimeMillis();
+    private Long lastTimeUpdateAt = System.currentTimeMillis();
     private Long playerOTime = 480000L;
     private Long playerXTime = 480000L;
 
@@ -71,5 +71,19 @@ public class LiveGame {
         users.add(playerX);
         users.add(playerO);
         return users;
+    }
+    public void updateTime(){
+        long currentMillis = System.currentTimeMillis();
+        long diff = currentMillis-this.getLastTimeUpdateAt();
+        if(board.isOTurn()) {
+            this.setPlayerOTime(this.getPlayerOTime() + diff);
+            this.setLastTimeUpdateAt(currentMillis);
+
+        }
+        else{
+            this.setPlayerXTime(this.getPlayerXTime() - diff);
+            this.setLastTimeUpdateAt(currentMillis);
+    }
+        lastTimeUpdateAt = System.currentTimeMillis();
     }
 }

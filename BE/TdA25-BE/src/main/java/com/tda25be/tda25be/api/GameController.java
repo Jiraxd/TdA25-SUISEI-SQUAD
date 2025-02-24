@@ -95,7 +95,10 @@ public class GameController {
         User user = authService.verify(token);
         if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         LiveGame livegame = liveGameRepo.findLiveGameByUserAndInProgress(user);
-        return livegame == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).build() : ResponseEntity.ok(livegame);
+        if(livegame == null) return ResponseEntity.notFound().build();
+        livegame.updateTime();
+        liveGameRepo.save(livegame);
+        return ResponseEntity.ok(livegame);
     }
 
     @GetMapping("/liveGameToken")
