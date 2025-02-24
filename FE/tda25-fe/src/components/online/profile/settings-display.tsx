@@ -400,17 +400,11 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                 </p>
               </div>
               <Button
-                variant="destructive"
+                className="bg-defaultred hover:bg-red-700 text-white"
                 onClick={async () => {
                   try {
                     const response = await fetch(
-                      `/api/v1/auth/sessions/${session.uuid}`,
-                      {
-                        method: "DELETE",
-                        headers: {
-                          Authorization: GetLoginCookie() || "",
-                        },
-                      }
+                      `/api/v1/auth/logout/${session.uuid}`
                     );
                     if (response.ok) {
                       setSessions(
