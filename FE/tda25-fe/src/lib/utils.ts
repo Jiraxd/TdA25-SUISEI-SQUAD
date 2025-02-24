@@ -263,6 +263,8 @@ const translationsCZ: Record<string, string> = {
   SESSION_TERMINATION_FAILED: "Nepodařilo se ukončit přihlášení",
   TERMINATE: "Odhlásit",
   CONFIRM_PASSWORD: "Potvrďte heslo (pouze při změně hesla)",
+  BAN_USER: "Zabanovat uživatele",
+  UNBAN_USER: "Odbanovat uživatele",
 };
 
 const translationsEN: Record<string, string> = {
