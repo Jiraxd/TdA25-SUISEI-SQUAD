@@ -18,19 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class MatchmakingService {
     protected final Set<UserWithTimeStamp> matchmakingUsers = ConcurrentHashMap.newKeySet();
-
     protected final WebSocketUtil webSocketUtil;
     private final LiveGameRepo liveGameRepo;
-
-    public static MatchmakingTypes getMatchmakingType(MatchmakingService service){
-        if(service instanceof RankedMatchmakingService){
-            return MatchmakingTypes.ranked;
-        }
-        else if(service instanceof UnrankedMatchmakingService){
-            return MatchmakingTypes.unranked;
-        }
-        return null;
-    }
+    private final Boolean ranked;
 
     public void joinMatchmaking(User user) {
         matchmakingUsers.add(new UserWithTimeStamp(user));
@@ -66,7 +56,7 @@ public class MatchmakingService {
             matchmakingUsers.remove(userList.get(0));
             matchmakingUsers.remove(userList.get(1));
 
-            LiveGame liveGame = new LiveGame(getMatchmakingType(this));
+            LiveGame liveGame = new LiveGame(ranked ? MatchmakingTypes.ranked : MatchmakingTypes.unranked);
             if (Math.round(Math.random()) != 0) {
                 liveGame.setPlayerO(player2).setPlayerX(player1);
             } else {
@@ -76,6 +66,7 @@ public class MatchmakingService {
             notifyPlayers(player1, player2, liveGame);
         }
     }
+
     private void notifyPlayers(User user, User opponent, LiveGame liveGame) {
         webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
         webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/matchmaking", "MatchFound", liveGame.getUuid(), HttpStatus.OK); //TODO goofy

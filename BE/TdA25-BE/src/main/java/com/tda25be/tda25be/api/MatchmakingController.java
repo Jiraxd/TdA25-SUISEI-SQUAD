@@ -5,9 +5,8 @@ import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.repositories.SessionRepo;
 import com.tda25be.tda25be.services.matchmaking.MatchmakingService;
 import com.tda25be.tda25be.enums.MatchmakingTypes;
-import com.tda25be.tda25be.services.matchmaking.RankedMatchmakingService;
-import com.tda25be.tda25be.services.matchmaking.UnrankedMatchmakingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/matchmaking")
 public class MatchmakingController {
-    private final List<MatchmakingService> matchmakingServices;
+    @Autowired
+    private MatchmakingService matchmakingServiceRanked;
+
+    @Autowired
+    private MatchmakingService matchmakingServiceUnranked;
     private final SessionRepo sessionRepo;
 
     @GetMapping("/start")
@@ -26,17 +29,15 @@ public class MatchmakingController {
         Session session = sessionRepo.findByToken(token).orElse(null);
         if(session == null || session.getUser() == null) return ResponseEntity.badRequest().build();
         User user = session.getUser();
-        for (MatchmakingService matchmakingService : matchmakingServices) {
-            if (matchmakingService.isUserMatchmaking(user)) {
-                return ResponseEntity.ok("Matchmaking is already running");
-            }
+        if (matchmakingServiceUnranked.isUserMatchmaking(user) || matchmakingServiceRanked.isUserMatchmaking(user)) {
+            return ResponseEntity.ok("Matchmaking is already running");
         }
-        MatchmakingService matchmakingService = matchmakingServices.stream().filter((service)->{
-            if(matchmaking == MatchmakingTypes.ranked && service instanceof RankedMatchmakingService){
-                return true;
-            } else return matchmaking == MatchmakingTypes.unranked && service instanceof UnrankedMatchmakingService;
-        }).findFirst().get();
-        matchmakingService.joinMatchmaking(user);
+        if(matchmaking == MatchmakingTypes.ranked){
+            matchmakingServiceRanked.joinMatchmaking(user);
+        }
+        if(matchmaking == MatchmakingTypes.unranked){
+            matchmakingServiceUnranked.joinMatchmaking(user);
+        }
         return ResponseEntity.ok("Matchmaking started");
     }
 
@@ -45,9 +46,8 @@ public class MatchmakingController {
         Session session = sessionRepo.findByToken(token).orElse(null);
         if(session == null || session.getUser() == null) return ResponseEntity.badRequest().build();
         User user = session.getUser();
-        for(MatchmakingService matchmakingService : matchmakingServices) {
-            matchmakingService.leaveMatchmaking(user);
-        }
+        matchmakingServiceUnranked.leaveMatchmaking(user);
+        matchmakingServiceRanked.leaveMatchmaking(user);
         return ResponseEntity.ok("Matchmaking stopped");
     }
 }
