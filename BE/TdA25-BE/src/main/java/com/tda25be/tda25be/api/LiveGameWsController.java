@@ -39,9 +39,10 @@ public class LiveGameWsController {
         if(user == null) return;
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
         if(liveGame == null) sendError("Player isnt in a game", user);
-        if(liveGame.getUsers().contains(user)) {
+        Boolean userInGame = liveGame.getUsers().stream().anyMatch((user1 -> Objects.equals(user.getUuid(), user1.getUuid())));
+        if(userInGame) {
             try {
-                boolean placeO = liveGame.getPlayerO().equals(user);
+                boolean placeO = liveGame.getPlayerO().getUuid().equals(user.getUuid());
                 if(liveGame.getBoard().isOTurn() != placeO) {
                     throw new BadRequestException("Its not your turn");
                 }
