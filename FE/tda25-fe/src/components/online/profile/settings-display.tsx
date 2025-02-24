@@ -69,8 +69,9 @@ const createSettingsFormSchema = (language: language) =>
         .regex(new RegExp(".*[A-Z].*"), {
           message: TranslateText("PASSWORD_UPPERCASE", language),
         })
-        .optional(),
-      confirmPassword: z.string().optional(),
+        .optional()
+        .or(z.literal("")),
+      confirmPassword: z.string().optional().or(z.literal("")),
       profilePicture: z.instanceof(File).optional(),
       nameColor: z
         .string()
@@ -143,47 +144,47 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
   const router = useRouter();
 
   async function onSubmit(data: SettingsFormValues) {
-    const res = await fetch("/api/v1/users/settings", {
-      method: "POST",
-      headers: {
-        Authorization: GetLoginCookie() || "",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      if (data.profilePicture) {
+        const formData = new FormData();
+        formData.append("profilePicture", data.profilePicture);
+
+        const picResponse = await fetch("/api/v1/users/profilePicture", {
+          method: "POST",
+          headers: {
+            Authorization: GetLoginCookie() || "",
+          },
+          body: formData,
+        });
+      }
+
+      const settings = {
         username: data.username,
         email: data.email,
         currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
+        newPassword: data.newPassword || undefined,
         nameColor: data.nameColor,
-      }),
-    });
-    if (res.status === 302) {
-      updateErrorMessage(TranslateText("FAILED_SETTINGS_UPDATE", language));
-      return;
-    }
-    if (res.ok) {
-      updateSuccessMessage(TranslateText("SETTINGS_UPDATED", language));
-    } else {
-      const errorText = await res.text();
-      updateErrorMessage(TranslateText(errorText, language));
-      return;
-    }
-    if (data.profilePicture) {
-      await fetch("/api/v1/users/profilePicture", {
+      };
+
+      const res = await fetch("/api/v1/users/settings", {
         method: "POST",
         headers: {
           Authorization: GetLoginCookie() || "",
+          "Content-Type": "application/json",
         },
-        body: (() => {
-          const formData = new FormData();
-          if (data.profilePicture) {
-            formData.append("profilePicture", data.profilePicture);
-          }
-          return formData;
-        })(),
+        body: JSON.stringify(settings),
       });
+
+      if (!res.ok) {
+        updateErrorMessage(TranslateText("FAILED_SETTINGS_UPDATE", language));
+        return;
+      }
+
+      updateSuccessMessage(TranslateText("SETTINGS_UPDATED", language));
+      router.refresh();
+    } catch (error) {
+      updateErrorMessage(TranslateText("FAILED_SETTINGS_UPDATE", language));
     }
-    router.refresh();
   }
 
   if (!user) return null;
@@ -335,6 +336,25 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
           />
           <FormField
             control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-md">
+                  {TranslateText("CONFIRM_PASSWORD", language)}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    {...field}
+                    className="border border-darkshade"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="nameColor"
             render={({ field }) => (
               <FormItem>
@@ -358,7 +378,6 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                       ))}
                     </div>
                   </FormControl>
-                  {/* Selected Color Display */}
                   <div className="flex items-center gap-4">
                     <div className="text-md bg-muted px-2 py-1 rounded">
                       {TranslateText("CURRENT_COLOR", language)}:

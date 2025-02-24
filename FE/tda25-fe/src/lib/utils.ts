@@ -262,6 +262,7 @@ const translationsCZ: Record<string, string> = {
   SESSION_TERMINATED: "Zařízení bylo úspěšně odhlášeno",
   SESSION_TERMINATION_FAILED: "Nepodařilo se ukončit přihlášení",
   TERMINATE: "Odhlásit",
+  CONFIRM_PASSWORD: "Potvrďte heslo (pouze při změně hesla)",
 };
 
 const translationsEN: Record<string, string> = {
@@ -505,6 +506,7 @@ const translationsEN: Record<string, string> = {
   SESSION_TERMINATED: "Session logged out successfully",
   SESSION_TERMINATION_FAILED: "Failed to logout session",
   TERMINATE: "Log out",
+  CONFIRM_PASSWORD: "Confirm password (only when changing password)",
 };
 
 import Cookies from "js-cookie";

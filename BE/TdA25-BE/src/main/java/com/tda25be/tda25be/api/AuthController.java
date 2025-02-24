@@ -99,6 +99,12 @@ public class AuthController {
     public ResponseEntity<List<Session>> getSessions(@RequestHeader("Authorization") String token) {
         User user = authService.verify(token);
         if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.ok(sessionRepo.findSessionByUserNoToken((user)));
+        List<Session> sessions = new ArrayList<>();
+        for(Session session : sessionRepo.findByUser((user))) {
+            session.setToken(null);
+            session.setToken(null);
+            sessions.add(session);
+        }
+        return ResponseEntity.ok(sessions);
     }
 }
