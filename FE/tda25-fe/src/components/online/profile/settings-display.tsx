@@ -72,7 +72,7 @@ const createSettingsFormSchema = (language: language) =>
         .optional()
         .or(z.literal("")),
       confirmPassword: z.string().optional().or(z.literal("")),
-      profilePicture: z.instanceof(File).optional(),
+      //  profilePicture: z.instanceof(File).optional(),
       nameColor: z
         .string()
         .regex(/^#[0-9A-F]{6}$/i, TranslateText("INVALID_COLOR", language)),
@@ -101,10 +101,11 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
   const [currentColor, setCurrentColor] = useState(
     user?.nameColor || "#1A1A1A"
   );
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  /* const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(
     byteArrayToImageUrl(user?.profilePicture)
   );
+  */
   const [sessions, setSessions] = useState<Session[]>([]);
 
   useEffect(() => {
@@ -145,6 +146,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
 
   async function onSubmit(data: SettingsFormValues) {
     try {
+      /*
       if (data.profilePicture) {
         const formData = new FormData();
         formData.append("profilePicture", data.profilePicture);
@@ -157,6 +159,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
           body: formData,
         });
       }
+        */
 
       const settings = {
         username: data.username,
@@ -196,6 +199,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/*
           <FormField
             control={form.control}
             name="profilePicture"
@@ -203,6 +207,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
               <FormItem>
                 <div className="flex items-center gap-4">
                   <div className="relative w-20 h-20">
+
                     <Avatar className="w-20 h-20 overflow-hidden">
                       <AvatarImage
                         src={previewUrl}
@@ -258,6 +263,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
               </FormItem>
             )}
           />
+          */}
           <FormField
             control={form.control}
             defaultValue={user.username}
