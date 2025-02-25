@@ -119,16 +119,20 @@ export default function OnlineGamePage() {
       }
       setBoard(livegame.board);
       setRanked(livegame.matchmakingTyps === "ranked");
+      setCurrentPlayer(
+        livegame.board.flat().filter((cell) => cell === "X").length ===
+          livegame.board.flat().filter((cell) => cell === "O").length
+          ? "X"
+          : "O"
+      );
       if (livegame.playerX.uuid === userTemp.uuid) {
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
-        setPlayerSymbol("X");
         setOpponent(livegame.playerO);
         setTimeRemaining(livegame.playerXTime / 1000);
       } else {
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
-        setPlayerSymbol("O");
         setOpponent(livegame.playerX);
         setTimeRemaining(livegame.playerOTime / 1000);
       }
@@ -203,6 +207,12 @@ export default function OnlineGamePage() {
                   ? livegame.playerXTime / 1000
                   : livegame.playerOTime / 1000
               );
+              setCurrentPlayer(
+                livegame.board.flat().filter((cell) => cell === "X").length ===
+                  livegame.board.flat().filter((cell) => cell === "O").length
+                  ? "X"
+                  : "O"
+              );
             }
           } else if (response.type === "Draw") {
             setShowDrawDialog(true);
@@ -241,8 +251,8 @@ export default function OnlineGamePage() {
       client.publish({
         destination: "/app/ws/makeMove",
         body: JSON.stringify({
-          x: rowIndex,
-          y: colIndex,
+          x: colIndex,
+          y: rowIndex,
         }),
         headers: { "Content-Type": "application/json" },
       });
@@ -650,12 +660,12 @@ export default function OnlineGamePage() {
                         : "text-red-600"
                     }`}
                   >
-                    {gameResult.playerEloChange >= 0 ? "+" : ""}
+                    {gameResult.playerEloChange >= 0 ? "+" : "-"}
                     {gameResult.playerEloChange} ELO
                   </div>
                   <div className="text-darkshade mt-2">
-                    {Math.floor(gameResult.playerTimeRemaining / 60)}:
-                    {(gameResult.playerTimeRemaining % 60)
+                    {Math.floor(gameResult.playerTimeRemaining / 1000)}:
+                    {Math.round(gameResult.playerTimeRemaining % 60)
                       .toString()
                       .padStart(2, "0")}
                   </div>
@@ -678,12 +688,12 @@ export default function OnlineGamePage() {
                         : "text-red-600"
                     }`}
                   >
-                    {gameResult.opponentEloChange >= 0 ? "+" : ""}
+                    {gameResult.opponentEloChange >= 0 ? "+" : "-"}
                     {gameResult.opponentEloChange} ELO
                   </div>
                   <div className="text-darkshade mt-2">
-                    {Math.floor(gameResult.opponentTimeRemaining / 60)}:
-                    {(gameResult.opponentTimeRemaining % 60)
+                    {Math.floor(gameResult.opponentTimeRemaining / 1000)}:
+                    {Math.round(gameResult.opponentTimeRemaining % 60)
                       .toString()
                       .padStart(2, "0")}
                   </div>
