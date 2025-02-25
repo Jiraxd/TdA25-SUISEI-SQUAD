@@ -22,6 +22,8 @@ public class LiveGameService {
     public void win(LiveGame liveGame, String symbolWin) {
         User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
         User loser = Objects.equals(symbolWin, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
+        winner.setWins(winner.getWins() + 1);
+        loser.setLosses(loser.getLosses() + 1);
         if(liveGame.getMatchmakingType() == MatchmakingTypes.ranked) evalMatch(winner, loser, false);
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
         liveGameRepo.saveAndFlush(liveGame);
@@ -30,10 +32,14 @@ public class LiveGameService {
     }
     public void draw(LiveGame liveGame) {
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
-        evalMatch(liveGame.getPlayerX(), liveGame.getPlayerO(), true);
+        User player1 = liveGame.getPlayerX();
+        User player2 = liveGame.getPlayerO();
+        player1.setDraws(player1.getDraws() + 1);
+        player2.setDraws(player2.getDraws() + 1);
+        evalMatch(player1, player2, true);
         liveGameRepo.saveAndFlush(liveGame);
-        webSocketUtil.sendMessageToUser(liveGame.getPlayerX().getUuid(), "/queue/game-updates", "End", "Draw", HttpStatus.OK);
-        webSocketUtil.sendMessageToUser(liveGame.getPlayerO().getUuid(), "/queue/game-updates", "End", "Draw", HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(player2.getUuid(), "/queue/game-updates", "End", "Draw", HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(player1.getUuid(), "/queue/game-updates", "End", "Draw", HttpStatus.OK);
     }
 
     public void evalMatch(User winner, User loser, boolean draw){
