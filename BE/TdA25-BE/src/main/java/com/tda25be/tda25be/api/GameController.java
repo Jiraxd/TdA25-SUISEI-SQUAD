@@ -146,7 +146,7 @@ public class GameController {
         liveGameService.requestDraw(user);
         return ResponseEntity.ok("Draw requested");
     }
-    @GetMapping("/rejectDraw")
+    @GetMapping("/reject")
     public ResponseEntity<String> rejectDraw(@RequestHeader("Authorization") String token){
         User user = authService.verify(token);
         if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
