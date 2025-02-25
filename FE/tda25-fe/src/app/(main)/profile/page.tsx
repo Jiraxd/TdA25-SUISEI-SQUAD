@@ -154,7 +154,7 @@ export default function ProfilePage() {
                       </span>
                     </span>
                     {profileOwner?.banned && (
-                      <div className="flex items-center space-x-2 ml-4">
+                      <div className="flex items-center space-x-2">
                         <BanIcon className="w-6 h-6" />
                         <span className="text-defaultred">
                           {" "}
@@ -163,7 +163,7 @@ export default function ProfilePage() {
                       </div>
                     )}
                     {profileOwner?.admin && (
-                      <div className="flex items-center space-x-2 ml-4">
+                      <div className="flex items-center space-x-2">
                         <WrenchIcon className="w-6 h-6" />
                         <span className="text-defaultred">
                           {" "}
