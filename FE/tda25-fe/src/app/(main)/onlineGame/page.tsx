@@ -68,6 +68,8 @@ export default function OnlineGamePage() {
   const [playerOTime, setPlayerOTime] = useState<number>(480);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
+  const [sentRematch, setSentRematch] = useState<boolean>(false);
+  const [declinedRematch, setDeclinedRematch] = useState<boolean>(false);
   const controls = useAnimation();
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
   const [client, setClient] = useState<Client | null>(null);
@@ -154,7 +156,6 @@ export default function OnlineGamePage() {
       debug: (msg) => console.log("STOMP:", msg),
       onConnect: () => {
         stompClient.subscribe("/user/queue/game-updates", async (message) => {
-          console.log(message);
           const data = JSON.parse(message.body);
           const response = data.body;
 
@@ -217,6 +218,13 @@ export default function OnlineGamePage() {
             }
           } else if (response.type === "Draw") {
             setShowDrawDialog(true);
+          } else if (response.type === "RejectRematch") {
+            setSentRematch(false);
+            setDeclinedRematch(true);
+          } else if (response.type === "AcceptRematch") {
+            setSentRematch(false);
+            setDeclinedRematch(false);
+            router.push("/onlineGame/" + response.message);
           }
         });
       },
@@ -751,6 +759,27 @@ export default function OnlineGamePage() {
                   }}
                 >
                   {TranslateText("CLOSE", language)}
+                </Button>
+                <Button
+                  disabled={sentRematch || declinedRematch}
+                  className="w-full bg-purple hover:bg-indigo-900 text-lg"
+                  onClick={async () => {
+                    setSentRematch(true);
+                    await fetch("/api/v1/rematch/" + gameId, {
+                      headers: {
+                        Authorization: GetLoginCookie() || "",
+                      },
+                    });
+                  }}
+                >
+                  {TranslateText(
+                    declinedRematch
+                      ? "DECLINED_REMATCH"
+                      : sentRematch
+                      ? "SENT_REMATCH"
+                      : "SEND_REMATCH",
+                    language
+                  )}
                 </Button>
               </DialogFooter>
             </DialogContent>
