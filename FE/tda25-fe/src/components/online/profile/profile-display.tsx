@@ -26,10 +26,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar className="w-20 h-20">
-            <AvatarImage
-              src={byteArrayToImageUrl(user.profilePicture)}
-              alt={user.username}
-            />
+            <AvatarImage src={byteArrayToImageUrl(null)} alt={user.username} />
           </Avatar>
           <div>
             <CardTitle
@@ -101,9 +98,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
             </p>
             <p className="text-lg text-black">
               {TranslateText("GAMES_PLAYED", language)}:{" "}
-              <span className="font-dosis-regular">
-                {totalWonLostGames}
-              </span>
+              <span className="font-dosis-regular">{totalWonLostGames}</span>
             </p>
             <p className="text-lg  text-black">
               {TranslateText("WINRATE", language)}:{" "}

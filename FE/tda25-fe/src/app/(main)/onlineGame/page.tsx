@@ -64,27 +64,29 @@ export default function OnlineGamePage() {
   const [ranked, setRanked] = useState<boolean>(false);
   const [winner, setWinner] = useState<"X" | "O" | "Draw" | null>(null);
   const [winLane, setWinLane] = useState<number[][]>([]);
-  const [timeRemaining, setTimeRemaining] = useState<number>(480);
+  const [playerXTime, setPlayerXTime] = useState<number>(480);
+  const [playerOTime, setPlayerOTime] = useState<number>(480);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
+  const [sentRematch, setSentRematch] = useState<boolean>(false);
+  const [declinedRematch, setDeclinedRematch] = useState<boolean>(false);
   const controls = useAnimation();
   const { updateSuccessMessage, updateErrorMessage } = useAlertContext();
   const [client, setClient] = useState<Client | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   useEffect(() => {
-    if (
-      timeRemaining > 0 &&
-      currentPlayer !== null &&
-      currentPlayer === playerSymbol
-    ) {
+    if (currentPlayer !== null) {
       const timer = setInterval(() => {
-        setTimeRemaining((prev) => Math.max(0, prev - 1000));
+        if (currentPlayer === "X") {
+          setPlayerXTime((prev) => Math.max(0, prev - 1000));
+        } else {
+          setPlayerOTime((prev) => Math.max(0, prev - 1000));
+        }
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [timeRemaining, currentPlayer, playerSymbol]);
-
+  }, [currentPlayer]);
   useEffect(() => {
     async function fetchData() {
       const loginToken = GetLoginCookie();
@@ -126,18 +128,18 @@ export default function OnlineGamePage() {
           ? "X"
           : "O"
       );
+      setPlayerXTime(livegame.playerXTime);
+      setPlayerOTime(livegame.playerOTime);
       if (livegame.playerX.uuid === userTemp.uuid) {
         setPlayerSymbol("X");
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerO);
-        setTimeRemaining(livegame.playerXTime);
       } else {
         setPlayerSymbol("O");
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerX);
-        setTimeRemaining(livegame.playerOTime);
       }
     }
     fetchData();
@@ -154,7 +156,6 @@ export default function OnlineGamePage() {
       debug: (msg) => console.log("STOMP:", msg),
       onConnect: () => {
         stompClient.subscribe("/user/queue/game-updates", async (message) => {
-          console.log(message);
           const data = JSON.parse(message.body);
           const response = data.body;
 
@@ -180,20 +181,18 @@ export default function OnlineGamePage() {
                   playerSymbol === "X"
                     ? livegame.playerXEloAfter - livegame.playerXEloBefore
                     : livegame.playerOEloAfter - livegame.playerOEloBefore,
-
                 opponentEloChange:
-                  playerSymbol === "O"
-                    ? livegame.playerXEloAfter - livegame.playerXEloBefore
-                    : livegame.playerOEloAfter - livegame.playerOEloBefore,
-
+                  playerSymbol === "X"
+                    ? livegame.playerOEloAfter - livegame.playerOEloBefore
+                    : livegame.playerXEloAfter - livegame.playerXEloBefore,
                 playerTimeRemaining:
                   playerSymbol === "X"
                     ? livegame.playerXTime
                     : livegame.playerOTime,
                 opponentTimeRemaining:
-                  playerSymbol === "O"
-                    ? livegame.playerXTime
-                    : livegame.playerOTime,
+                  playerSymbol === "X"
+                    ? livegame.playerOTime
+                    : livegame.playerXTime,
               });
               setShowWinDialog(true);
             }
@@ -208,11 +207,8 @@ export default function OnlineGamePage() {
             if (res.ok) {
               const livegame: LiveGame = await res.json();
               setBoard(livegame.board);
-              setTimeRemaining(
-                playerSymbol === "X"
-                  ? livegame.playerXTime
-                  : livegame.playerOTime
-              );
+              setPlayerXTime(livegame.playerXTime);
+              setPlayerOTime(livegame.playerOTime);
               setCurrentPlayer(
                 livegame.board.flat().filter((cell) => cell === "X").length ===
                   livegame.board.flat().filter((cell) => cell === "O").length
@@ -222,6 +218,13 @@ export default function OnlineGamePage() {
             }
           } else if (response.type === "Draw") {
             setShowDrawDialog(true);
+          } else if (response.type === "RejectRematch") {
+            setSentRematch(false);
+            setDeclinedRematch(true);
+          } else if (response.type === "AcceptRematch") {
+            setSentRematch(false);
+            setDeclinedRematch(false);
+            router.push("/onlineGame/" + response.message);
           }
         });
       },
@@ -404,18 +407,22 @@ export default function OnlineGamePage() {
 
                       <div className="flex flex-col items-center">
                         <span className="text-lg">
-                          {TranslateText("TIME_REMAINING", language)}
+                          {TranslateText("YOUR_TIME", language)}
                         </span>
                         <div className="flex items-center gap-2">
                           <AlarmClockIcon className="h-6 w-6" />
                           <span
                             className={`text-2xl font-bold ${
-                              timeRemaining < 60
+                              (playerSymbol === "X"
+                                ? playerXTime
+                                : playerOTime) < 60000
                                 ? "text-defaultred"
                                 : "text-darkshade"
                             }`}
                           >
-                            {formatTime(timeRemaining)}
+                            {formatTime(
+                              playerSymbol === "X" ? playerXTime : playerOTime
+                            )}
                           </span>
                         </div>
                       </div>
@@ -491,7 +498,7 @@ export default function OnlineGamePage() {
                   <CardContent className="flex flex-col items-center gap-4">
                     <Avatar className="w-24 h-24">
                       <AvatarImage
-                        src={byteArrayToImageUrl(opponent?.profilePicture)}
+                        src={byteArrayToImageUrl(null)}
                         alt={opponent?.username || "Unknown"}
                         className="object-cover"
                       />
@@ -527,6 +534,26 @@ export default function OnlineGamePage() {
                         <span>{TranslateText("LOSSES", language)}:</span>
                         <span className="font-bold text-black">
                           {opponent?.losses || 0}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <span className="text-lg">
+                        {TranslateText("OPPONENT_TIME", language)}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <AlarmClockIcon className="h-6 w-6" />
+                        <span
+                          className={`text-2xl font-bold ${
+                            (playerSymbol === "O" ? playerXTime : playerOTime) <
+                            60000
+                              ? "text-defaultred"
+                              : "text-darkshade"
+                          }`}
+                        >
+                          {formatTime(
+                            playerSymbol === "O" ? playerXTime : playerOTime
+                          )}
                         </span>
                       </div>
                     </div>
@@ -672,7 +699,7 @@ export default function OnlineGamePage() {
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
                       className={`text-2xl font-bold ${
-                        timeRemaining < 60
+                        gameResult.playerTimeRemaining < 60000
                           ? "text-defaultred"
                           : "text-darkshade"
                       }`}
@@ -706,7 +733,7 @@ export default function OnlineGamePage() {
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
                       className={`text-2xl font-bold ${
-                        timeRemaining < 60
+                        gameResult.opponentTimeRemaining < 60000
                           ? "text-defaultred"
                           : "text-darkshade"
                       }`}
@@ -732,6 +759,27 @@ export default function OnlineGamePage() {
                   }}
                 >
                   {TranslateText("CLOSE", language)}
+                </Button>
+                <Button
+                  disabled={sentRematch || declinedRematch}
+                  className="w-full bg-purple hover:bg-indigo-900 text-lg"
+                  onClick={async () => {
+                    setSentRematch(true);
+                    await fetch("/api/v1/rematch/" + gameId, {
+                      headers: {
+                        Authorization: GetLoginCookie() || "",
+                      },
+                    });
+                  }}
+                >
+                  {TranslateText(
+                    declinedRematch
+                      ? "DECLINED_REMATCH"
+                      : sentRematch
+                      ? "SENT_REMATCH"
+                      : "SEND_REMATCH",
+                    language
+                  )}
                 </Button>
               </DialogFooter>
             </DialogContent>

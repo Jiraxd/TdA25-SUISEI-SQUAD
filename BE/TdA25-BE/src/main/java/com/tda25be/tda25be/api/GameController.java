@@ -9,6 +9,7 @@ import com.tda25be.tda25be.models.GameRequest;
 import com.tda25be.tda25be.models.OrganizationResponse;
 import com.tda25be.tda25be.repositories.GameRepository;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
+import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import com.tda25be.tda25be.services.liveGameService.LiveGameService;
 import lombok.RequiredArgsConstructor;
@@ -137,6 +138,20 @@ public class GameController {
             liveGameService.win(livegame, "O");
         }
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/draw")
+    public ResponseEntity<String> requestDraw(@RequestHeader("Authorization") String token){
+        User user = authService.verify(token);
+        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        liveGameService.requestDraw(user);
+        return ResponseEntity.ok("Draw requested");
+    }
+    @GetMapping("/reject")
+    public ResponseEntity<String> rejectDraw(@RequestHeader("Authorization") String token){
+        User user = authService.verify(token);
+        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        liveGameService.rejectDraw(user);
+        return ResponseEntity.ok("Draw rejected");
     }
     @GetMapping("/test2")
     public void test(){

@@ -186,6 +186,7 @@ const translationsCZ: Record<string, string> = {
   ONLINE_GAME_PAGE_TITLE: "Piškvorky | Online hra",
   YOUR_SYMBOL: "Váš symbol",
   TIME_REMAINING: "Zbývající čas",
+  TIME_REMAINING_OPPONENT: "Zbývající čas soupeře",
   OPPONENT: "Soupeř",
   WINS: "Výhry",
   DRAWS: "Remízy",
@@ -515,6 +516,7 @@ const translationsEN: Record<string, string> = {
   DELETE_ACCOUNT: "Delete Account",
   ARE_YOU_SURE: "Are you sure? Click again to confirm",
   DELETE_ACCOUNT_FAILED: "Failed to delete account",
+  TIME_REMAINING_OPPONENT: "Remaining time opponent",
 };
 
 import Cookies from "js-cookie";
@@ -551,8 +553,8 @@ export const formatDate = (date: string) => {
 
 export const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 1000 / 60);
-  const remainingSeconds = Math.floor(seconds / 1000 % 60);
-  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  const remainingSeconds = Math.floor((seconds / 1000) % 60);
+  return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 };
 
 export function checkWinner(board: string[][]): {
