@@ -79,7 +79,7 @@ export default function OnlineGamePage() {
       currentPlayer === playerSymbol
     ) {
       const timer = setInterval(() => {
-        setTimeRemaining((prev) => Math.max(0, prev - 1));
+        setTimeRemaining((prev) => Math.max(0, prev - 1000));
       }, 1000);
       return () => clearInterval(timer);
     }
@@ -170,6 +170,7 @@ export default function OnlineGamePage() {
             });
             if (res.ok) {
               const livegame: LiveGame = await res.json();
+              setBoard(livegame.board);
               const { winner, winningLine } = checkWinner(livegame.board);
               setWinLane(winningLine);
               console.log(livegame);
