@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { TranslateText } from "@/lib/utils";
+import { formatDate, formatTime, TranslateText } from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
 
 type GameHistoryProps = {
@@ -82,16 +82,6 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
     return diff >= 0 ? `(+${diff})` : `(${diff})`;
   };
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleString("cz", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   return (
     <div className="flex flex-col gap-4">
       {games.map((game) => (
@@ -156,7 +146,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
                     </div>
                     <div className="text-lg font-dosis-medium">
                       {TranslateText("TIME_REMAINING", language)}
-                      {": "} {selectedGame.playerXTime}s
+                      {": "} {formatTime(selectedGame.playerXTime)}
                     </div>
                   </div>
 
@@ -183,7 +173,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
                     <div className="text-lg font-dosis-medium">
                       {TranslateText("TIME_REMAINING", language)}
                       {": "}
-                      {selectedGame.playerOTime}s
+                      {formatTime(selectedGame.playerOTime)}
                     </div>
                   </div>
                 </div>
