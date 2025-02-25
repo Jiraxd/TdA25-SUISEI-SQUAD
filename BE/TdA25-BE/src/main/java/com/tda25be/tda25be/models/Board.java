@@ -52,6 +52,7 @@ public class Board {
         String winner = checkWinner();
         if(!Objects.equals(winner, "")){
             this.winner = winner;
+            System.out.println("Winner: " + winner);
             return GameState.completed;
         }
         for (int y = 0; y < board.size(); y++) {
@@ -118,11 +119,11 @@ public class Board {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 String player = board.get(row).get(col);
-                if (!player.equals(".")) {
-                    if (checkDirection(board, row, col, 1, 0, player) || // Horizontal
-                            checkDirection(board, row, col, 0, 1, player) || // Vertical
-                            checkDirection(board, row, col, 1, 1, player) || // Diagonal (")
-                            checkDirection(board, row, col, 1, -1, player)) { // Diagonal (/)
+                if (!player.isEmpty()) {
+                    if (checkDirection(board, row, col, 1, 0, player) ||
+                            checkDirection(board, row, col, 0, 1, player) ||
+                            checkDirection(board, row, col, 1, 1, player) ||
+                            checkDirection(board, row, col, 1, -1, player)) {
                         return player;
                     }
                 }
@@ -136,7 +137,7 @@ public class Board {
         for (int i = 0; i < 5; i++) {
             int newRow = row + i * dRow;
             int newCol = col + i * dCol;
-            if (newRow < 0 || newRow >= 15 || newCol < 0 || newCol >= 15 || !board.get(newRow).get(newCol).equals(player)) {
+            if (newRow < 0 || newRow >= 15 || newCol < 0 || newCol >= 15 || !board.get(newCol).get(newRow).equals(player)) {
                 return false;
             }
             count++;
