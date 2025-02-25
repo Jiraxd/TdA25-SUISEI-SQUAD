@@ -127,11 +127,13 @@ export default function OnlineGamePage() {
           : "O"
       );
       if (livegame.playerX.uuid === userTemp.uuid) {
+        setPlayerSymbol("X");
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerO);
         setTimeRemaining(livegame.playerXTime);
       } else {
+        setPlayerSymbol("O");
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerX);
@@ -239,12 +241,11 @@ export default function OnlineGamePage() {
     if (!client) {
       return;
     }
-    if (
-      board[rowIndex][colIndex] !== "" ||
-      winner ||
-      !client.active ||
-      currentPlayer !== playerSymbol
-    ) {
+    if (board[rowIndex][colIndex] !== "" || winner || !client.active) {
+      return;
+    }
+
+    if (currentPlayer !== playerSymbol) {
       return;
     }
 
