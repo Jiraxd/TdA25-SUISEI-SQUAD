@@ -39,7 +39,7 @@ export function PrivateGameModal({
         ? parseInt(customMinutes) * 60 + parseInt(customSeconds)
         : parseInt(timeLimit) * 60;
 
-    const response = await fetch("/api/v1/onlineGame/create-private", {
+    const response = await fetch("/api/v1/create-private", {
       method: "POST",
       headers: {
         Authorization: GetLoginCookie() || "",

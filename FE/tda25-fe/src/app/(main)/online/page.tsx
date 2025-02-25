@@ -80,14 +80,11 @@ export default function OnlinePage() {
       updateErrorMessage(TranslateText("ENTER_PRIVATE_GAME_ID", language));
       return;
     }
-    const data = await fetch(`/api/v1/onlineGame/join-private`, {
-      method: "POST",
+    const data = await fetch(`/api/v1/join-private/` + privateGameId, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        gameId: privateGameId,
-      }),
     });
     if (data.ok) {
       const uuid = await data.text();
