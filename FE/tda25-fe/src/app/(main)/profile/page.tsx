@@ -146,7 +146,7 @@ export default function ProfilePage() {
                 {loading ? (
                   <Skeleton className="h-10 w-64 bg-gray-700" />
                 ) : (
-                  <div className="text-darkerblue flex-col flex justify-start items-center">
+                  <div className="text-darkerblue flex-col flex justify-start items-start">
                     <span>
                       {TranslateText("PROFILE_PLAYER", language)}
                       <span style={{ color: getNameColor(profileOwner) }}>
