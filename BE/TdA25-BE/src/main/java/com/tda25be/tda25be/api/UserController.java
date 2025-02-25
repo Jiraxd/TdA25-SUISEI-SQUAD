@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController()
 @RequiredArgsConstructor
@@ -96,6 +93,8 @@ public class UserController {
         Optional<User> userOptional = userRepo.findById(uuid);
         if (userOptional.isEmpty()) return ResponseEntity.notFound().build();
         else userOptional.get().setBanned(false);
+        User user = userOptional.get().setBanned(true);
+        userRepo.save(user);
         return ResponseEntity.ok("User unbanned");
     }
 
@@ -121,9 +120,9 @@ public class UserController {
         if (newPassword != null && !authService.validatePassword(newPassword))
             return ResponseEntity.badRequest().body("PASSWORD_NOT_STRONG_ENOUGH");
         User userToCheck = userRepo.findByUsername(username);
-        if (userToCheck != null && userToCheck.getUuid() != user.getUuid()) return ResponseEntity.badRequest().body("USERNAME_EXISTS");
+        if (userToCheck != null && !Objects.equals(userToCheck.getUuid(), user.getUuid())) return ResponseEntity.badRequest().body("USERNAME_EXISTS");
         userToCheck = userRepo.findByEmail(email);
-        if (userToCheck != null && userToCheck.getUuid() != user.getUuid() return ResponseEntity.badRequest().body("EMAIL_EXISTS");
+        if (userToCheck != null && !Objects.equals(userToCheck.getUuid(), user.getUuid())) return ResponseEntity.badRequest().body("EMAIL_EXISTS");
         if (!colors.contains(nameColor)) return ResponseEntity.badRequest().body("INVALID_NAME_COLOR");
         if (newPassword != null) {
             user.setPasswordHash(passwordEncoder.encode(newPassword));
@@ -145,7 +144,6 @@ public class UserController {
         try {
             user.setProfilePicture(file.getBytes());
         } catch (IOException e) {
-            System.out.println(e);
             return ResponseEntity.internalServerError().body("IO_EXCEPTION");
         }
         return ResponseEntity.ok("Profile picture updated");
