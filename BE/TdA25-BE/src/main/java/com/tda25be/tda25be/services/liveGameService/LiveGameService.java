@@ -4,9 +4,8 @@ import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.enums.EloGameState;
+import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
-import com.tda25be.tda25be.repositories.UserRepo;
-import com.tda25be.tda25be.services.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,7 +22,7 @@ public class LiveGameService {
     public void win(LiveGame liveGame, String symbolWin) {
         User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
         User loser = Objects.equals(symbolWin, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
-        evalMatch(winner, loser, false);
+        if(liveGame.getMatchmakingType() == MatchmakingTypes.ranked) evalMatch(winner, loser, false);
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
         liveGameRepo.saveAndFlush(liveGame);
         webSocketUtil.sendMessageToUser(winner.getUuid(), "/queue/game-updates", "End", symbolWin, HttpStatus.OK);

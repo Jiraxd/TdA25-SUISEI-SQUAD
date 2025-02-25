@@ -74,20 +74,21 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/ban")
-    public ResponseEntity<String> banUser(@RequestParam String uuid, @RequestHeader("Authorization") String token) {
+    @GetMapping("/ban/{uuid}")
+    public ResponseEntity<String> banUser(@PathVariable String uuid, @RequestHeader("Authorization") String token) {
         if (token == null || token.isEmpty()) return ResponseEntity.badRequest().build();
         User requester = authService.verify(token);
         if (requester == null) return ResponseEntity.badRequest().build();
         if (!requester.getAdmin()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         Optional<User> userOptional = userRepo.findById(uuid);
         if (userOptional.isEmpty()) return ResponseEntity.notFound().build();
-        else userOptional.get().setBanned(true);
+        User user = userOptional.get().setBanned(true);
+        userRepo.save(user);
         return ResponseEntity.ok("User banned");
     }
 
-    @GetMapping("/unban")
-    public ResponseEntity<String> unbanUser(@RequestParam String uuid, @RequestHeader("Authorization") String token) {
+    @GetMapping("/unban/{uuid}")
+    public ResponseEntity<String> unbanUser(@PathVariable String uuid, @RequestHeader("Authorization") String token) {
         if (token == null || token.isEmpty()) return ResponseEntity.badRequest().build();
         User requester = authService.verify(token);
         if (requester == null) return ResponseEntity.badRequest().build();
@@ -142,6 +143,7 @@ public class UserController {
         try {
             user.setProfilePicture(file.getBytes());
         } catch (IOException e) {
+            System.out.println(e);
             return ResponseEntity.internalServerError().body("IO_EXCEPTION");
         }
         return ResponseEntity.ok("Profile picture updated");

@@ -539,6 +539,21 @@ export function byteArrayToImageUrl(byteArray: string | null | undefined) {
   if (!byteArray) return "/images/placeholder-avatar.png";
   return `data:image/jpeg;base64,${byteArray}`;
 }
+export const formatDate = (date: string) => {
+  return new Date(date).toLocaleString("cz", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+export const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 export function checkWinner(board: string[][]): {
   winner: boolean;

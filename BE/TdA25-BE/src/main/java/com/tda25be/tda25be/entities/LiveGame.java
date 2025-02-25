@@ -33,7 +33,7 @@ public class LiveGame {
     @ReadOnlyProperty
     @CreationTimestamp
     private Timestamp createdAt;
-    private MatchmakingTypes matchmakingTypes;
+    private MatchmakingTypes matchmakingType;
     @ManyToOne
     @NonNull
     private User playerX;
@@ -64,7 +64,7 @@ public class LiveGame {
             boardList.add(row);
         }
         board = new Board(boardList);
-        this.matchmakingTypes = matchmakingType;
+        this.matchmakingType = matchmakingType;
     }
     public List<User> getUsers(){
         List<User> users = new ArrayList<>();
