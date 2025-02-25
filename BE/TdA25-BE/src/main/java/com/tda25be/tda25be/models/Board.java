@@ -124,6 +124,7 @@ public class Board {
                             checkDirection(board, row, col, 0, 1, player) ||
                             checkDirection(board, row, col, 1, 1, player) ||
                             checkDirection(board, row, col, 1, -1, player)) {
+                        System.out.println(player + " winner");
                         return player;
                     }
                 }
@@ -146,7 +147,6 @@ public class Board {
     }
 
     public void playMove(int x, int y, Boolean placeO) throws BadRequestException, SemanticErrorException {
-        System.out.println(x + " " + y + " " + placeO);
         List<List<String>> newBoard = board.stream()
                 .map(ArrayList::new)
                 .collect(Collectors.toList());
