@@ -130,9 +130,7 @@ export function AdminModal({ isOpen, onClose, language }: AdminModalProps) {
                 >
                   <div className="flex items-center space-x-3">
                     <img
-                      src={
-                        user.profilePicture || "/images/placeholder-avatar.png"
-                      }
+                      src={"/images/placeholder-avatar.png"}
                       alt="Avatar"
                       className="w-8 h-8 rounded-full"
                     />
