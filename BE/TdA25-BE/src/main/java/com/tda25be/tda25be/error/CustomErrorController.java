@@ -28,6 +28,8 @@ public class CustomErrorController implements ErrorController {
             }
         }
 
-        return "redirect:/errorPage.html?code=" + statusCode;
+        return "forward:/errorPage.html?code=" + statusCode;
     }
+
+    
 }
