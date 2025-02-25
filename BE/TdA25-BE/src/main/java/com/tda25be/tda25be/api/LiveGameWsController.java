@@ -60,10 +60,12 @@ public class LiveGameWsController {
                 }
                 liveGame.getBoard().playMove(move.x,move.y, placeO);
                 if(liveGame.getBoard().getState() == GameState.completed){
+                    System.out.println("AAAAAAAH");
                     if(placeO) liveGameService.win(liveGame, "O");
                     else liveGameService.win(liveGame, "X");
                 }
                 else{
+                    System.out.println("GGGGG");
                     liveGameRepo.saveAndFlush(liveGame);
                     webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Update", liveGame.getBoard().board.toString(), HttpStatus.OK);
                 }
