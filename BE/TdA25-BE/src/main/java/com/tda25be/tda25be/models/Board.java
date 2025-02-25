@@ -52,6 +52,7 @@ public class Board {
         String winner = checkWinner();
         if(!Objects.equals(winner, "")){
             this.winner = winner;
+            System.out.println("Winner: " + winner);
             return GameState.completed;
         }
         for (int y = 0; y < board.size(); y++) {
