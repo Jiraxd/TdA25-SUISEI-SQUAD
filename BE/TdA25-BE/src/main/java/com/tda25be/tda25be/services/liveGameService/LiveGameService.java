@@ -67,10 +67,12 @@ public class LiveGameService {
         for(LiveGame liveGame : liveGames){
             if(liveGame.getFinished()) continue;
             liveGame.updateTime();
-            if(liveGame.getPlayerOTime()< 0){
+            if(liveGame.getPlayerOTime()<=0){
+                liveGame.setPlayerOTime(0L);
                 win(liveGame, "X");
             }
-            if(liveGame.getPlayerXTime()< 0){
+            if(liveGame.getPlayerXTime()<=0){
+                liveGame.setPlayerXTime(0L);
                 win(liveGame, "O");
             }
         }

@@ -48,11 +48,13 @@ public class LiveGameWsController {
                     throw new BadRequestException("Its not your turn");
                 }
                 liveGame.updateTime();
-                if(liveGame.getPlayerOTime() < 0){
+                if(liveGame.getPlayerOTime() <= 0){
+                    liveGame.setPlayerOTime(0L);
                     liveGameService.win(liveGame, "X");
                     return;
                 }
-                else if(liveGame.getPlayerXTime() < 0){
+                else if(liveGame.getPlayerXTime() <= 0){
+                    liveGame.setPlayerXTime(0L);
                     liveGameService.win(liveGame, "O");
                     return;
                 }
