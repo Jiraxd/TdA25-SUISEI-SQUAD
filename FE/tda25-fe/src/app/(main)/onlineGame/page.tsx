@@ -39,6 +39,7 @@ export default function OnlineGamePage() {
   const pathName = usePathname();
   const { language } = useLanguage();
   const gameId = pathName.split("/").pop();
+  const isPrivateGame = gameId?.startsWith("PRIVATE_") || false;
   const [user, setUser] = useState<UserProfile | null>(null);
   const [board, setBoard] = useState<Array<Array<"X" | "O" | "">>>(
     Array.from({ length: 15 }, () => Array(15).fill(""))
