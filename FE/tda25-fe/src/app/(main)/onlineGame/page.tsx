@@ -664,7 +664,7 @@ export default function OnlineGamePage() {
                         : "text-red-600"
                     }`}
                   >
-                    {gameResult.playerEloChange >= 0 ? "+" : "-"}
+                    {gameResult.playerEloChange >= 0 ? "+" : ""}
                     {gameResult.playerEloChange} ELO
                   </div>
                   <div className="text-darkshade mt-2">
@@ -689,7 +689,7 @@ export default function OnlineGamePage() {
                         : "text-red-600"
                     }`}
                   >
-                    {gameResult.opponentEloChange >= 0 ? "+" : "-"}
+                    {gameResult.opponentEloChange >= 0 ? "+" : ""}
                     {gameResult.opponentEloChange} ELO
                   </div>
                   <div className="text-darkshade mt-2">
