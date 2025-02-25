@@ -172,6 +172,7 @@ export default function OnlineGamePage() {
               const livegame: LiveGame = await res.json();
               const { winner, winningLine } = checkWinner(livegame.board);
               setWinLane(winningLine);
+              console.log(livegame);
               setGameResult({
                 winner: response.message,
                 playerEloChange:
@@ -413,10 +414,7 @@ export default function OnlineGamePage() {
                                 : "text-darkshade"
                             }`}
                           >
-                            {Math.floor(timeRemaining / 60 / 1000)}:
-                            {((timeRemaining / 1000) % 60)
-                              .toString()
-                              .padStart(2, "0")}
+                            {formatTime(timeRemaining)}
                           </span>
                         </div>
                       </div>
@@ -668,8 +666,18 @@ export default function OnlineGamePage() {
                     {gameResult.playerEloChange >= 0 ? "+" : ""}
                     {gameResult.playerEloChange} ELO
                   </div>
-                  <div className="text-darkshade mt-2">
-                    {formatTime(gameResult.playerTimeRemaining)}
+
+                  <div className="flex items-center mt-2 gap-2">
+                    <AlarmClockIcon className="h-6 w-6" />
+                    <span
+                      className={`text-2xl font-bold ${
+                        timeRemaining < 60
+                          ? "text-defaultred"
+                          : "text-darkshade"
+                      }`}
+                    >
+                      {formatTime(gameResult.playerTimeRemaining)}
+                    </span>
                   </div>
                 </div>
                 <div className="text-center">
@@ -693,11 +701,17 @@ export default function OnlineGamePage() {
                     {gameResult.opponentEloChange >= 0 ? "+" : ""}
                     {gameResult.opponentEloChange} ELO
                   </div>
-                  <div className="text-darkshade mt-2">
-                    {Math.floor(gameResult.opponentTimeRemaining / 1000)}:
-                    {Math.round(gameResult.opponentTimeRemaining % 60)
-                      .toString()
-                      .padStart(2, "0")}
+                  <div className="flex items-center mt-2 gap-2">
+                    <AlarmClockIcon className="h-6 w-6" />
+                    <span
+                      className={`text-2xl font-bold ${
+                        timeRemaining < 60
+                          ? "text-defaultred"
+                          : "text-darkshade"
+                      }`}
+                    >
+                      {formatTime(gameResult.opponentTimeRemaining)}
+                    </span>
                   </div>
                 </div>
               </div>

@@ -56,7 +56,7 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
           value={progress}
           className="h-full transition-all"
           style={{
-            backgroundColor: "var(--whitelessbright)",
+            backgroundColor: "var(--defaultblue)",
             borderColor: "#6B7280",
             borderWidth: "2px",
           }}

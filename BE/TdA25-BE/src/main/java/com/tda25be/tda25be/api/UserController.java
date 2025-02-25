@@ -92,8 +92,7 @@ public class UserController {
         if (!requester.getAdmin()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         Optional<User> userOptional = userRepo.findById(uuid);
         if (userOptional.isEmpty()) return ResponseEntity.notFound().build();
-        else userOptional.get().setBanned(false);
-        User user = userOptional.get().setBanned(true);
+        User user = userOptional.get().setBanned(false);
         userRepo.save(user);
         return ResponseEntity.ok("User unbanned");
     }

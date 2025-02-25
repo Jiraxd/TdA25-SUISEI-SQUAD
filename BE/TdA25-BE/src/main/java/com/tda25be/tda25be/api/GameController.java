@@ -138,4 +138,9 @@ public class GameController {
         }
         return ResponseEntity.ok().build();
     }
+    @GetMapping("/test2")
+    public void test(){
+        LiveGame liveGame = liveGameRepo.findById("5d3ab0f3-6145-4868-aaff-8d904e7a743b").get();
+        liveGame.getBoard().checkWinner();
+    }
 }
