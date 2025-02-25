@@ -37,6 +37,5 @@ public class User {
     private int losses = 0;
     private int draws = 0;
     private String nameColor = "#1a1a1a";
-    @Lob
-    private byte[] profilePicture;
+
 }

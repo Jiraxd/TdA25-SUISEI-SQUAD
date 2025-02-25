@@ -65,7 +65,7 @@ public class LiveGameWsController {
                 }
                 else{
                     liveGameRepo.saveAndFlush(liveGame);
-                    webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Update", liveGame.getBoard().board.toString(), HttpStatus.OK);
+                    webSocketUtil.sendMessageToUsers(liveGame.getUsers(), "/queue/game-updates","Update", liveGame.getBoard().board.toString(   ), HttpStatus.OK);//TODO send board with time
                 }
             } catch (BadRequestException | SemanticErrorException e) {
                 sendError(e.getMessage(), user);

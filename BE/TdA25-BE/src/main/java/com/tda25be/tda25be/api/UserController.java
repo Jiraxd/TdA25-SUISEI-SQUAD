@@ -135,18 +135,6 @@ public class UserController {
         return ResponseEntity.ok("Settings updated");
     }
 
-    @PostMapping("/profilePicture")
-    public ResponseEntity<String> updateProfilePicture(@RequestBody MultipartFile file, @RequestHeader("Authorization") String token) {
-        if (token == null || token.isEmpty()) return ResponseEntity.badRequest().build();
-        User user = authService.verify(token);
-        if (user == null) return ResponseEntity.badRequest().build();
-        try {
-            user.setProfilePicture(file.getBytes());
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("IO_EXCEPTION");
-        }
-        return ResponseEntity.ok("Profile picture updated");
-    }
     @DeleteMapping("/user")
     public ResponseEntity<String> deleteUserToken(@RequestHeader("Authorization") String token){
         User user = authService.verify(token);

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ import java.util.Objects;
 public class LiveGameService {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
+    private List<User> requestingDraw = new ArrayList<>();
 
     public void win(LiveGame liveGame, String symbolWin) {
         User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
@@ -67,6 +70,25 @@ public class LiveGameService {
         playerElo = playerElo + 40*(score - Ea)*(1+0.5*(0.5-playerWR));
         player.setElo(Math.max(0, (int) Math.ceil(playerElo)));
     }
+    public void requestDraw(User user){
+        LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
+        User opponent = Objects.equals(liveGame.getPlayerO().getUuid(), user.getUuid()) ? liveGame.getPlayerX() : liveGame.getPlayerO();
+        boolean drawGame = requestingDraw.stream().anyMatch((userD)-> Objects.equals(userD.getUuid(), opponent.getUuid()));
+        if(drawGame) {
+            draw(liveGame);
+            requestingDraw.remove(opponent);
+            return;
+        }
+        requestingDraw.add(user);
+    }
+    public void rejectDraw(User user){
+        LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
+        User opponent = Objects.equals(liveGame.getPlayerO().getUuid(), user.getUuid()) ? liveGame.getPlayerX() : liveGame.getPlayerO();
+        requestingDraw.remove(opponent);
+        requestingDraw.add(user);
+    }
+
+
     @Scheduled(fixedDelay = 5000)
     private void checkTimeOut(){
         List<LiveGame> liveGames = liveGameRepo.findAll();
