@@ -9,7 +9,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { formatDate, formatTime, TranslateText } from "@/lib/utils";
+import {
+  checkWinner,
+  formatDate,
+  formatTime,
+  TranslateText,
+} from "@/lib/utils";
 import { useLanguage } from "@/components/languageContext";
 
 type GameHistoryProps = {
@@ -23,6 +28,10 @@ function GameBoard({
   board: string[][];
   disabled: boolean;
 }) {
+  const { winningLine } = checkWinner(board);
+  const isWinningCell = (row: number, col: number) => {
+    return winningLine.some(([r, c]) => r === row && c === col);
+  };
   return (
     <div
       className="grid grid-cols-15 border-2"
@@ -38,7 +47,9 @@ function GameBoard({
         row.map((cell, j) => (
           <div
             key={`${i}-${j}`}
-            className="aspect-square flex items-center justify-center text-base sm:text-xl md:text-2xl lg:text-3xl font-bold"
+            className={`aspect-square flex items-center justify-center text-base sm:text-xl md:text-2xl lg:text-3xl font-bold ${
+              isWinningCell(i, j) ? "bg-[#22c55e]" : ""
+            }`}
             style={{
               backgroundColor: "var(--whitelessbright)",
               color: cell === "X" ? "var(--defaultred)" : "var(--defaultblue)",
@@ -63,7 +74,6 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
   const [selectedGame, setSelectedGame] = useState<LiveGame | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const { language } = useLanguage();
-
   useEffect(() => {
     async function fetchData() {
       const data = await fetch(`/api/v1/liveGameByUserId/${userProfile?.uuid}`);
