@@ -29,8 +29,9 @@ function GameBoard({
       style={{
         backgroundColor: "var(--darkshade)",
         borderColor: "var(--darkshade)",
-        width: "min(90vw, 60vh)",
-        height: "min(90vw, 60vh)",
+        width: "min(90vw, 600px)",
+        height: "min(90vw, 600px)",
+        aspectRatio: "1 / 1",
       }}
     >
       {board.map((row, i) =>
@@ -118,7 +119,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
       ))}
 
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent className="sm:max-w-3xl bg-white border-2 text-black border-darkshade shadow-darkshade shadow-md">
+        <DialogContent className="sm:max-w-[800px] bg-white border-2 text-black border-darkshade shadow-darkshade shadow-md">
           {selectedGame && (
             <>
               <DialogTitle></DialogTitle>
