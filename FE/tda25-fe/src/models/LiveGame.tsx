@@ -3,7 +3,7 @@ import { UserProfile } from "./UserProfile";
 export type LiveGame = {
   uuid: string;
   board: Array<Array<"X" | "O" | "">>;
-  matchmakingTyps: "ranked" | "unranked";
+  matchmakingType: "ranked" | "unranked";
   playerX: UserProfile;
   playerO: UserProfile;
   playerXTime: number;

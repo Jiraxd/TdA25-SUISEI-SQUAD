@@ -119,7 +119,7 @@ export default function OnlineGamePage() {
         return;
       }
       setBoard(livegame.board);
-      setRanked(livegame.matchmakingTyps === "ranked");
+      setRanked(livegame.matchmakingType === "ranked");
       setCurrentPlayer(
         livegame.board.flat().filter((cell) => cell === "X").length ===
           livegame.board.flat().filter((cell) => cell === "O").length
@@ -127,15 +127,17 @@ export default function OnlineGamePage() {
           : "O"
       );
       if (livegame.playerX.uuid === userTemp.uuid) {
+        setPlayerSymbol("X");
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerO);
-        setTimeRemaining(livegame.playerXTime / 1000);
+        setTimeRemaining(livegame.playerXTime);
       } else {
+        setPlayerSymbol("O");
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerX);
-        setTimeRemaining(livegame.playerOTime / 1000);
+        setTimeRemaining(livegame.playerOTime);
       }
     }
     fetchData();
@@ -205,8 +207,8 @@ export default function OnlineGamePage() {
               setBoard(livegame.board);
               setTimeRemaining(
                 playerSymbol === "X"
-                  ? livegame.playerXTime / 1000
-                  : livegame.playerOTime / 1000
+                  ? livegame.playerXTime
+                  : livegame.playerOTime
               );
               setCurrentPlayer(
                 livegame.board.flat().filter((cell) => cell === "X").length ===
@@ -239,12 +241,11 @@ export default function OnlineGamePage() {
     if (!client) {
       return;
     }
-    if (
-      board[rowIndex][colIndex] !== "" ||
-      winner ||
-      !client.active ||
-      currentPlayer !== playerSymbol
-    ) {
+    if (board[rowIndex][colIndex] !== "" || winner || !client.active) {
+      return;
+    }
+
+    if (currentPlayer !== playerSymbol) {
       return;
     }
 

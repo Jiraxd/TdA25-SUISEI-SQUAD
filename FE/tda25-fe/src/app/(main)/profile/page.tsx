@@ -185,6 +185,7 @@ export default function ProfilePage() {
                       },
                     });
                     ClearLoginCookie();
+                    setUser(null);
                     router.refresh();
                   }}
                 >

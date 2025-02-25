@@ -22,9 +22,13 @@ import { AdminModal } from "./admin-modal";
 
 type ProfileProps = {
   userProfile: UserProfile | null;
+  setUserProfile: (userProfile: UserProfile | null) => void;
 };
 
-export default function UserMenu({ userProfile }: ProfileProps) {
+export default function UserMenu({
+  userProfile,
+  setUserProfile,
+}: ProfileProps) {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [adminMenuOpened, setAdminMenuOpened] = useState(false);
   const { language } = useLanguage();
@@ -58,6 +62,7 @@ export default function UserMenu({ userProfile }: ProfileProps) {
     });
 
     ClearLoginCookie();
+    setUserProfile(null);
     router.refresh();
   }
   return (

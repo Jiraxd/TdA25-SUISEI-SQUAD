@@ -120,7 +120,7 @@ public class UserController {
         }
         if (newPassword != null && !authService.validatePassword(newPassword))
             return ResponseEntity.badRequest().body("PASSWORD_NOT_STRONG_ENOUGH");
-        if (userRepo.findById(username).isPresent()) return ResponseEntity.badRequest().body("USERNAME_EXISTS");
+        if (userRepo.findByUsername(username) != null) return ResponseEntity.badRequest().body("USERNAME_EXISTS");
         if (userRepo.findById(email).isPresent()) return ResponseEntity.badRequest().body("EMAIL_EXISTS");
         if (!colors.contains(nameColor)) return ResponseEntity.badRequest().body("INVALID_NAME_COLOR");
         if (newPassword != null) {
