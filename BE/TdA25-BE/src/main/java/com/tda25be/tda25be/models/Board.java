@@ -138,7 +138,7 @@ public class Board {
         for (int i = 0; i < 5; i++) {
             int newRow = row + i * dRow;
             int newCol = col + i * dCol;
-            if (newRow < 0 || newRow >= 15 || newCol < 0 || newCol >= 15 || !board.get(newCol).get(newRow).equals(player)) {
+            if (newRow < 0 || newRow >= 15 || newCol < 0 || newCol >= 15 || !board.get(newRow).get(newCol).equals(player)) {
                 return false;
             }
             count++;
