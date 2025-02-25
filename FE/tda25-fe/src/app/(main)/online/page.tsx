@@ -90,7 +90,8 @@ export default function OnlinePage() {
       }),
     });
     if (data.ok) {
-      router.push(`/onlineGame/${privateGameId}`);
+      const uuid = await data.text();
+      router.push(`/onlineGame/${uuid}`);
     } else {
       updateErrorMessage(TranslateText("PRIVATE_GAME_NOT_FOUND", language));
     }
@@ -181,7 +182,8 @@ export default function OnlinePage() {
                         <TableCell>
                           {user.wins > 0
                             ? (
-                                ((user.wins + user.draws) / (user.wins + user.losses + user.draws)) *
+                                ((user.wins + user.draws) /
+                                  (user.wins + user.losses + user.draws)) *
                                 100
                               ).toFixed(1)
                             : 0}
