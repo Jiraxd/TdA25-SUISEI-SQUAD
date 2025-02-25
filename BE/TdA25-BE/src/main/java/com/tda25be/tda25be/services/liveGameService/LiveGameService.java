@@ -46,7 +46,7 @@ public class LiveGameService {
         int winnerElo = winner.getElo();
         int loserElo = loser.getElo();
         double winnerEa = 1/(1+Math.pow(10, (double) (loserElo - winnerElo) /400));
-        double loserEa =  1-winnerEa;
+        double loserEa = 1-winnerEa;
         if(draw){
             modifyElo(winner, winnerEa, EloGameState.draw);
             modifyElo(loser, loserEa, EloGameState.draw);
@@ -65,7 +65,7 @@ public class LiveGameService {
             case draw -> 0.5;
         };
         playerElo = playerElo + 40*(score - Ea)*(1+0.5*(0.5-playerWR));
-        player.setElo((int) Math.ceil(playerElo));
+        player.setElo(Math.max(0, (int) Math.ceil(playerElo)));
     }
     @Scheduled(fixedDelay = 5000)
     private void checkTimeOut(){
