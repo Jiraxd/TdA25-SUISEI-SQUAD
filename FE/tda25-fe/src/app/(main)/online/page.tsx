@@ -113,7 +113,7 @@ export default function OnlinePage() {
             <h1 className="text-3xl lg:text-4xl  text-defaultred font-dosis-bold">
               {TranslateText("WELCOME_ONLINE", language)}
             </h1>
-            <UserMenu userProfile={user} />
+            <UserMenu userProfile={user} setUserProfile={setUser} />
           </div>
           <EloDisplay loading={loading} userProfile={user} />
           <GameOptions user={user} />
