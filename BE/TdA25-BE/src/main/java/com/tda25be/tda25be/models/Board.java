@@ -151,7 +151,7 @@ public class Board {
                 .map(ArrayList::new)
                 .collect(Collectors.toList());
             String symbol = placeO ? "O" : "X";
-            if(!newBoard.get(y).get(y).isEmpty()) throw new SemanticErrorException("The cell is already occupied");
+            if(!newBoard.get(y).get(x).isEmpty()) throw new SemanticErrorException("The cell is already occupied");
             newBoard.get(y).set(x, symbol);
             setBoard(newBoard);
     }
