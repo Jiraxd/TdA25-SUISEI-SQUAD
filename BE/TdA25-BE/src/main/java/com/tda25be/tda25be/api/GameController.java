@@ -12,6 +12,8 @@ import com.tda25be.tda25be.repositories.LiveGameRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import com.tda25be.tda25be.services.liveGameService.LiveGameService;
+import com.tda25be.tda25be.services.matchmaking.PracticeGameService;
+import com.tda25be.tda25be.services.matchmaking.RematchService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,8 @@ public class GameController {
     private final LiveGameRepo liveGameRepo;
     private final AuthService authService;
     private final LiveGameService liveGameService;
+    private final RematchService rematchService;
+    private final PracticeGameService practiceGameService;
 
     @GetMapping(path = "/test")
     public OrganizationResponse api() {
@@ -153,9 +157,25 @@ public class GameController {
         liveGameService.rejectDraw(user);
         return ResponseEntity.ok("Draw rejected");
     }
-    @GetMapping("/test2")
-    public void test(){
-        LiveGame liveGame = liveGameRepo.findById("5d3ab0f3-6145-4868-aaff-8d904e7a743b").get();
-        liveGame.getBoard().checkWinner();
+    @GetMapping("/rematch/{uuid}")
+    public ResponseEntity<String> offerRematch(@RequestHeader("Authorization") String token, @PathVariable String uuid){
+        User user = authService.verify(token);
+        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        rematchService.requestRematch(user, uuid);
+        return ResponseEntity.ok("Rematch requested");
     }
+    @GetMapping("/rejectRematch/{uuid}")
+    public ResponseEntity<String> rejectRematch(@RequestHeader("Authorization") String token, @PathVariable String uuid) {
+        User user = authService.verify(token);
+        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        rematchService.rejectRematch(user, uuid);
+        return ResponseEntity.ok("Rematch rejected");
+    }
+    @GetMapping("/join-private/{gameId}")
+    public ResponseEntity<String> getUuidFromCode(@PathVariable String gameId){
+        if(gameId == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(practiceGameService.getUuidFromCode(gameId));
+    }
+
+
 }
