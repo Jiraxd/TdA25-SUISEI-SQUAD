@@ -160,8 +160,7 @@ export default function OnlineGamePage() {
 
           if (response.type === "End") {
             setWinner(response.message as "X" | "O" | "Draw");
-            const { winner, winningLine } = checkWinner(board);
-            setWinLane(winningLine);
+
             const res = await fetch(`/api/v1/liveGameById/${gameId}`, {
               method: "GET",
               headers: {
@@ -171,6 +170,8 @@ export default function OnlineGamePage() {
             });
             if (res.ok) {
               const livegame: LiveGame = await res.json();
+              const { winner, winningLine } = checkWinner(livegame.board);
+              setWinLane(winningLine);
               setGameResult({
                 winner: response.message,
                 playerEloChange:
@@ -664,7 +665,7 @@ export default function OnlineGamePage() {
                         : "text-red-600"
                     }`}
                   >
-                    {gameResult.playerEloChange >= 0 ? "+" : "-"}
+                    {gameResult.playerEloChange >= 0 ? "+" : ""}
                     {gameResult.playerEloChange} ELO
                   </div>
                   <div className="text-darkshade mt-2">
@@ -689,7 +690,7 @@ export default function OnlineGamePage() {
                         : "text-red-600"
                     }`}
                   >
-                    {gameResult.opponentEloChange >= 0 ? "+" : "-"}
+                    {gameResult.opponentEloChange >= 0 ? "+" : ""}
                     {gameResult.opponentEloChange} ELO
                   </div>
                   <div className="text-darkshade mt-2">
