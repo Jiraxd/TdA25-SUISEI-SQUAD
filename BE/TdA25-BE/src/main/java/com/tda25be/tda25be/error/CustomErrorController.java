@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-/*
+
 @Controller
 public class CustomErrorController implements ErrorController {
 
@@ -28,8 +28,8 @@ public class CustomErrorController implements ErrorController {
             }
         }
 
-        return "redirect:/errorPage.html?code=" + statusCode;
+        return "forward:/errorPage.html?code=" + statusCode;
     }
 
-    */
+    
 }
