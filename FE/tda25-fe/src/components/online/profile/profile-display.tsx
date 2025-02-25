@@ -1,4 +1,4 @@
-import { type UserProfile, getNameColor } from "@/models/UserProfile"; // Adjust the import path as needed
+import { type UserProfile, getNameColor } from "@/models/UserProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useLanguage } from "@/components/languageContext";
@@ -12,10 +12,10 @@ type ProfileDisplayProps = {
 export default function ProfileDisplay({ user }: ProfileDisplayProps) {
   const { language } = useLanguage();
   if (!user) return null;
-  const totalWonLostGames = user.wins + user.losses;
+  const totalWonLostGames = user.wins + user.losses + user.draws;
   const winrate =
     totalWonLostGames > 0
-      ? ((user.wins / totalWonLostGames) * 100).toFixed(1)
+      ? ((user.wins + user.draws / totalWonLostGames) * 100).toFixed(1)
       : "0.0";
 
   const currentRank = getRankByElo(user.elo);
@@ -102,7 +102,7 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
             <p className="text-lg text-black">
               {TranslateText("GAMES_PLAYED", language)}:{" "}
               <span className="font-dosis-regular">
-                {totalWonLostGames + user.draws}
+                {totalWonLostGames}
               </span>
             </p>
             <p className="text-lg  text-black">

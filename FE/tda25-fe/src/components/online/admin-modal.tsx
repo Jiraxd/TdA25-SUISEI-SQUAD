@@ -80,7 +80,7 @@ export function AdminModal({ isOpen, onClose, language }: AdminModalProps) {
   };
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className="bg-white border-2 border-darkshade shadow-darkshade shadow-md max-w-2xl [&>button]:hidden"
         onPointerDownOutside={(e) => e.preventDefault()}

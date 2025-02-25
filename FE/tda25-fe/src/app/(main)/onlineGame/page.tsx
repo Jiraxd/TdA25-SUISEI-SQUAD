@@ -667,7 +667,7 @@ export default function OnlineGamePage() {
                     {gameResult.playerEloChange} ELO
                   </div>
 
-                  <div className="flex items-center mt-2 gap-2">
+                  <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
                       className={`text-2xl font-bold ${
@@ -701,7 +701,7 @@ export default function OnlineGamePage() {
                     {gameResult.opponentEloChange >= 0 ? "+" : ""}
                     {gameResult.opponentEloChange} ELO
                   </div>
-                  <div className="flex items-center mt-2 gap-2">
+                  <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
                       className={`text-2xl font-bold ${

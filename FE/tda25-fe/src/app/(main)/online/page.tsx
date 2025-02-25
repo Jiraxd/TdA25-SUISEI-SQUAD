@@ -181,7 +181,7 @@ export default function OnlinePage() {
                         <TableCell>
                           {user.wins > 0
                             ? (
-                                (user.wins / (user.wins + user.losses)) *
+                                ((user.wins + user.draws) / (user.wins + user.losses + user.draws)) *
                                 100
                               ).toFixed(1)
                             : 0}
