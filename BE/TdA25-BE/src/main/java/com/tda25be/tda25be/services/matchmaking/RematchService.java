@@ -44,8 +44,8 @@ public class RematchService {
         requestingRematch.remove(uuid);
     }
     private void notifyPlayers(User user, User opponent, LiveGame liveGame) {
-        webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/game-updates", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
-        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/game-updates", "MatchFound", liveGame.getUuid(), HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/game-updates", "AcceptRematch", liveGame.getUuid(), HttpStatus.OK);
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/game-updates", "AcceptRematch", liveGame.getUuid(), HttpStatus.OK);
     }
 
 }

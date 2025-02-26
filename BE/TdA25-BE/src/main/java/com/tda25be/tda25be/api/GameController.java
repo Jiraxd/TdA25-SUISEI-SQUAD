@@ -4,12 +4,11 @@ import com.tda25be.tda25be.entities.Game;
 import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.error.SemanticErrorException;
-import com.tda25be.tda25be.models.Board;
-import com.tda25be.tda25be.models.GameRequest;
-import com.tda25be.tda25be.models.OrganizationResponse;
+import com.tda25be.tda25be.models.*;
 import com.tda25be.tda25be.repositories.GameRepository;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
+import com.tda25be.tda25be.security.WebSocketAuthInterceptor;
 import com.tda25be.tda25be.services.auth.AuthService;
 import com.tda25be.tda25be.services.liveGameService.LiveGameService;
 import com.tda25be.tda25be.services.matchmaking.PracticeGameService;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -35,6 +35,7 @@ public class GameController {
     private final LiveGameService liveGameService;
     private final RematchService rematchService;
     private final PracticeGameService practiceGameService;
+    private final WebSocketAuthInterceptor webSocketAuthInterceptor;
 
     @GetMapping(path = "/test")
     public OrganizationResponse api() {
@@ -171,11 +172,29 @@ public class GameController {
         rematchService.rejectRematch(user, uuid);
         return ResponseEntity.ok("Rematch rejected");
     }
+    @PostMapping
+    public ResponseEntity<PrivateGameResponse> createPrivateGame(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> body){
+        String symbol = body.get("symbol");
+        User user = authService.verify(token);
+        long timeLimit;
+        try {
+            timeLimit = Long.parseLong(body.get("timeLimit"));
+        }catch (NumberFormatException e){
+            return ResponseEntity.badRequest().build();
+        }
+        IncompletePracticeGame game = practiceGameService.createRequest(user, symbol, timeLimit);
+        return ResponseEntity.ok(new PrivateGameResponse(game.getUuid(), game.getCode()));
+    }
+
+
     @GetMapping("/join-private/{gameId}")
     public ResponseEntity<String> getUuidFromCode(@PathVariable String gameId){
         if(gameId == null) return ResponseEntity.badRequest().build();
         return ResponseEntity.ok(practiceGameService.getUuidFromCode(gameId));
     }
-
+    @GetMapping("/privateJoinPage/{uuid}")
+    public ResponseEntity<PrivateGameJoinedResponse> joinPrivateGame(@RequestHeader("Authorization") String token,@PathVariable String uuid){
+        return ResponseEntity.ok(practiceGameService.acceptMatch(uuid, token));
+    }
 
 }
