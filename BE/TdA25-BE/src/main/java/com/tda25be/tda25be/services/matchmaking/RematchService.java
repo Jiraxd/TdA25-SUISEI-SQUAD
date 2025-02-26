@@ -32,6 +32,7 @@ public class RematchService {
             } else {
                 newLiveGame.setPlayerO(opponent).setPlayerX(user).setPlayerOEloBefore(opponent.getElo()).setPlayerXEloBefore(user.getElo());
             }
+            liveGameRepo.saveAndFlush(newLiveGame);
             notifyPlayers(user, opponent, newLiveGame);
         }
     }
