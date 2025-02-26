@@ -269,10 +269,11 @@ export default function OnlineGamePage() {
     setClient(stompClient);
     stompClient.activate();
 
-    return () => {
+    return async() => {
       if (stompClient.active) {
         stompClient.deactivate();
       }
+        await fetch("/api/v1/rejectRematch/" + gameId,{})
     };
   }, []);
 
