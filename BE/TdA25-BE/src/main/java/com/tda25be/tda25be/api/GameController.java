@@ -172,6 +172,8 @@ public class GameController {
         rematchService.rejectRematch(user, uuid);
         return ResponseEntity.ok("Rematch rejected");
     }
+
+    @ResponseBody
     @PostMapping("/create-private")
     public ResponseEntity<PrivateGameResponse> createPrivateGame(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> body){
         String symbol = body.get("Symbol");
