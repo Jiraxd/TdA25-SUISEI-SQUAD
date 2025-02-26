@@ -51,11 +51,17 @@ public class PracticeGameService {
 
     public PrivateGameJoinedResponse acceptMatch(String uuid, String token){
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
-        if(practiceGame == null) return null;
+        if(practiceGame == null) {
+            System.out.println("N1");
+            return null;
+        }
         User user = practiceGame.getUser();
         User tempUser = token == null || token.isEmpty() ? createTempUser() : authService.verify(token);
         if(tempUser == null) tempUser = createTempUser();
-        if(tempUser.getUuid().equals(user.getUuid())) return null;
+        if(tempUser.getUuid().equals(user.getUuid())) {
+            System.out.println("N2: " + user.getUuid() +" XD: " + tempUser.getUuid());
+            return null;
+        }
 
         LiveGame newLiveGame = new LiveGame(MatchmakingTypes.unranked);
         if(Objects.equals(practiceGame.getSymbol(), "X")) newLiveGame.setPlayerX(user).setPlayerXEloBefore(user.getElo()).setPlayerOEloBefore(tempUser.getElo()).setPlayerO(tempUser);
