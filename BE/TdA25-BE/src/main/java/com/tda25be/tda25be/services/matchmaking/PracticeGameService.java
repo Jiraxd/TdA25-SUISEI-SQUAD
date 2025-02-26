@@ -57,11 +57,11 @@ public class PracticeGameService {
         Optional<LiveGame> possibleLiveGame = liveGameRepo.findById(uuid);
         if( possibleLiveGame.isPresent()) {
             LiveGame liveGame = possibleLiveGame.get();
-            if(liveGame.getPlayerO().getEmail().isEmpty()){
+            if(liveGame.getPlayerO().getEmail() == null || liveGame.getPlayerO().getEmail().isEmpty()){
                 Session session = sessionRepo.findByUser(liveGame.getPlayerO()).get(0);
                 return new PrivateGameJoinedResponse(liveGame, liveGame.getPlayerO(), session.getToken());
             }
-            else if(liveGame.getPlayerX().getEmail().isEmpty()){
+            else if(liveGame.getPlayerX().getEmail() == null || liveGame.getPlayerX().getEmail().isEmpty()){
                 Session session = sessionRepo.findByUser(liveGame.getPlayerX()).get(0);
                 return new PrivateGameJoinedResponse(liveGame, liveGame.getPlayerX(), session.getToken());
             }
@@ -78,7 +78,7 @@ public class PracticeGameService {
         }
         User tempUser = token == null || token.isEmpty() ? createTempUser() : authService.verify(token);
         if(tempUser == null) tempUser = createTempUser();
-        
+
         LiveGame newLiveGame = new LiveGame(MatchmakingTypes.unranked);
         if(Objects.equals(practiceGame.getSymbol(), "X")) newLiveGame.setPlayerX(user).setPlayerXEloBefore(user.getElo()).setPlayerOEloBefore(tempUser.getElo()).setPlayerO(tempUser);
         else newLiveGame.setPlayerX(tempUser).setPlayerXEloBefore(tempUser.getElo()).setPlayerOEloBefore(user.getElo()).setPlayerO(user);
