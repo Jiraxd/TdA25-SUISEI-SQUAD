@@ -58,11 +58,25 @@ public class PracticeGameService {
         if( possibleLiveGame.isPresent()) {
             LiveGame liveGame = possibleLiveGame.get();
             if(liveGame.getPlayerO().getEmail() == null || liveGame.getPlayerO().getEmail().isEmpty()){
-                Session session = sessionRepo.findByUser(liveGame.getPlayerO()).get(0);
+                List<Session> sessions = sessionRepo.findByUser(liveGame.getPlayerO());
+                Session session = new Session();
+                if(sessions.isEmpty()){
+                    session.user = liveGame.getPlayerO();
+                    session.setDeviceName("temp");
+                }else {
+                    session = sessions.get(0);
+                }
                 return new PrivateGameJoinedResponse(liveGame, liveGame.getPlayerO(), session.getToken());
             }
             else if(liveGame.getPlayerX().getEmail() == null || liveGame.getPlayerX().getEmail().isEmpty()){
-                Session session = sessionRepo.findByUser(liveGame.getPlayerX()).get(0);
+                List<Session> sessions = sessionRepo.findByUser(liveGame.getPlayerX());
+                Session session = new Session();
+                if(sessions.isEmpty()){
+                    session.user = liveGame.getPlayerX();
+                    session.setDeviceName("temp");
+                }else {
+                    session = sessions.get(0);
+                }
                 return new PrivateGameJoinedResponse(liveGame, liveGame.getPlayerX(), session.getToken());
             }
         }
