@@ -439,28 +439,30 @@ export default function OnlineGamePage() {
                           </div>
                         </div>
                       </div>
-
-                      <div className="flex flex-col items-center">
-                        <span className="text-lg">
-                          {TranslateText("YOUR_TIME", language)}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <AlarmClockIcon className="h-6 w-6" />
-                          <span
-                            className={`text-2xl font-bold ${
-                              (playerSymbol === "X"
-                                ? playerXTime
-                                : playerOTime) < 60000
-                                ? "text-defaultred"
-                                : "text-darkshade"
-                            }`}
-                          >
-                            {formatTime(
-                              playerSymbol === "X" ? playerXTime : playerOTime
-                            )}
+                      {(playerSymbol === "X" ? playerXTime : playerOTime) <
+                        4000000 && (
+                        <div className="flex flex-col items-center">
+                          <span className="text-lg">
+                            {TranslateText("YOUR_TIME", language)}
                           </span>
+                          <div className="flex items-center gap-2">
+                            <AlarmClockIcon className="h-6 w-6" />
+                            <span
+                              className={`text-2xl font-bold ${
+                                (playerSymbol === "X"
+                                  ? playerXTime
+                                  : playerOTime) < 60000
+                                  ? "text-defaultred"
+                                  : "text-darkshade"
+                              }`}
+                            >
+                              {formatTime(
+                                playerSymbol === "X" ? playerXTime : playerOTime
+                              )}
+                            </span>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -572,26 +574,30 @@ export default function OnlineGamePage() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-lg">
-                        {TranslateText("OPPONENT_TIME", language)}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <AlarmClockIcon className="h-6 w-6" />
-                        <span
-                          className={`text-2xl font-bold ${
-                            (playerSymbol === "O" ? playerXTime : playerOTime) <
-                            60000
-                              ? "text-defaultred"
-                              : "text-darkshade"
-                          }`}
-                        >
-                          {formatTime(
-                            playerSymbol === "O" ? playerXTime : playerOTime
-                          )}
+                    {(playerSymbol === "O" ? playerXTime : playerOTime) <
+                      4000000 && (
+                      <div className="flex flex-col items-center">
+                        <span className="text-lg">
+                          {TranslateText("OPPONENT_TIME", language)}
                         </span>
+                        <div className="flex items-center gap-2">
+                          <AlarmClockIcon className="h-6 w-6" />
+                          <span
+                            className={`text-2xl font-bold ${
+                              (playerSymbol === "O"
+                                ? playerXTime
+                                : playerOTime) < 60000
+                                ? "text-defaultred"
+                                : "text-darkshade"
+                            }`}
+                          >
+                            {formatTime(
+                              playerSymbol === "O" ? playerXTime : playerOTime
+                            )}
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="flex flex-col items-center space-y-1">
                       <Button
                         className="w-full mt-4 bg-defaultblue hover:bg-darkerblue"
