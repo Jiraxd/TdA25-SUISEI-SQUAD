@@ -6,6 +6,7 @@ import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.enums.EloGameState;
 import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
+import com.tda25be.tda25be.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,6 +21,7 @@ import java.util.Objects;
 public class LiveGameService {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
+    private final UserRepo userRepo;
     private List<User> requestingDraw = new ArrayList<>();
 
     public void win(LiveGame liveGame, String symbolWin) {
@@ -69,6 +71,7 @@ public class LiveGameService {
         };
         playerElo = playerElo + 40*(score - Ea)*(1+0.5*(0.5-playerWR));
         player.setElo(Math.max(0, (int) Math.ceil(playerElo)));
+        userRepo.save(player);
     }
     public void requestDraw(User user){
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);

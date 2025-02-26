@@ -17,4 +17,5 @@ public class IncompletePracticeGame {
     User user;
     String symbol;
     Long timeLimit;
+    String code;
 }
