@@ -195,7 +195,7 @@ public class GameController {
         return ResponseEntity.ok(practiceGameService.getUuidFromCode(gameId));
     }
     @GetMapping("/privateJoinPage/{uuid}")
-    public ResponseEntity<PrivateGameJoinedResponse> joinPrivateGame(@RequestHeader("Authorization") String token,@PathVariable String uuid){
+    public ResponseEntity<PrivateGameJoinedResponse> joinPrivateGame(@RequestHeader(value = "Authorization", required = false) String token,@PathVariable String uuid){
         return ResponseEntity.ok(practiceGameService.acceptMatch(uuid, token));
     }
 
