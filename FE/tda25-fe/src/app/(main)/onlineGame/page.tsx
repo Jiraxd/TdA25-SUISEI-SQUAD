@@ -7,6 +7,7 @@ import {
   checkWinner,
   formatTime,
   GetLoginCookie,
+  SetLoginCookie,
   TranslateText,
 } from "@/lib/utils";
 import { UserProfile } from "@/models/UserProfile";
@@ -88,35 +89,9 @@ export default function OnlineGamePage() {
       return () => clearInterval(timer);
     }
   }, [currentPlayer]);
+
   useEffect(() => {
-    async function fetchData() {
-      const loginToken = GetLoginCookie();
-      if (!loginToken) {
-        return;
-      }
-      const data = await fetch(`/api/v1/auth/verify`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${loginToken}`,
-        },
-        credentials: "include",
-      });
-
-      const userTemp: UserProfile = await data.json();
-      setUser(userTemp);
-
-      const res = await fetch(`/api/v1/liveGameById/${gameId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${loginToken}`,
-        },
-      });
-      if (!res.ok) {
-        router.push("/online");
-        return;
-      }
-      const livegame: LiveGame = await res.json();
+    function setLiveGame(livegame: LiveGame, userTemp: UserProfile) {
       if (livegame.finished) {
         router.push("/online");
         return;
@@ -141,6 +116,63 @@ export default function OnlineGamePage() {
         setXPlayer(livegame.playerX.uuid);
         setOPlayer(livegame.playerO.uuid);
         setOpponent(livegame.playerX);
+      }
+    }
+    async function fetchData() {
+      const loginToken = GetLoginCookie() || "";
+      if (isPrivateGame) {
+        const data = await fetch(`/api/v1/privateJoinPage/${gameId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${loginToken}`,
+          },
+        });
+        if (data.ok) {
+          const text = await data.text();
+
+          if (text === "GAME_ALREADY_STARTED") {
+            router.push("/online");
+            return;
+          }
+          const datajson = await data.json();
+          if (datajson.token) {
+            SetLoginCookie(datajson.token);
+          }
+          setUser(datajson.user);
+          const livegame: LiveGame = datajson.liveGame;
+          setLiveGame(livegame, datajson.user);
+        } else {
+          router.push("/online");
+        }
+      } else {
+        if (!loginToken) {
+          return;
+        }
+        const data = await fetch(`/api/v1/auth/verify`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${loginToken}`,
+          },
+          credentials: "include",
+        });
+
+        const userTemp: UserProfile = await data.json();
+        setUser(userTemp);
+
+        const res = await fetch(`/api/v1/liveGameById/${gameId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${loginToken}`,
+          },
+        });
+        if (!res.ok) {
+          router.push("/online");
+          return;
+        }
+        const livegame: LiveGame = await res.json();
+        setLiveGame(livegame, userTemp);
       }
     }
     fetchData();
@@ -347,11 +379,13 @@ export default function OnlineGamePage() {
                   </CardHeader>
                   <CardContent className="flex flex-col items-center gap-4">
                     <div className="w-full space-y-4 text-darkshade">
-                      <div className="flex flex-col items-center space-y-2">
+                      <div className="flex flex-col items-center space-y-2 text-md">
                         <span className="text-lg">
                           {TranslateText("GAME_TYPE", language)}
                         </span>
-                        {ranked ? (
+                        {isPrivateGame ? (
+                          <span>{TranslateText("PRIVATE_GAME", language)}</span>
+                        ) : ranked ? (
                           <span>{TranslateText("RANKED", language)}</span>
                         ) : (
                           <span>{TranslateText("UNRANKED", language)}</span>
