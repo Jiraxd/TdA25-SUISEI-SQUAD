@@ -2,6 +2,7 @@ package com.tda25be.tda25be.services.matchmaking;
 
 import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
+import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.models.IncompletePracticeGame;
@@ -70,7 +71,10 @@ public class PracticeGameService {
         liveGameRepo.saveAndFlush(newLiveGame);
         privateGames.remove(uuid);
         webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", uuid, HttpStatus.OK);
-        return new PrivateGameJoinedResponse(newLiveGame, tempUser);
+        Session session = new Session();
+        session.user = tempUser;
+        session.setDeviceName("temp");
+        return new PrivateGameJoinedResponse(newLiveGame, tempUser, session.getToken());
     }//TODO scheduled deletion
 
     public static String generateRandomCode() {
