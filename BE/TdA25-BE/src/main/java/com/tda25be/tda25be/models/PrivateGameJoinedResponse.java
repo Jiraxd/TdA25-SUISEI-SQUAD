@@ -6,10 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Setter
 @Getter
 public class PrivateGameJoinedResponse {
+    public PrivateGameJoinedResponse(LiveGame liveGame, User user, String token){
+        this.liveGame = liveGame;
+        this.user = user;
+        this.token = token;
+    }
     LiveGame liveGame;
     User user;
     String token;
