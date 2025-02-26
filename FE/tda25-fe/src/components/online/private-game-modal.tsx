@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { language, TranslateText } from "@/lib/utils";
+import { GetLoginCookie, language, TranslateText } from "@/lib/utils";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { useAlertContext } from "../alertContext";
@@ -31,6 +31,7 @@ export function PrivateGameModal({
   const [customMinutes, setCustomMinutes] = useState("5");
   const [customSeconds, setCustomSeconds] = useState("0");
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
+  const [codeJoin, setCodeJoin] = useState<string | null>(null);
   const { updateErrorMessage } = useAlertContext();
   const handleCreateGame = async () => {
     const totalSeconds =
@@ -38,20 +39,22 @@ export function PrivateGameModal({
         ? parseInt(customMinutes) * 60 + parseInt(customSeconds)
         : parseInt(timeLimit) * 60;
 
-    const response = await fetch("/api/v1/onlineGame/create-private", {
+    const response = await fetch("/api/v1/create-private", {
       method: "POST",
       headers: {
+        Authorization: GetLoginCookie() || "",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        symbol,
-        timeLimit: totalSeconds,
+        Symbol: symbol,
+        TimeLimit: totalSeconds,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      setGeneratedLink(`${window.location.origin}/onlineGame/${data.gameId}`);
+      setGeneratedLink(`${window.location.origin}/onlineGame/${data.uuid}`);
+      setCodeJoin(data.code);
     } else {
       updateErrorMessage(TranslateText("SOMETHING_WENT_WRONG", language));
     }
@@ -180,24 +183,47 @@ export function PrivateGameModal({
               {TranslateText("GENERATE_LINK", language)}
             </Button>
           ) : (
-            <div className="space-y-2 border border-darkshade p-4 rounded-md">
-              <Label className="text-lg font-dosis-bold text-darkshade">
-                {TranslateText("GAME_LINK", language)}
-              </Label>
-              <div className="flex gap-2">
-                <input
-                  readOnly
-                  value={generatedLink}
-                  className="flex-1 p-2 border border-darkshade rounded-md text-darkshade bg-white"
-                />
-                <Button
-                  onClick={() => {
-                    navigator.clipboard.writeText(generatedLink);
-                  }}
-                  className="bg-defaultblue hover:bg-darkerblue text-white font-dosis-bold"
-                >
-                  {TranslateText("COPY", language)}
-                </Button>
+            <div className="space-y-2">
+              <div className="space-y-2 border border-darkshade p-4 rounded-md">
+                <Label className="text-lg font-dosis-bold text-darkshade">
+                  {TranslateText("GAME_LINK", language)}
+                </Label>
+                <div className="flex gap-2">
+                  <input
+                    readOnly
+                    value={generatedLink}
+                    className="flex-1 p-2 border border-darkshade rounded-md text-darkshade bg-white"
+                  />
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedLink);
+                    }}
+                    className="bg-defaultblue hover:bg-darkerblue text-white font-dosis-bold"
+                  >
+                    {TranslateText("COPY", language)}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2 border border-darkshade p-4 rounded-md">
+                <Label className="text-lg font-dosis-bold text-darkshade">
+                  {TranslateText("GAME_CODE", language)}
+                </Label>
+                <div className="flex gap-2">
+                  <input
+                    readOnly
+                    value={codeJoin || ""}
+                    className="flex-1 p-2 border border-darkshade rounded-md text-darkshade bg-white text-center font-bold text-xl"
+                  />
+                  <Button
+                    onClick={() => {
+                      if (codeJoin) navigator.clipboard.writeText(codeJoin);
+                    }}
+                    className="bg-defaultblue hover:bg-darkerblue text-white font-dosis-bold"
+                  >
+                    {TranslateText("COPY", language)}
+                  </Button>
+                </div>
               </div>
             </div>
           )}

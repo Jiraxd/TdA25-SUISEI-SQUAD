@@ -205,7 +205,7 @@ const translationsCZ: Record<string, string> = {
   CURRENT_COLOR: "Aktuálně vybraná barva",
   ON_TURN: "Na tahu",
   JOIN_PRIVATE_GAME: "Připojit se k soukromé hře",
-  ENTER_PRIVATE_GAME_ID: "Zadejte ID soukromé hry",
+  ENTER_PRIVATE_GAME_ID: "Zadejte kód soukromé hry",
   PASSWORD_MIN_LENGTH: "Heslo musí mít alespoň 8 znaků",
   PASSWORD_SPECIAL_CHAR: "Heslo musí obsahovat alespoň jeden speciální znak",
   PASSWORD_NUMBER: "Heslo musí obsahovat alespoň jedno číslo",
@@ -269,6 +269,7 @@ const translationsCZ: Record<string, string> = {
   DELETE_ACCOUNT: "Smazat účet",
   ARE_YOU_SURE: "Jste si jisti? Klikněte znovu pro potvrzení",
   DELETE_ACCOUNT_FAILED: "Nepodařilo se smazat účet",
+  GAME_CODE: "Kód hry",
 };
 
 const translationsEN: Record<string, string> = {
@@ -454,7 +455,7 @@ const translationsEN: Record<string, string> = {
   CURRENT_COLOR: "Currently selected color",
   ON_TURN: "On turn",
   JOIN_PRIVATE_GAME: "Join private game",
-  ENTER_PRIVATE_GAME_ID: "Enter private game ID",
+  ENTER_PRIVATE_GAME_ID: "Enter private game code",
   PASSWORD_MIN_LENGTH: "Password must be at least 8 characters long",
   PASSWORD_SPECIAL_CHAR: "Password must contain at least one special character",
   PASSWORD_NUMBER: "Password must contain at least one number",
@@ -517,6 +518,7 @@ const translationsEN: Record<string, string> = {
   ARE_YOU_SURE: "Are you sure? Click again to confirm",
   DELETE_ACCOUNT_FAILED: "Failed to delete account",
   TIME_REMAINING_OPPONENT: "Remaining time opponent",
+  GAME_CODE: "Game Code",
 };
 
 import Cookies from "js-cookie";

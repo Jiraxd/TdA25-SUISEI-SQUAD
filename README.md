@@ -13,7 +13,6 @@
 - shadcn/ui
 - TypeScript
 - React
-- Socket.io
 
 *BE*
 - SpringBoot

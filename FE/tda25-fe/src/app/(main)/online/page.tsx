@@ -80,17 +80,15 @@ export default function OnlinePage() {
       updateErrorMessage(TranslateText("ENTER_PRIVATE_GAME_ID", language));
       return;
     }
-    const data = await fetch(`/api/v1/onlineGame/join-private`, {
-      method: "POST",
+    const data = await fetch(`/api/v1/join-private/` + privateGameId, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        gameId: privateGameId,
-      }),
     });
     if (data.ok) {
-      router.push(`/onlineGame/${privateGameId}`);
+      const uuid = await data.text();
+      router.push(`/onlineGame/${uuid}`);
     } else {
       updateErrorMessage(TranslateText("PRIVATE_GAME_NOT_FOUND", language));
     }
@@ -181,7 +179,8 @@ export default function OnlinePage() {
                         <TableCell>
                           {user.wins > 0
                             ? (
-                                ((user.wins + user.draws) / (user.wins + user.losses + user.draws)) *
+                                ((user.wins + user.draws) /
+                                  (user.wins + user.losses + user.draws)) *
                                 100
                               ).toFixed(1)
                             : 0}
