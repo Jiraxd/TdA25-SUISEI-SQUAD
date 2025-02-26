@@ -67,13 +67,13 @@ public class PracticeGameService {
             }
         }
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
-        System.out.println(privateGames);
+         System.out.println(privateGames);
         if(practiceGame == null) {
             System.out.println("N1");
             return null;
         }
         User user = practiceGame.getUser();
-        if(authService.verify(token).getUuid().equals(user.getUuid())){
+        if(authService.verify(token) != null && authService.verify(token).getUuid().equals(user.getUuid())){
             return new PrivateGameJoinedResponse(liveGameRepo.getLiveGameByUuid(uuid),user, token);
         }
         User tempUser = token == null || token.isEmpty() ? createTempUser() : authService.verify(token);
