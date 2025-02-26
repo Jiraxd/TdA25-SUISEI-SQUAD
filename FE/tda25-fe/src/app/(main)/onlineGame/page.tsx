@@ -725,17 +725,18 @@ export default function OnlineGamePage() {
                       <img className="w-8 h-8" src="/icons/O_modre.svg" />
                     )}
                   </div>
-                  <div
-                    className={`text-lg ${
-                      gameResult.playerEloChange >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {gameResult.playerEloChange >= 0 ? "+" : ""}
-                    {gameResult.playerEloChange} ELO
-                  </div>
-
+                  {ranked && (
+                    <div
+                      className={`text-lg ${
+                        gameResult.playerEloChange >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {gameResult.playerEloChange >= 0 ? "+" : ""}
+                      {gameResult.playerEloChange} ELO
+                    </div>
+                  )}
                   <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
@@ -760,16 +761,18 @@ export default function OnlineGamePage() {
                       <img className="w-8 h-8" src="/icons/X_cervene.svg" />
                     )}
                   </div>
-                  <div
-                    className={`text-lg ${
-                      gameResult.opponentEloChange >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {gameResult.opponentEloChange >= 0 ? "+" : ""}
-                    {gameResult.opponentEloChange} ELO
-                  </div>
+                  {ranked && (
+                    <div
+                      className={`text-lg ${
+                        gameResult.opponentEloChange >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {gameResult.opponentEloChange >= 0 ? "+" : ""}
+                      {gameResult.opponentEloChange} ELO
+                    </div>
+                  )}
                   <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
