@@ -207,17 +207,17 @@ export default function OnlineGamePage() {
               setBoard(livegame.board);
               const { winner, winningLine } = checkWinner(livegame.board);
               setWinLane(winningLine);
-              console.log(livegame);
+              const playerXEloChange =
+                livegame.playerXEloAfter - livegame.playerXEloBefore;
+              const playerOEloChange =
+                livegame.playerOEloAfter - livegame.playerOEloBefore;
+
               setGameResult({
                 winner: response.message,
                 playerEloChange:
-                  playerSymbol === "X"
-                    ? livegame.playerXEloAfter - livegame.playerXEloBefore
-                    : livegame.playerOEloAfter - livegame.playerOEloBefore,
+                  playerSymbol === "X" ? playerXEloChange : playerOEloChange,
                 opponentEloChange:
-                  playerSymbol === "X"
-                    ? livegame.playerOEloAfter - livegame.playerOEloBefore
-                    : livegame.playerXEloAfter - livegame.playerXEloBefore,
+                  playerSymbol === "X" ? playerOEloChange : playerXEloChange,
                 playerTimeRemaining:
                   playerSymbol === "X"
                     ? livegame.playerXTime
@@ -778,7 +778,7 @@ export default function OnlineGamePage() {
                   </div>
                 </div>
               </div>
-              <DialogFooter>
+              <DialogFooter className="flex flex-col gap-2">
                 <Button
                   className="w-full bg-defaultblue hover:bg-darkerblue text-lg"
                   onClick={() => {
