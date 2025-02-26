@@ -16,6 +16,7 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "Live_game")
@@ -24,7 +25,6 @@ import java.util.List;
 @Accessors(chain = true)
 public class LiveGame {
     @Id
-    @UuidGenerator
     private String uuid;
     @Column(length = 1024)
     @Convert(converter = BoardConverter.class)
@@ -52,6 +52,7 @@ public class LiveGame {
     private Boolean finished = false;
 
     public LiveGame(){
+        this.uuid = UUID.randomUUID().toString();
     }
     @SneakyThrows
     public LiveGame(MatchmakingTypes matchmakingType) {
