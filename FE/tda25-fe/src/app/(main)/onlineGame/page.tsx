@@ -48,16 +48,12 @@ export default function OnlineGamePage() {
   const [showWinDialog, setShowWinDialog] = useState(false);
   const [gameResult, setGameResult] = useState<{
     winner: "X" | "O" | "draw" | null;
-    playerEloChange: number;
-    opponentEloChange: number;
-    playerTimeRemaining: number;
-    opponentTimeRemaining: number;
+    playerXEloChange: number;
+    playerOEloChange: number;
   } | null>({
     winner: "draw",
-    playerEloChange: 0,
-    opponentEloChange: 0,
-    playerTimeRemaining: 0,
-    opponentTimeRemaining: 0,
+    playerXEloChange: 0,
+    playerOEloChange: 0,
   });
   const [showDrawDialog, setShowDrawDialog] = useState<boolean>(false);
   const [xPlayer, setXPlayer] = useState<string>("");
@@ -80,6 +76,7 @@ export default function OnlineGamePage() {
   useEffect(() => {
     if (currentPlayer !== null) {
       const timer = setInterval(() => {
+        if (winner) return;
         if (currentPlayer === "X") {
           setPlayerXTime((prev) => Math.max(0, prev - 1000));
         } else {
@@ -214,18 +211,8 @@ export default function OnlineGamePage() {
 
               setGameResult({
                 winner: response.message,
-                playerEloChange:
-                  playerSymbol === "X" ? playerXEloChange : playerOEloChange,
-                opponentEloChange:
-                  playerSymbol === "X" ? playerOEloChange : playerXEloChange,
-                playerTimeRemaining:
-                  playerSymbol === "X"
-                    ? livegame.playerXTime
-                    : livegame.playerOTime,
-                opponentTimeRemaining:
-                  playerSymbol === "X"
-                    ? livegame.playerOTime
-                    : livegame.playerXTime,
+                playerXEloChange: playerXEloChange,
+                playerOEloChange: playerOEloChange,
               });
               setShowWinDialog(true);
             }
@@ -721,73 +708,69 @@ export default function OnlineGamePage() {
               <div className="grid grid-cols-2 gap-4 py-4">
                 <div className="text-center">
                   <div className="font-dosis-bold text-lg">
-                    {user?.username}
+                    {xPlayer === user?.uuid
+                      ? user?.username
+                      : opponent?.username}
                   </div>
                   <div className="flex justify-center my-2">
-                    {playerSymbol === "X" ? (
-                      <img className="w-8 h-8" src="/icons/X_cervene.svg" />
-                    ) : (
-                      <img className="w-8 h-8" src="/icons/O_modre.svg" />
-                    )}
+                    <img className="w-8 h-8" src="/icons/X_cervene.svg" />
                   </div>
                   {ranked && (
                     <div
                       className={`text-lg ${
-                        gameResult.playerEloChange >= 0
+                        gameResult.playerXEloChange >= 0
                           ? "text-green-600"
                           : "text-red-600"
                       }`}
                     >
-                      {gameResult.playerEloChange >= 0 ? "+" : ""}
-                      {gameResult.playerEloChange} ELO
+                      {gameResult.playerXEloChange >= 0 ? "+" : ""}
+                      {gameResult.playerXEloChange} ELO
                     </div>
                   )}
                   <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
                       className={`text-2xl font-bold ${
-                        gameResult.playerTimeRemaining < 60000
+                        playerXTime < 60000
                           ? "text-defaultred"
                           : "text-darkshade"
                       }`}
                     >
-                      {formatTime(gameResult.playerTimeRemaining)}
+                      {formatTime(playerXTime)}
                     </span>
                   </div>
                 </div>
                 <div className="text-center">
                   <div className="font-dosis-bold text-lg">
-                    {opponent?.username}
+                    {xPlayer === user?.uuid
+                      ? opponent?.username
+                      : user?.username}
                   </div>
                   <div className="flex justify-center my-2">
-                    {playerSymbol === "X" ? (
-                      <img className="w-8 h-8" src="/icons/O_modre.svg" />
-                    ) : (
-                      <img className="w-8 h-8" src="/icons/X_cervene.svg" />
-                    )}
+                    <img className="w-8 h-8" src="/icons/O_modre.svg" />
                   </div>
                   {ranked && (
                     <div
                       className={`text-lg ${
-                        gameResult.opponentEloChange >= 0
+                        gameResult.playerOEloChange >= 0
                           ? "text-green-600"
                           : "text-red-600"
                       }`}
                     >
-                      {gameResult.opponentEloChange >= 0 ? "+" : ""}
-                      {gameResult.opponentEloChange} ELO
+                      {gameResult.playerOEloChange >= 0 ? "+" : ""}
+                      {gameResult.playerOEloChange} ELO
                     </div>
                   )}
                   <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
                       className={`text-2xl font-bold ${
-                        gameResult.opponentTimeRemaining < 60000
+                        playerOTime < 60000
                           ? "text-defaultred"
                           : "text-darkshade"
                       }`}
                     >
-                      {formatTime(gameResult.opponentTimeRemaining)}
+                      {formatTime(playerOTime)}
                     </span>
                   </div>
                 </div>
