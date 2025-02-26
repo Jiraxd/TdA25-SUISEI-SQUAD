@@ -35,7 +35,9 @@ export function PrivateGameModal({
   const { updateErrorMessage } = useAlertContext();
   const handleCreateGame = async () => {
     const totalSeconds =
-      timeLimit === "custom"
+      timeLimit === "none"
+        ? 0
+        : timeLimit === "custom"
         ? parseInt(customMinutes) * 60 + parseInt(customSeconds)
         : parseInt(timeLimit) * 60;
 

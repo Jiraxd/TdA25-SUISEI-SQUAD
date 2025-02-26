@@ -207,17 +207,17 @@ export default function OnlineGamePage() {
               setBoard(livegame.board);
               const { winner, winningLine } = checkWinner(livegame.board);
               setWinLane(winningLine);
-              console.log(livegame);
+              const playerXEloChange =
+                livegame.playerXEloAfter - livegame.playerXEloBefore;
+              const playerOEloChange =
+                livegame.playerOEloAfter - livegame.playerOEloBefore;
+
               setGameResult({
                 winner: response.message,
                 playerEloChange:
-                  playerSymbol === "X"
-                    ? livegame.playerXEloAfter - livegame.playerXEloBefore
-                    : livegame.playerOEloAfter - livegame.playerOEloBefore,
+                  playerSymbol === "X" ? playerXEloChange : playerOEloChange,
                 opponentEloChange:
-                  playerSymbol === "X"
-                    ? livegame.playerOEloAfter - livegame.playerOEloBefore
-                    : livegame.playerXEloAfter - livegame.playerXEloBefore,
+                  playerSymbol === "X" ? playerOEloChange : playerXEloChange,
                 playerTimeRemaining:
                   playerSymbol === "X"
                     ? livegame.playerXTime
@@ -269,10 +269,11 @@ export default function OnlineGamePage() {
     setClient(stompClient);
     stompClient.activate();
 
-    return () => {
+    return async() => {
       if (stompClient.active) {
         stompClient.deactivate();
       }
+        await fetch("/api/v1/rejectRematch/" + gameId,{})
     };
   }, []);
 
@@ -439,28 +440,30 @@ export default function OnlineGamePage() {
                           </div>
                         </div>
                       </div>
-
-                      <div className="flex flex-col items-center">
-                        <span className="text-lg">
-                          {TranslateText("YOUR_TIME", language)}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <AlarmClockIcon className="h-6 w-6" />
-                          <span
-                            className={`text-2xl font-bold ${
-                              (playerSymbol === "X"
-                                ? playerXTime
-                                : playerOTime) < 60000
-                                ? "text-defaultred"
-                                : "text-darkshade"
-                            }`}
-                          >
-                            {formatTime(
-                              playerSymbol === "X" ? playerXTime : playerOTime
-                            )}
+                      {(playerSymbol === "X" ? playerXTime : playerOTime) <
+                        4000000 && (
+                        <div className="flex flex-col items-center">
+                          <span className="text-lg">
+                            {TranslateText("YOUR_TIME", language)}
                           </span>
+                          <div className="flex items-center gap-2">
+                            <AlarmClockIcon className="h-6 w-6" />
+                            <span
+                              className={`text-2xl font-bold ${
+                                (playerSymbol === "X"
+                                  ? playerXTime
+                                  : playerOTime) < 60000
+                                  ? "text-defaultred"
+                                  : "text-darkshade"
+                              }`}
+                            >
+                              {formatTime(
+                                playerSymbol === "X" ? playerXTime : playerOTime
+                              )}
+                            </span>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -572,26 +575,30 @@ export default function OnlineGamePage() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-lg">
-                        {TranslateText("OPPONENT_TIME", language)}
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <AlarmClockIcon className="h-6 w-6" />
-                        <span
-                          className={`text-2xl font-bold ${
-                            (playerSymbol === "O" ? playerXTime : playerOTime) <
-                            60000
-                              ? "text-defaultred"
-                              : "text-darkshade"
-                          }`}
-                        >
-                          {formatTime(
-                            playerSymbol === "O" ? playerXTime : playerOTime
-                          )}
+                    {(playerSymbol === "O" ? playerXTime : playerOTime) <
+                      4000000 && (
+                      <div className="flex flex-col items-center">
+                        <span className="text-lg">
+                          {TranslateText("OPPONENT_TIME", language)}
                         </span>
+                        <div className="flex items-center gap-2">
+                          <AlarmClockIcon className="h-6 w-6" />
+                          <span
+                            className={`text-2xl font-bold ${
+                              (playerSymbol === "O"
+                                ? playerXTime
+                                : playerOTime) < 60000
+                                ? "text-defaultred"
+                                : "text-darkshade"
+                            }`}
+                          >
+                            {formatTime(
+                              playerSymbol === "O" ? playerXTime : playerOTime
+                            )}
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="flex flex-col items-center space-y-1">
                       <Button
                         className="w-full mt-4 bg-defaultblue hover:bg-darkerblue"
@@ -719,17 +726,18 @@ export default function OnlineGamePage() {
                       <img className="w-8 h-8" src="/icons/O_modre.svg" />
                     )}
                   </div>
-                  <div
-                    className={`text-lg ${
-                      gameResult.playerEloChange >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {gameResult.playerEloChange >= 0 ? "+" : ""}
-                    {gameResult.playerEloChange} ELO
-                  </div>
-
+                  {ranked && (
+                    <div
+                      className={`text-lg ${
+                        gameResult.playerEloChange >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {gameResult.playerEloChange >= 0 ? "+" : ""}
+                      {gameResult.playerEloChange} ELO
+                    </div>
+                  )}
                   <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
@@ -754,16 +762,18 @@ export default function OnlineGamePage() {
                       <img className="w-8 h-8" src="/icons/X_cervene.svg" />
                     )}
                   </div>
-                  <div
-                    className={`text-lg ${
-                      gameResult.opponentEloChange >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {gameResult.opponentEloChange >= 0 ? "+" : ""}
-                    {gameResult.opponentEloChange} ELO
-                  </div>
+                  {ranked && (
+                    <div
+                      className={`text-lg ${
+                        gameResult.opponentEloChange >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {gameResult.opponentEloChange >= 0 ? "+" : ""}
+                      {gameResult.opponentEloChange} ELO
+                    </div>
+                  )}
                   <div className="flex items-center justify-center align-middle mt-2 gap-2">
                     <AlarmClockIcon className="h-6 w-6" />
                     <span
@@ -778,7 +788,7 @@ export default function OnlineGamePage() {
                   </div>
                 </div>
               </div>
-              <DialogFooter>
+              <DialogFooter className="flex flex-col gap-2">
                 <Button
                   className="w-full bg-defaultblue hover:bg-darkerblue text-lg"
                   onClick={() => {

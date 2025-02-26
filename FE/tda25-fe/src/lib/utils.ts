@@ -270,6 +270,11 @@ const translationsCZ: Record<string, string> = {
   ARE_YOU_SURE: "Jste si jisti? Klikněte znovu pro potvrzení",
   DELETE_ACCOUNT_FAILED: "Nepodařilo se smazat účet",
   GAME_CODE: "Kód hry",
+  SEND_REMATCH: "Odveta",
+  YOUR_TIME: "Tvůj čas",
+  OPPONENT_TIME: "Čas soupeře",
+  SENT_REMATCH: "Odveta odeslána",
+  DECLINED_REMATCH: "Odveta odmítnuta",
 };
 
 const translationsEN: Record<string, string> = {
@@ -519,6 +524,11 @@ const translationsEN: Record<string, string> = {
   DELETE_ACCOUNT_FAILED: "Failed to delete account",
   TIME_REMAINING_OPPONENT: "Remaining time opponent",
   GAME_CODE: "Game Code",
+  SEND_REMATCH: "Send rematch",
+  SENT_REMATCH: "Rematch sent",
+  DECLINED_REMATCH: "Rematch declined",
+  YOUR_TIME: "Your time",
+  OPPONENT_TIME: "Opponent time",
 };
 
 import Cookies from "js-cookie";

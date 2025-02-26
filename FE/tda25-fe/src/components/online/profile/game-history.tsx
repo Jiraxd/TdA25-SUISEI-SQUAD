@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   checkWinner,
@@ -29,9 +28,6 @@ function GameBoard({
   disabled: boolean;
 }) {
   const { winningLine } = checkWinner(board);
-  const isWinningCell = (row: number, col: number) => {
-    return winningLine.some(([r, c]) => r === row && c === col);
-  };
   return (
     <div
       className="grid grid-cols-15 border-2"
@@ -47,11 +43,11 @@ function GameBoard({
         row.map((cell, j) => (
           <div
             key={`${i}-${j}`}
-            className={`aspect-square flex items-center justify-center text-base sm:text-xl md:text-2xl lg:text-3xl font-bold ${
-              isWinningCell(i, j) ? "bg-[#22c55e]" : ""
-            }`}
+            className={`aspect-square flex items-center justify-center text-base sm:text-xl md:text-2xl lg:text-3xl font-bold`}
             style={{
-              backgroundColor: "var(--whitelessbright)",
+              backgroundColor: winningLine.some(([r, c]) => r === i && c === j)
+                ? "#22c55e"
+                : "var(--whitelessbright)",
               color: cell === "X" ? "var(--defaultred)" : "var(--defaultblue)",
               borderColor: "var(--darkshade)",
               borderWidth: "1px",
@@ -90,7 +86,12 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
 
   const getEloDifference = (beforeElo: number, afterElo: number) => {
     const diff = afterElo - beforeElo;
-    return diff >= 0 ? `(+${diff})` : `(${diff})`;
+    const textColor = diff >= 0 ? "text-green-600" : "text-red-600";
+    return (
+      <span className={textColor}>
+        {diff >= 0 ? `(+${diff})` : `(${diff})`}
+      </span>
+    );
   };
 
   return (
@@ -104,11 +105,20 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center text-darkshade">
               <div className="font-dosis-medium">
-                <span className="font-dosis-bold text-xl">
+                <a
+                  href={`/profile/${
+                    userProfile?.uuid === game.playerX.uuid
+                      ? game.playerO.uuid
+                      : game.playerX.uuid
+                  }`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-dosis-bold text-xl hover:underline hover:text-defaultblue transition-colors"
+                >
                   {userProfile?.uuid === game.playerX.uuid
                     ? game.playerO.username
                     : game.playerX.username}
-                </span>
+                </a>
                 <span className="ml-2 text-lg">
                   ({TranslateText("ELO_OPPONENT_DURING_GAME", language)}:{" "}
                   {userProfile?.uuid === game.playerX.uuid
@@ -140,8 +150,16 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
                       className="font-dosis-bold text-xl"
                       style={{ color: selectedGame.playerX.nameColor }}
                     >
-                      {selectedGame.playerX.username}
-                      <span className="text-lg ml-2 font-dosis-medium text-black">
+                      <a
+                        href={`/profile/${selectedGame.playerX.uuid}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline transition-colors"
+                        style={{ color: selectedGame.playerX.nameColor }}
+                      >
+                        {selectedGame.playerX.username}
+                      </a>
+                      <span className="text-lg ml-2 font-dosis-medium">
                         {getEloDifference(
                           selectedGame.playerXEloBefore,
                           selectedGame.playerXEloAfter
@@ -166,8 +184,16 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
                       className="font-dosis-bold text-xl"
                       style={{ color: selectedGame.playerO.nameColor }}
                     >
-                      {selectedGame.playerO.username}
-                      <span className="text-lg ml-2 font-dosis-medium text-black">
+                      <a
+                        href={`/profile/${selectedGame.playerO.uuid}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline transition-colors"
+                        style={{ color: selectedGame.playerO.nameColor }}
+                      >
+                        {selectedGame.playerO.username}
+                      </a>
+                      <span className="text-lg ml-2 font-dosis-medium">
                         {getEloDifference(
                           selectedGame.playerOEloBefore,
                           selectedGame.playerOEloAfter
