@@ -60,8 +60,8 @@ public class PracticeGameService {
         else newLiveGame.setPlayerX(tempUser).setPlayerXEloBefore(tempUser.getElo()).setPlayerOEloBefore(user.getElo()).setPlayerO(user);
         newLiveGame.setUuid(uuid);
         if(practiceGame.getTimeLimit() != 0) {
-            newLiveGame.setPlayerXTime(practiceGame.getTimeLimit());
-            newLiveGame.setPlayerOTime(practiceGame.getTimeLimit());
+            newLiveGame.setPlayerXTime(practiceGame.getTimeLimit()*1000);
+            newLiveGame.setPlayerOTime(practiceGame.getTimeLimit()*1000);
         }
         else {
             newLiveGame.setPlayerXTime(1000000000L);
