@@ -273,6 +273,8 @@ const translationsCZ: Record<string, string> = {
   SEND_REMATCH: "Odveta",
   YOUR_TIME: "Tvůj čas",
   OPPONENT_TIME: "Čas soupeře",
+  SENT_REMATCH: "Odveta odeslána",
+  DECLINED_REMATCH: "Odveta odmítnuta",
 };
 
 const translationsEN: Record<string, string> = {
@@ -523,6 +525,8 @@ const translationsEN: Record<string, string> = {
   TIME_REMAINING_OPPONENT: "Remaining time opponent",
   GAME_CODE: "Game Code",
   SEND_REMATCH: "Send rematch",
+  SENT_REMATCH: "Rematch sent",
+  DECLINED_REMATCH: "Rematch declined",
   YOUR_TIME: "Your time",
   OPPONENT_TIME: "Opponent time",
 };
