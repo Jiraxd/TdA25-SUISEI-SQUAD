@@ -8,10 +8,12 @@ import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.models.IncompletePracticeGame;
 import com.tda25be.tda25be.models.PrivateGameJoinedResponse;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
+import com.tda25be.tda25be.repositories.SessionRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -26,12 +28,14 @@ public class PracticeGameService {
     private final AuthService authService;
     private final UserRepo userRepo;
     private final LiveGameRepo liveGameRepo;
+    private final SessionRepo sessionRepo;
 
-    public PracticeGameService(WebSocketUtil webSocketUtil, AuthService authService, UserRepo userRepo, LiveGameRepo liveGameRepo) {
+    public PracticeGameService(WebSocketUtil webSocketUtil, AuthService authService, UserRepo userRepo, LiveGameRepo liveGameRepo, SessionRepo sessionRepo) {
         this.webSocketUtil = webSocketUtil;
         this.authService = authService;
         this.userRepo = userRepo;
         this.liveGameRepo = liveGameRepo;
+        this.sessionRepo = sessionRepo;
     }
 
     public IncompletePracticeGame createRequest(User user, String symbol, Long timeLimit){
@@ -50,6 +54,18 @@ public class PracticeGameService {
     }
 
     public PrivateGameJoinedResponse acceptMatch(String uuid, String token){
+        Optional<LiveGame> possibleLiveGame = liveGameRepo.findById(uuid);
+        if( possibleLiveGame.isPresent()) {
+            LiveGame liveGame = possibleLiveGame.get();
+            if(liveGame.getPlayerO().getEmail().isEmpty()){
+                Session session = sessionRepo.findByUser(liveGame.getPlayerO()).get(0);
+                return new PrivateGameJoinedResponse(liveGame, liveGame.getPlayerO(), session.getToken());
+            }
+            else if(liveGame.getPlayerX().getEmail().isEmpty()){
+                Session session = sessionRepo.findByUser(liveGame.getPlayerX()).get(0);
+                return new PrivateGameJoinedResponse(liveGame, liveGame.getPlayerX(), session.getToken());
+            }
+        }
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
         System.out.println(privateGames);
         if(practiceGame == null) {
