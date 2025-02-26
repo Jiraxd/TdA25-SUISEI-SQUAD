@@ -53,7 +53,8 @@ public class PracticeGameService {
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
         if(practiceGame == null) return null;
         User user = practiceGame.getUser();
-        User tempUser = token == null ? createTempUser() : authService.verify(token);
+        User tempUser = token == null || token.isEmpty() ? createTempUser() : authService.verify(token);
+        if(tempUser == null) tempUser = createTempUser();
         if(tempUser.getUuid().equals(user.getUuid())) return null;
 
         LiveGame newLiveGame = new LiveGame(MatchmakingTypes.unranked);
