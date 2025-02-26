@@ -51,6 +51,7 @@ public class PracticeGameService {
 
     public PrivateGameJoinedResponse acceptMatch(String uuid, String token){
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
+        System.out.println(privateGames);
         if(practiceGame == null) {
             System.out.println("N1");
             return null;
