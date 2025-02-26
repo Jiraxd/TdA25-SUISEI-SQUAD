@@ -32,7 +32,7 @@ public class RematchService {
             } else {
                 newLiveGame.setPlayerO(opponent).setPlayerX(user).setPlayerOEloBefore(opponent.getElo()).setPlayerXEloBefore(user.getElo());
             }
-            notifyPlayers(user, opponent, liveGame);
+            notifyPlayers(user, opponent, newLiveGame);
         }
     }
     public void rejectRematch(User user, String uuid){
