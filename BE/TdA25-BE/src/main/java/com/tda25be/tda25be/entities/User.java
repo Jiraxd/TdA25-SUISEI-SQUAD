@@ -1,5 +1,6 @@
 package com.tda25be.tda25be.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,6 +29,7 @@ public class User {
     private String email;
     private String username;
     @NonNull
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordHash;
     private Boolean banned = false;
     @ReadOnlyProperty
