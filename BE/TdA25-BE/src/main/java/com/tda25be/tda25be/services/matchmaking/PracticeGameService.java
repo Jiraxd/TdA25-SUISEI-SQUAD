@@ -73,13 +73,12 @@ public class PracticeGameService {
             return null;
         }
         User user = practiceGame.getUser();
+        if(authService.verify(token).getUuid().equals(user.getUuid())){
+            return new PrivateGameJoinedResponse(liveGameRepo.getLiveGameByUuid(uuid),user, token);
+        }
         User tempUser = token == null || token.isEmpty() ? createTempUser() : authService.verify(token);
         if(tempUser == null) tempUser = createTempUser();
-        if(tempUser.getUuid().equals(user.getUuid())) {
-            System.out.println("N2: " + user.getUuid() +" XD: " + tempUser.getUuid());
-            return null;
-        }
-
+        
         LiveGame newLiveGame = new LiveGame(MatchmakingTypes.unranked);
         if(Objects.equals(practiceGame.getSymbol(), "X")) newLiveGame.setPlayerX(user).setPlayerXEloBefore(user.getElo()).setPlayerOEloBefore(tempUser.getElo()).setPlayerO(tempUser);
         else newLiveGame.setPlayerX(tempUser).setPlayerXEloBefore(tempUser.getElo()).setPlayerOEloBefore(user.getElo()).setPlayerO(user);
