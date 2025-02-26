@@ -174,11 +174,11 @@ public class GameController {
     }
     @PostMapping("/create-private")
     public ResponseEntity<PrivateGameResponse> createPrivateGame(@RequestHeader("Authorization") String token, @RequestBody Map<String, String> body){
-        String symbol = body.get("symbol");
+        String symbol = body.get("Symbol");
         User user = authService.verify(token);
         long timeLimit;
         try {
-            timeLimit = Long.parseLong(body.get("timeLimit"));
+            timeLimit = Long.parseLong(body.get("TimeLimit"));
         }catch (NumberFormatException e){
             return ResponseEntity.badRequest().build();
         }
