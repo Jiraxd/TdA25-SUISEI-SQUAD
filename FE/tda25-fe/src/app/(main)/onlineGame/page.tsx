@@ -604,7 +604,11 @@ export default function OnlineGamePage() {
                               Authorization: GetLoginCookie() || "",
                             },
                           });
-                          if (!data.ok) {
+                          if (data.ok) {
+                            updateSuccessMessage(
+                              TranslateText("DRAW_SENT", language)
+                            );
+                          } else {
                             updateErrorMessage(
                               TranslateText("DRAW_ERROR", language)
                             );
@@ -622,7 +626,11 @@ export default function OnlineGamePage() {
                               Authorization: GetLoginCookie() || "",
                             },
                           });
-                          if (!data.ok) {
+                          if (data.ok) {
+                            updateSuccessMessage(
+                              TranslateText("SURRENDER_SENT", language)
+                            );
+                          } else {
                             updateErrorMessage(
                               TranslateText("SURRENDER_ERROR", language)
                             );
