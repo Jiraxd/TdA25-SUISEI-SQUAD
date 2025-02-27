@@ -92,7 +92,7 @@ const createSettingsFormSchema = (language: language) =>
 export type Session = {
   uuid: string;
   deviceName: string;
-  signedAt: string;
+  createdAt: string;
 };
 type SettingsFormValues = z.infer<ReturnType<typeof createSettingsFormSchema>>;
 
@@ -369,7 +369,7 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
                 </FormLabel>
                 <div className="flex flex-col items-start gap-4">
                   <FormControl>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {availableColors.map((color) => (
                         <button
                           key={color}
@@ -416,12 +416,12 @@ export default function SettingsProfile({ user }: SettingsProfileProps) {
           {sessions.map((session) => (
             <div
               key={session.uuid}
-              className="p-4 border border-darkshade rounded-lg flex justify-between items-center"
+              className="p-4 border border-darkshade rounded-lg flex flex-col lg:flex-row justify-between items-center"
             >
               <div>
                 <p className="font-medium">{session.deviceName}</p>
                 <p className="text-sm text-gray-500">
-                  {new Date(session.signedAt).toLocaleString()}
+                  {new Date(session.createdAt).toLocaleString()}
                 </p>
               </div>
               <Button
