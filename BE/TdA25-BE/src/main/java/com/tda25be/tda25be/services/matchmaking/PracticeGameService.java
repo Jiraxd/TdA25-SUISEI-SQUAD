@@ -121,10 +121,10 @@ public class PracticeGameService {
         }
         liveGameRepo.saveAndFlush(newLiveGame);
         privateGames.remove(uuid);
-        webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", uuid, HttpStatus.OK);
         Session session = new Session();
         session.user = tempUser;
         session.setDeviceName("temp");
+        webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", uuid, HttpStatus.OK);
         return new PrivateGameJoinedResponse(newLiveGame, tempUser, session.getToken());
     }//TODO scheduled deletion
 

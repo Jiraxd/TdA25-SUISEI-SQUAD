@@ -22,7 +22,7 @@ public class Session {
     private String uuid;
     private String token;
     private String deviceName;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     public User user;
 
     public Session(){
