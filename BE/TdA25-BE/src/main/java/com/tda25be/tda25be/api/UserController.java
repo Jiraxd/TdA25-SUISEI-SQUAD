@@ -1,8 +1,10 @@
 package com.tda25be.tda25be.api;
 
 
+import com.tda25be.tda25be.entities.LiveGame;
 import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.models.SettingsBody;
+import com.tda25be.tda25be.repositories.LiveGameRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.requests.UserCreateRequest;
 import com.tda25be.tda25be.services.auth.AuthService;
@@ -23,6 +25,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final UserRepo userRepo;
     private final AuthService authService;
+    private final LiveGameRepo liveGameRepo;
     List<String> colors = Arrays.asList("#1a1a1a", "#caaa1c", "#78ca1c", "#2ca420", "#20beb0", "#2091be", "#6930db", "#db3080", "#c42c48", "#c47d2c");
 
 
@@ -67,6 +70,16 @@ public class UserController {
         if (userOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        User user = userOptional.get();
+        List<LiveGame> liveGames = liveGameRepo.findAllByPlayerOOrPlayerX(user, user);
+        liveGames.forEach((liveGame -> {
+            if(liveGame.getPlayerO().getUuid().equals(user.getUuid())){
+                liveGame.setPlayerO(null);
+            }
+            else {
+                liveGame.setPlayerX(null);
+            }
+        }));
         userRepo.deleteById(uuid);
         return ResponseEntity.noContent().build();
     }

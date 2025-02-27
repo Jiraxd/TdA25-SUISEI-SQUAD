@@ -35,10 +35,8 @@ public class LiveGame {
     private Timestamp createdAt;
     private MatchmakingTypes matchmakingType;
     @ManyToOne
-    @NonNull
     private User playerX;
     @ManyToOne
-    @NonNull
     private User playerO;
     private Long lastTimeUpdateAt = System.currentTimeMillis();
     private Long playerOTime = 480000L;
@@ -56,6 +54,7 @@ public class LiveGame {
     }
     @SneakyThrows
     public LiveGame(MatchmakingTypes matchmakingType) {
+        this.uuid = UUID.randomUUID().toString();
         List<List<String>> boardList = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
             ArrayList<String> row = new ArrayList<>();
