@@ -27,6 +27,8 @@ public class LiveGameService {
     public void win(LiveGame liveGame, String symbolWin) {
         User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
         User loser = Objects.equals(symbolWin, "X") ? liveGame.getPlayerO() : liveGame.getPlayerX();
+        requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(loser.getUuid()));
+        requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(winner.getUuid()));
         winner.setWins(winner.getWins() + 1);
         loser.setLosses(loser.getLosses() + 1);
         if(liveGame.getMatchmakingType() == MatchmakingTypes.ranked) evalMatch(winner, loser, false);
@@ -39,6 +41,8 @@ public class LiveGameService {
         liveGame.setFinished(true).setPlayerXEloAfter(liveGame.getPlayerX().getElo()).setPlayerOEloAfter(liveGame.getPlayerO().getElo());
         User player1 = liveGame.getPlayerX();
         User player2 = liveGame.getPlayerO();
+        requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(player2.getUuid()));
+        requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(player1.getUuid()));
         player1.setDraws(player1.getDraws() + 1);
         player2.setDraws(player2.getDraws() + 1);
         evalMatch(player1, player2, true);
@@ -109,5 +113,13 @@ public class LiveGameService {
             }
         }
     }
-
+    @Scheduled(fixedDelay = 60000)
+    private void removeTempUsers(){
+        List<User> users = userRepo.findAll();
+        users.forEach((user ->  {
+            if(liveGameRepo.findAllByPlayerOOrPlayerX(user,user).isEmpty() && user.getEmail() == null){
+                userRepo.delete(user);
+            }
+        }));
+    }
 }
