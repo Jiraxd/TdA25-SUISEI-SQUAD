@@ -22,7 +22,7 @@ public class LiveGameService {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
     private final UserRepo userRepo;
-    private List<User> requestingDraw = new ArrayList<>();
+    private final List<User> requestingDraw = new ArrayList<>();
 
     public void win(LiveGame liveGame, String symbolWin) {
         User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
@@ -79,16 +79,17 @@ public class LiveGameService {
         boolean drawGame = requestingDraw.stream().anyMatch((userD)-> Objects.equals(userD.getUuid(), opponent.getUuid()));
         if(drawGame) {
             draw(liveGame);
-            requestingDraw.remove(opponent);
+            requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(user.getUuid()));
             return;
         }
         requestingDraw.add(user);
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/game-updates", "RequestDraw", "", HttpStatus.OK);
     }
     public void rejectDraw(User user){
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
         User opponent = Objects.equals(liveGame.getPlayerO().getUuid(), user.getUuid()) ? liveGame.getPlayerX() : liveGame.getPlayerO();
-        requestingDraw.remove(opponent);
-        requestingDraw.add(user);
+        requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(opponent.getUuid()));
+        webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/game-updates", "RejectDraw", "", HttpStatus.OK);
     }
 
 
