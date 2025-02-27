@@ -280,6 +280,7 @@ const translationsCZ: Record<string, string> = {
   DRAW_SENT: "Žádost o remízu odeslána",
   DRAW_ERROR: "Chyba při odesílání remízy",
   COPIED: "Zkopírováno!",
+  DRAW_REJECT: "Remíza odmítnuta",
 };
 
 const translationsEN: Record<string, string> = {
@@ -539,6 +540,7 @@ const translationsEN: Record<string, string> = {
   DRAW_SENT: "Draw request sent",
   DRAW_ERROR: "Error sending draw request",
   COPIED: "Copied!",
+  DRAW_REJECT: "Draw rejected",
 };
 
 import Cookies from "js-cookie";

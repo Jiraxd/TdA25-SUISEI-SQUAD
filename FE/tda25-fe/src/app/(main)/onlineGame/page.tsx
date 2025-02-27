@@ -618,6 +618,10 @@ export default function OnlineGamePage() {
                         <HandshakeIcon className="mr-2 h-4 w-4" />
                         {TranslateText("OFFER_DRAW", language)}
                       </Button>
+                      <p className="text-md text-defaultred">
+                        {drawRejectedByOpp &&
+                          TranslateText("DRAW_REJECT", language)}
+                      </p>
                       <Button
                         className="w-full mt-4 bg-defaultred hover:bg-red-700"
                         onClick={async () => {
@@ -740,18 +744,20 @@ export default function OnlineGamePage() {
                       {gameResult.playerXEloChange} ELO
                     </div>
                   )}
-                  <div className="flex items-center justify-center align-middle mt-2 gap-2">
-                    <AlarmClockIcon className="h-6 w-6" />
-                    <span
-                      className={`text-2xl font-bold ${
-                        playerXTime < 60000
-                          ? "text-defaultred"
-                          : "text-darkshade"
-                      }`}
-                    >
-                      {formatTime(playerXTime)}
-                    </span>
-                  </div>
+                  {playerXTime < 4000000 && (
+                    <div className="flex items-center justify-center align-middle mt-2 gap-2">
+                      <AlarmClockIcon className="h-6 w-6" />
+                      <span
+                        className={`text-2xl font-bold ${
+                          playerXTime < 60000
+                            ? "text-defaultred"
+                            : "text-darkshade"
+                        }`}
+                      >
+                        {formatTime(playerXTime)}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="text-center">
                   <div className="font-dosis-bold text-lg">
@@ -774,18 +780,20 @@ export default function OnlineGamePage() {
                       {gameResult.playerOEloChange} ELO
                     </div>
                   )}
-                  <div className="flex items-center justify-center align-middle mt-2 gap-2">
-                    <AlarmClockIcon className="h-6 w-6" />
-                    <span
-                      className={`text-2xl font-bold ${
-                        playerOTime < 60000
-                          ? "text-defaultred"
-                          : "text-darkshade"
-                      }`}
-                    >
-                      {formatTime(playerOTime)}
-                    </span>
-                  </div>
+                  {playerOTime < 4000000 && (
+                    <div className="flex items-center justify-center align-middle mt-2 gap-2">
+                      <AlarmClockIcon className="h-6 w-6" />
+                      <span
+                        className={`text-2xl font-bold ${
+                          playerOTime < 60000
+                            ? "text-defaultred"
+                            : "text-darkshade"
+                        }`}
+                      >
+                        {formatTime(playerOTime)}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
               <DialogFooter className="flex flex-col gap-2">
@@ -828,10 +836,6 @@ export default function OnlineGamePage() {
                     language
                   )}
                 </Button>
-                <p className="text-md text-defaultred">
-                  {drawRejectedByOpp &&
-                    TranslateText("REMATCH_REJECTED", language)}
-                </p>
               </DialogFooter>
             </DialogContent>
           </Dialog>
