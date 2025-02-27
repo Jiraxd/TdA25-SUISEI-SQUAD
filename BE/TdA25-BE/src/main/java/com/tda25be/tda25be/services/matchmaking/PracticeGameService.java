@@ -57,6 +57,7 @@ public class PracticeGameService {
         Optional<LiveGame> possibleLiveGame = liveGameRepo.findById(uuid);
         if( possibleLiveGame.isPresent()) {
             LiveGame liveGame = possibleLiveGame.get();
+
             
             User found = authService.verify(token);
 
@@ -95,7 +96,6 @@ public class PracticeGameService {
             }
         }
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
-       
         if(practiceGame == null) {
             System.out.println("N1");
             return null;
