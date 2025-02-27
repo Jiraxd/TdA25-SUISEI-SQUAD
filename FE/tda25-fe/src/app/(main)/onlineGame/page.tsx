@@ -697,7 +697,7 @@ export default function OnlineGamePage() {
             >
               <DialogHeader>
                 <DialogTitle className="text-2xl font-dosis-bold text-center">
-                  {gameResult.winner === "draw"
+                  {gameResult.winner === "Draw"
                     ? TranslateText("GAME_DRAW", language)
                     : gameResult.winner === playerSymbol
                     ? TranslateText("YOU_WON", language)
