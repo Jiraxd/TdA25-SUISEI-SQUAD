@@ -126,13 +126,12 @@ export default function OnlineGamePage() {
           },
         });
         if (data.ok) {
-          const text = await data.text();
-
-          if (text === "GAME_ALREADY_STARTED") {
+          const datajson = await data.json();
+          if (datajson === "GAME_ALREADY_STARTED") {
             router.push("/online");
             return;
           }
-          const datajson = await data.json();
+
           if (datajson.token) {
             SetLoginCookie(datajson.token);
           }
