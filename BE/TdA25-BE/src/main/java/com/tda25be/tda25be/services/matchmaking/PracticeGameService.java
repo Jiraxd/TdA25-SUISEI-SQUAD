@@ -13,6 +13,7 @@ import com.tda25be.tda25be.repositories.UserRepo;
 import com.tda25be.tda25be.services.auth.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
@@ -124,6 +125,7 @@ public class PracticeGameService {
         Session session = new Session();
         session.user = tempUser;
         session.setDeviceName("temp");
+        sessionRepo.saveAndFlush(session);
         webSocketUtil.sendMessageToUser(user.getUuid(),  "/queue/matchmaking", "MatchFound", uuid, HttpStatus.OK);
         return new PrivateGameJoinedResponse(newLiveGame, tempUser, session.getToken());
     }//TODO scheduled deletion
@@ -156,4 +158,12 @@ public class PracticeGameService {
         return codeAndUuidRelation.get(code);
     }
 
+    @Scheduled(fixedDelay = 60000)
+    private void removePrivateGames(){
+        List<String> toRemove = new ArrayList<>();
+        privateGames.forEach((uuid, incompletePracticeGame) -> {
+            if(System.currentTimeMillis() - incompletePracticeGame.getCreationTime() > 600000) toRemove.add(uuid);
+        });
+        toRemove.forEach(privateGames::remove);
+    }
 }
