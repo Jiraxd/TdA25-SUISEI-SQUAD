@@ -57,10 +57,20 @@ public class PracticeGameService {
         Optional<LiveGame> possibleLiveGame = liveGameRepo.findById(uuid);
         if( possibleLiveGame.isPresent()) {
             LiveGame liveGame = possibleLiveGame.get();
+
+            
             User found = authService.verify(token);
+
+
         if(found != null){
+
+
             if(liveGame.getPlayerX().getUuid().equals(found.getUuid()) || liveGame.getPlayerO().getUuid().equals(found.getUuid()))
+
+
                 return new PrivateGameJoinedResponse(liveGame,found, token);
+
+
         } 
             if(liveGame.getPlayerO().getEmail() == null || liveGame.getPlayerO().getEmail().isEmpty()){
                 List<Session> sessions = sessionRepo.findByUser(liveGame.getPlayerO());
@@ -86,7 +96,6 @@ public class PracticeGameService {
             }
         }
         IncompletePracticeGame practiceGame = privateGames.get(uuid);
-         
         if(practiceGame == null) {
             System.out.println("N1");
             return null;
