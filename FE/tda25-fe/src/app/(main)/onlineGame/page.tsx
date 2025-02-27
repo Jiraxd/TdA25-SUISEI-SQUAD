@@ -47,11 +47,11 @@ export default function OnlineGamePage() {
   );
   const [showWinDialog, setShowWinDialog] = useState(false);
   const [gameResult, setGameResult] = useState<{
-    winner: "X" | "O" | "draw" | null;
+    winner: "X" | "O" | "Draw" | null;
     playerXEloChange: number;
     playerOEloChange: number;
   } | null>({
-    winner: "draw",
+    winner: "Draw",
     playerXEloChange: 0,
     playerOEloChange: 0,
   });
@@ -66,6 +66,8 @@ export default function OnlineGamePage() {
   const [playerOTime, setPlayerOTime] = useState<number>(480);
   const [playerSymbol, setPlayerSymbol] = useState<"X" | "O" | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X");
+  const [drawRejectedByOpp, setDrawRejectedByOpp] = useState<boolean>(false);
+  const [receivedRematch, setReceivedRematch] = useState<boolean>(false);
   const [sentRematch, setSentRematch] = useState<boolean>(false);
   const [declinedRematch, setDeclinedRematch] = useState<boolean>(false);
   const controls = useAnimation();
@@ -75,8 +77,8 @@ export default function OnlineGamePage() {
   const router = useRouter();
   useEffect(() => {
     if (currentPlayer !== null) {
+      if (winner) return;
       const timer = setInterval(() => {
-        if (winner) return;
         if (currentPlayer === "X") {
           setPlayerXTime((prev) => Math.max(0, prev - 1000));
         } else {
@@ -85,7 +87,7 @@ export default function OnlineGamePage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentPlayer]);
+  }, [currentPlayer, winner]);
 
   useEffect(() => {
     function setLiveGame(livegame: LiveGame, userTemp: UserProfile) {
@@ -175,12 +177,11 @@ export default function OnlineGamePage() {
   }, [gameId]);
 
   useEffect(() => {
-    const token = GetLoginCookie() || "";
     const stompClient = new Client({
       webSocketFactory: () =>
         new WebSocket("wss://1f1362ea.app.deploy.tourde.app/app/handshake"),
       connectHeaders: {
-        Authorization: token,
+        Authorization: GetLoginCookie() || "",
       },
       debug: (msg) => console.log("STOMP:", msg),
       onConnect: () => {
@@ -195,7 +196,7 @@ export default function OnlineGamePage() {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `${token}`,
+                Authorization: `${GetLoginCookie() || ""}`,
               },
             });
             if (res.ok) {
@@ -220,7 +221,7 @@ export default function OnlineGamePage() {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `${token}`,
+                Authorization: `${GetLoginCookie() || ""}`,
               },
             });
             if (res.ok) {
@@ -235,11 +236,16 @@ export default function OnlineGamePage() {
                   : "O"
               );
             }
-          } else if (response.type === "Draw") {
+          } else if (response.type === "RequestDraw") {
             setShowDrawDialog(true);
+          } else if (response.type === "RejectDraw") {
+            setSentRematch(false);
+            setDrawRejectedByOpp(true);
           } else if (response.type === "RejectRematch") {
             setSentRematch(false);
             setDeclinedRematch(true);
+          } else if (response.type === "RequestRematch") {
+            setReceivedRematch(true);
           } else if (response.type === "AcceptRematch") {
             setSentRematch(false);
             setDeclinedRematch(false);
@@ -806,12 +812,18 @@ export default function OnlineGamePage() {
                   {TranslateText(
                     declinedRematch
                       ? "DECLINED_REMATCH"
+                      : receivedRematch
+                      ? "CLICK_TO_ACCEPT"
                       : sentRematch
                       ? "SENT_REMATCH"
                       : "SEND_REMATCH",
                     language
                   )}
                 </Button>
+                <p className="text-md text-defaultred">
+                  {drawRejectedByOpp &&
+                    TranslateText("REMATCH_REJECTED", language)}
+                </p>
               </DialogFooter>
             </DialogContent>
           </Dialog>
