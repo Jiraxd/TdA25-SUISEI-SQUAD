@@ -277,6 +277,9 @@ const translationsCZ: Record<string, string> = {
   DECLINED_REMATCH: "Odveta odmítnuta",
   CLICK_TO_ACCEPT: "Klikněte pro přijetí odvety",
   REMATCH_REJECTED: "Odveta odmítnuta soupeřem",
+  DRAW_SENT: "Žádost o remízu odeslána",
+  DRAW_ERROR: "Chyba při odesílání remízy",
+  COPIED: "Zkopírováno!",
 };
 
 const translationsEN: Record<string, string> = {
@@ -533,6 +536,9 @@ const translationsEN: Record<string, string> = {
   OPPONENT_TIME: "Opponent time",
   CLICK_TO_ACCEPT: "Click to accept rematch",
   REMATCH_REJECTED: "Rematch rejected by opponent",
+  DRAW_SENT: "Draw request sent",
+  DRAW_ERROR: "Error sending draw request",
+  COPIED: "Copied!",
 };
 
 import Cookies from "js-cookie";

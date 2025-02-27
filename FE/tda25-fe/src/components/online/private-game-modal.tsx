@@ -199,6 +199,7 @@ export function PrivateGameModal({
                   <Button
                     onClick={() => {
                       navigator.clipboard.writeText(generatedLink);
+                      alert(TranslateText("COPIED", language));
                     }}
                     className="bg-defaultblue hover:bg-darkerblue text-white font-dosis-bold"
                   >
@@ -219,7 +220,10 @@ export function PrivateGameModal({
                   />
                   <Button
                     onClick={() => {
-                      if (codeJoin) navigator.clipboard.writeText(codeJoin);
+                      if (codeJoin) {
+                        navigator.clipboard.writeText(codeJoin);
+                        alert(TranslateText("COPIED", language));
+                      }
                     }}
                     className="bg-defaultblue hover:bg-darkerblue text-white font-dosis-bold"
                   >
