@@ -64,7 +64,7 @@ export function PrivateGameModal({
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden">
+      <DialogContent className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex justify-between items-center border-b border-darkshade pb-4">
             <DialogTitle className="text-2xl font-dosis-bold text-defaultred">

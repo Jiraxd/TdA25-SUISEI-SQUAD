@@ -117,7 +117,7 @@ export default function OnlinePage() {
           <GameOptions user={user} />
           <form
             onSubmit={joinPrivateGame}
-            className="text-center mt-8 p-4 flex w-full justify-center gap-4 font-dosis-medium border border-darkshade rounded-lg"
+            className="text-center mt-8 p-4 flex flex-col lg:flex-row w-full justify-center gap-4 font-dosis-medium border border-darkshade rounded-lg"
           >
             <Input
               placeholder={TranslateText("ENTER_PRIVATE_GAME_ID", language)}

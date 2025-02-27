@@ -82,7 +82,7 @@ export function AdminModal({ isOpen, onClose, language }: AdminModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className="bg-white border-2 border-darkshade shadow-darkshade shadow-md max-w-2xl [&>button]:hidden"
+        className="bg-white border-2 border-darkshade shadow-darkshade shadow-md max-w-2xl max-h-[90vh] overflow-y-auto [&>button]:hidden"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
