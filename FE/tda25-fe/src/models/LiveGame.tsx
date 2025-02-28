@@ -13,5 +13,5 @@ export type LiveGame = {
   playerXEloBefore: number;
   playerXEloAfter: number;
   finished: boolean;
-  createdAt: Date;
+  createdAt: string;
 };

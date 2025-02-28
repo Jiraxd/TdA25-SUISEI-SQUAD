@@ -77,7 +77,10 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
 
       setGames(
         gamestmp
-          .toSorted((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
           .filter((f) => f.finished)
       );
     }
