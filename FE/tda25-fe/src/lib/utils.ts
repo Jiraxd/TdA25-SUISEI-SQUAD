@@ -312,6 +312,7 @@ const translationsCZ: Record<string, string> = {
   GAME_RESULT_LOSS: "Tuto hru jste prohráli",
   GAME_RESULT_DRAW: "Tato hra skončila remízou",
   GAME_ENDED_IN_DRAW: "Hra skončila remízou",
+  MOVE_ERROR: "Chyba při provádění tahu",
 };
 
 const translationsEN: Record<string, string> = {
@@ -603,6 +604,7 @@ const translationsEN: Record<string, string> = {
   GAME_RESULT_LOSS: "You lost this game",
   GAME_RESULT_DRAW: "This game ended in a draw",
   GAME_ENDED_IN_DRAW: "The game ended in a draw",
+  MOVE_ERROR: "Error making move",
 };
 
 import Cookies from "js-cookie";
