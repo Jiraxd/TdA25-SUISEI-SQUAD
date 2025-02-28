@@ -174,6 +174,14 @@ export default function OnlineGamePage() {
       }
     }
     fetchData();
+
+    return () => {
+      fetch("/api/v1/rejectRematch/" + gameId, {
+        headers: {
+          Authorization: GetLoginCookie() || "",
+        },
+      });
+    };
   }, [gameId]);
 
   useEffect(() => {
@@ -265,13 +273,8 @@ export default function OnlineGamePage() {
       if (stompClient.active) {
         stompClient.deactivate();
       }
-      fetch("/api/v1/rejectRematch/" + gameId, {
-        headers: {
-          Authorization: GetLoginCookie() || "",
-        },
-      });
     };
-  }, []);
+  }, [user]);
 
   async function handleClick(rowIndex: number, colIndex: number) {
     if (!client) {
