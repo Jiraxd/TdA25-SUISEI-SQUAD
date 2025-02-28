@@ -19,4 +19,6 @@ public interface LiveGameRepo extends JpaRepository<LiveGame, String> {
     LiveGame getLiveGameByUuid(String uuid);
 
     List<LiveGame> findAllByPlayerOOrPlayerX(@NonNull User playerO, @NonNull User playerX);
+
+    List<LiveGame> findAllByPlayerOOrPlayerXAndFinished(User playerO, User playerX, Boolean finished);
 }

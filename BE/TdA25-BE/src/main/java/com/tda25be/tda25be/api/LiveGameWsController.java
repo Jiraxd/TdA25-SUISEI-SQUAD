@@ -23,7 +23,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 @Controller("/api/v1")
-public class LiveGameWsController {
+public class  LiveGameWsController {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
     private final AuthService authService;

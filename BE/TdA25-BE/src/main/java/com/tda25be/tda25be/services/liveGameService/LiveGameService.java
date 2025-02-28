@@ -123,12 +123,19 @@ public class LiveGameService {
             }
         }
     }
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 500)
     private void removeTempUsers(){
         List<User> users = userRepo.findAll();
         users.forEach((user ->  {
-            if(liveGameRepo.findAllByPlayerOOrPlayerX(user,user).isEmpty() && user.getEmail() == null){
-                userRepo.delete(user);
+            if(user.getEmail() == null){
+                boolean delete = true;
+                for(LiveGame liveGame : liveGameRepo.findAllByPlayerOOrPlayerX(user,user)){
+                    if (!liveGame.getFinished()) {
+                        delete = false;
+                        break;
+                    }
+                }
+                if(delete) userRepo.delete(user);
             }
         }));
     }
