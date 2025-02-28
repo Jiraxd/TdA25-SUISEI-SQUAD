@@ -188,7 +188,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
             placeholder={TranslateText("SEARCH_OPPONENT", language)}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 border-2 border-darkshade"
+            className="pl-8 border-2 border-darkshade text-gray-500"
           />
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
         </div>
