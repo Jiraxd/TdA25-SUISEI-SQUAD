@@ -188,7 +188,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
             placeholder={TranslateText("SEARCH_OPPONENT", language)}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 border-2 border-darkshade"
+            className="pl-8 border-2 border-darkshade text-gray-500"
           />
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
         </div>
@@ -466,7 +466,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
                     <GameBoard board={selectedGame.board} disabled={true} />
                   </div>
                   <p className="text-center font-dosis-medium mt-4 text-darkshade">
-                    {format(new Date(selectedGame.createdAt), "PPP")} -{" "}
+                    {(new Date(selectedGame.createdAt), "PPP").toLocaleDateString("cs-CZ")} -{" "}
                     {gameResult === "Draw"
                       ? TranslateText("GAME_ENDED_IN_DRAW", language)
                       : TranslateText("WINNER", language) +
