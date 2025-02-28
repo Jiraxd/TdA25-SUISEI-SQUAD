@@ -24,10 +24,11 @@ public class Session {
     private String deviceName;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     public User user;
-    @ReadOnlyProperty
+ /*   @ReadOnlyProperty
     @CreationTimestamp
     private Timestamp createdAt;
-
+    TODO fix pls backend dev nejde ti DB
+*/
     public Session(){
         SecureRandom secureRandom = new SecureRandom();
         Base64.Encoder base64Encoder = Base64.getUrlEncoder();
