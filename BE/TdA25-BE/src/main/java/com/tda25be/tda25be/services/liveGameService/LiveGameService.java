@@ -126,7 +126,7 @@ public class LiveGameService {
             }
         }
     }
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 6000)
     private void removeTempUsers(){
         List<User> users = userRepo.findAll();
         users.forEach((user ->  {
@@ -135,7 +135,7 @@ public class LiveGameService {
                 List<LiveGame> liveGames = liveGameRepo.findAllByPlayerOOrPlayerX(user,user);
                 for(LiveGame liveGame : liveGames){
 
-                    if (liveGame.getFinished()) {
+                    if (!liveGame.getFinished()) {
                         delete = false;
                         break;
                     }
