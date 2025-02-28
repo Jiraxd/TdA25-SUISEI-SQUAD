@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.security.SecureRandom;
+import java.sql.Timestamp;
 import java.util.Base64;
 
 @Entity
@@ -24,11 +27,11 @@ public class Session {
     private String deviceName;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     public User user;
- /*   @ReadOnlyProperty
+    @ReadOnlyProperty
     @CreationTimestamp
     private Timestamp createdAt;
-    TODO fix pls backend dev nejde ti DB
-*/
+
+
     public Session(){
         SecureRandom secureRandom = new SecureRandom();
         Base64.Encoder base64Encoder = Base64.getUrlEncoder();

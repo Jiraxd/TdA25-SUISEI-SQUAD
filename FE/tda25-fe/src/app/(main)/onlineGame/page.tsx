@@ -35,6 +35,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import SEOMetaTags from "@/components/online/SEOMetaTags";
 
 export default function OnlineGamePage() {
   const pathName = usePathname();
@@ -305,7 +306,13 @@ export default function OnlineGamePage() {
 
   return (
     <>
-      <title>{TranslateText("ONLINE_GAME_PAGE_TITLE", language)}</title>
+      <SEOMetaTags
+        type="onlineGame"
+        opponent={opponent}
+        gameId={gameId as string}
+        isPrivateGame={isPrivateGame}
+        ranked={ranked}
+      />
       <motion.div
         className="font-dosis-bold bg-whitelessbright"
         initial={{ opacity: 0 }}

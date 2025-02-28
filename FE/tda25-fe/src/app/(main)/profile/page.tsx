@@ -14,6 +14,7 @@ import ProfileDisplay from "@/components/online/profile/profile-display";
 import { getNameColor, type UserProfile } from "@/models/UserProfile";
 import { useAlertContext } from "@/components/alertContext";
 import { BanIcon, WrenchIcon } from "lucide-react";
+import SEOMetaTags from "@/components/online/SEOMetaTags";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<UserProfile | null>(null);
@@ -137,7 +138,11 @@ export default function ProfilePage() {
 
   return (
     <>
-      <title>{TranslateText("PROFILE_PAGE_TITLE", language)}</title>
+      <SEOMetaTags
+        type="profile"
+        profileOwner={profileOwner}
+        profileId={userId as string}
+      />
       <div className="bg-whitelessbright text-white font-dosis-medium min-h-screen overflow-x-hidden">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-8">
           <Card className="mt-4 sm:mt-6 bg-whitelessbright text-darkshade border-2 border-darkshade">
