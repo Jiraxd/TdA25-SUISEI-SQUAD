@@ -42,12 +42,13 @@ export default function GameOptions({ user }: GameOptionsProps) {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const client = new Client({
       brokerURL: `${protocol}//${window.location.host}/app/handshake`,
-      debug: (str) => {
+     /* debug: (str) => {
         console.log("STOMP debug:", str);
       },
+      */
       onConnect: () => {
         client.subscribe("/user/queue/matchmaking", (message) => {
-          console.log(message);
+       //   console.log(message);
           const response = JSON.parse(message.body);
           if (response.body.type === "MatchFound") {
             router.push(`/onlineGame/${response.body.message}`);

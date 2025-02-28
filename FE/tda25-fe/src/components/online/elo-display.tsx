@@ -42,8 +42,6 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
     )
   );
 
-  const pointsNeeded = nextRankMinElo - elo;
-
   return (
     <div className="mb-4 sm:mb-8 p-4 sm:p-6 border-2 border-darkshade rounded-lg shadow-md text-black">
       <h2 className="text-xl sm:text-2xl font-dosis-bold mb-2 sm:mb-4 text-darkerblue">
@@ -63,16 +61,14 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
           </span>
         </span>
       </div>
-      <div className="w-full rounded-full h-3 sm:h-4 overflow-hidden">
-        <Progress
-          value={progress}
-          className="h-full transition-all"
+      <div className="w-full bg-gray-200 rounded-full h-3 sm:h-4 mb-2 border-2 border-darkshade overflow-hidden">
+        <div
+          className="h-full rounded-full transition-all duration-300"
           style={{
-            backgroundColor: "var(--defaultblue)",
-            borderColor: "#6B7280",
-            borderWidth: "2px",
+            width: `${progress}%`,
+            backgroundColor: nextRank?.color || "var(--defaultblue)",
           }}
-        />
+        ></div>
       </div>
       <p className="mt-2 text-sm sm:text-base text-black font-dosis-medium">
         {TranslateText("POINTS_NEEDED", language)}

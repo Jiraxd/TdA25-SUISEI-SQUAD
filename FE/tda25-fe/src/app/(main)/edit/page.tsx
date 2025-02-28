@@ -46,7 +46,7 @@ export default function EditPage() {
 
       setGame(data);
     } catch (error) {
-      console.log("Error message:" + error);
+   //   console.log("Error message:" + error);
       updateErrorMessage(TranslateText("ERROR_FETCH", language));
     }
   };

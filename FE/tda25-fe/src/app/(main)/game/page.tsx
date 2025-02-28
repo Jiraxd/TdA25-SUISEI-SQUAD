@@ -72,7 +72,7 @@ export default function GamePage() {
         setHasBaseWinner(true);
       }
     } catch (error) {
-      console.log("Error message:" + error);
+     // console.log("Error message:" + error);
       updateErrorMessage(TranslateText("ERROR_FETCH", language));
     }
   };
