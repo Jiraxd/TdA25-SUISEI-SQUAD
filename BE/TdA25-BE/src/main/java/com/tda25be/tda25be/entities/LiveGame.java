@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
@@ -34,9 +36,11 @@ public class LiveGame {
     @CreationTimestamp
     private Timestamp createdAt;
     private MatchmakingTypes matchmakingType;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User playerX;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User playerO;
     private Long lastTimeUpdateAt = System.currentTimeMillis();
     private Long playerOTime = 480000L;

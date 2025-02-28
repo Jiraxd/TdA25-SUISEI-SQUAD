@@ -66,7 +66,7 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
           className="h-full rounded-full transition-all duration-300"
           style={{
             width: `${progress}%`,
-            backgroundColor: nextRank?.color || "var(--defaultblue)",
+            backgroundColor: "var(--defaultblue)",
           }}
         ></div>
       </div>
