@@ -175,15 +175,19 @@ export default function OnlineGamePage() {
       }
     }
     fetchData();
-
+    window.addEventListener("beforeunload", rejectRematch);
     return () => {
-      fetch("/api/v1/rejectRematch/" + gameId, {
-        headers: {
-          Authorization: GetLoginCookie() || "",
-        },
-      });
+      window.removeEventListener("beforeunload", rejectRematch);
     };
   }, [gameId]);
+
+  const rejectRematch = () => {
+    fetch("/api/v1/rejectRematch/" + gameId, {
+      headers: {
+        Authorization: GetLoginCookie() || "",
+      },
+    });
+  };
 
   useEffect(() => {
     const stompClient = new Client({

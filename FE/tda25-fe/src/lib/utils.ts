@@ -278,7 +278,8 @@ const translationsCZ: Record<string, string> = {
   CLICK_TO_ACCEPT: "Klikněte pro přijetí odvety",
   REMATCH_REJECTED: "Odveta odmítnuta soupeřem",
   DRAW_SENT: "Žádost o remízu odeslána",
-  DRAW_ERROR: "Chyba při odesílání remízy",
+  DRAW_ERROR:
+    "Chyba při odesílání remízy, počkejte alespoň 10 vteřin před další žádostí",
   COPIED: "Zkopírováno!",
   DRAW_REJECT: "Remíza odmítnuta",
   ONLINEGAME_PAGE_TITLE: "Online hra Piškvorky",
@@ -556,7 +557,8 @@ const translationsEN: Record<string, string> = {
   CLICK_TO_ACCEPT: "Click to accept rematch",
   REMATCH_REJECTED: "Rematch rejected by opponent",
   DRAW_SENT: "Draw request sent",
-  DRAW_ERROR: "Error sending draw request",
+  DRAW_ERROR:
+    "Error sending draw request, wait at least 10 seconds before next request",
   COPIED: "Copied!",
   DRAW_REJECT: "Draw rejected",
   ONLINEGAME_PAGE_TITLE: "Tic Tac Toe Online Game",
