@@ -33,6 +33,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cs, enUS } from "date-fns/locale";
 
 type GameHistoryProps = {
   userProfile: UserProfile | null;
@@ -189,7 +190,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-8 border-2 border-darkshade"
           />
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
         </div>
 
         <Popover>
@@ -197,22 +198,23 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
             <Button
               variant="outline"
               className={cn(
-                "justify-start text-left font-normal border-2 border-darkshade",
-                !selectedDate && "text-muted-foreground"
+                "justify-start text-left border-2 border-darkshade",
+                !selectedDate && "text-gray-600"
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {selectedDate
-                ? format(selectedDate, "PPP")
+                ? selectedDate.toLocaleDateString("cs-CZ")
                 : TranslateText("SELECT_DATE", language)}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
+          <PopoverContent className="w-auto p-0 border border-darkshade">
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
               initialFocus
+              locale={language === "CZ" ? cs : enUS}
             />
           </PopoverContent>
         </Popover>
@@ -269,7 +271,7 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
             <Card
               key={game.uuid}
               onClick={() => handleGameClick(game)}
-              className="p-4 cursor-pointer transition-colors border-2 border-darkshade hover:bg-gray-100"
+              className="p-4 cursor-pointer transition-colors border-2 border-darkshade hover:bg-gray-200"
             >
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center text-darkshade">

@@ -303,6 +303,15 @@ const translationsCZ: Record<string, string> = {
   PROFILE_LOBBY_META_DESCRIPTION: "Prohlédněte si profily hráčů Piškvorkek",
   PRIVATE_GAME_NOT_FOUND: "Soukromá hra nebyla nalezena",
   SURRENDER_SENT: "Vzdání hry odesláno",
+  SEARCH_OPPONENT: "Hledat soupeře",
+  SELECT_DATE: "Vybrat datum",
+  CLEAR_FILTERS: "Vymazat filtry",
+  NO_GAMES_FOUND: "Žádné hry nenalezeny",
+  NO_GAMES_FOUND_FILTERED: "Žádné hry neodpovídají vašim kritériím vyhledávání",
+  GAME_RESULT_WIN: "Tuto hru jste vyhráli",
+  GAME_RESULT_LOSS: "Tuto hru jste prohráli",
+  GAME_RESULT_DRAW: "Tato hra skončila remízou",
+  GAME_ENDED_IN_DRAW: "Hra skončila remízou",
 };
 
 const translationsEN: Record<string, string> = {
@@ -585,6 +594,15 @@ const translationsEN: Record<string, string> = {
   PROFILE_LOBBY_META_DESCRIPTION: "View player profiles and statistics",
   PRIVATE_GAME_NOT_FOUND: "Private game not found",
   SURRENDER_SENT: "Surrender sent",
+  SEARCH_OPPONENT: "Search opponent",
+  SELECT_DATE: "Select date",
+  CLEAR_FILTERS: "Clear filters",
+  NO_GAMES_FOUND: "No games found",
+  NO_GAMES_FOUND_FILTERED: "No games match your search criteria",
+  GAME_RESULT_WIN: "You won this game",
+  GAME_RESULT_LOSS: "You lost this game",
+  GAME_RESULT_DRAW: "This game ended in a draw",
+  GAME_ENDED_IN_DRAW: "The game ended in a draw",
 };
 
 import Cookies from "js-cookie";
