@@ -13,9 +13,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+
 @RequiredArgsConstructor
 @Service
 public class LiveGameService {
@@ -23,6 +26,7 @@ public class LiveGameService {
     private final WebSocketUtil webSocketUtil;
     private final UserRepo userRepo;
     private final List<User> requestingDraw = new ArrayList<>();
+    private final ConcurrentHashMap<String, LocalDateTime> lastRequests = new ConcurrentHashMap<>();
 
     public void win(LiveGame liveGame, String symbolWin) {
         User winner = Objects.equals(symbolWin, "X") ? liveGame.getPlayerX() : liveGame.getPlayerO();
@@ -77,17 +81,23 @@ public class LiveGameService {
         player.setElo(Math.max(0, (int) Math.ceil(playerElo)));
         userRepo.save(player);
     }
-    public void requestDraw(User user){
+    public Boolean requestDraw(User user){
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
         User opponent = Objects.equals(liveGame.getPlayerO().getUuid(), user.getUuid()) ? liveGame.getPlayerX() : liveGame.getPlayerO();
+        if(lastRequests.containsKey(user.getUuid())){
+            if(LocalDateTime.now().isBefore(lastRequests.get(user.getUuid()).plusSeconds(10))) return false;
+            lastRequests.remove(user.getUuid());
+        }
+        lastRequests.put(user.getUuid(), LocalDateTime.now());
         boolean drawGame = requestingDraw.stream().anyMatch((userD)-> Objects.equals(userD.getUuid(), opponent.getUuid()));
         if(drawGame) {
             draw(liveGame);
             requestingDraw.removeIf(userRequesting -> userRequesting.getUuid().equals(user.getUuid()));
-            return;
+            return true;
         }
         requestingDraw.add(user);
         webSocketUtil.sendMessageToUser(opponent.getUuid(), "/queue/game-updates", "RequestDraw", "", HttpStatus.OK);
+        return true;
     }
     public void rejectDraw(User user){
         LiveGame liveGame = liveGameRepo.findLiveGameByUserAndInProgress(user);
