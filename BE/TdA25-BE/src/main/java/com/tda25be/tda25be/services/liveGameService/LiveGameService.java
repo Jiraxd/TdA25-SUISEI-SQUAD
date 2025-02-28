@@ -126,7 +126,7 @@ public class LiveGameService {
             }
         }
     }
-    @Scheduled(fixedDelay = 500) // zmen cas
+    @Scheduled(fixedDelay = 60000)
     private void removeTempUsers(){
         List<User> users = userRepo.findAll();
         users.forEach((user ->  {
