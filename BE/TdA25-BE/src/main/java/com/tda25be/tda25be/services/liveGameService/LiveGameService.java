@@ -2,10 +2,12 @@ package com.tda25be.tda25be.services.liveGameService;
 
 import com.tda25be.tda25be.WebSocketUtil;
 import com.tda25be.tda25be.entities.LiveGame;
+import com.tda25be.tda25be.entities.Session;
 import com.tda25be.tda25be.entities.User;
 import com.tda25be.tda25be.enums.EloGameState;
 import com.tda25be.tda25be.enums.MatchmakingTypes;
 import com.tda25be.tda25be.repositories.LiveGameRepo;
+import com.tda25be.tda25be.repositories.SessionRepo;
 import com.tda25be.tda25be.repositories.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ public class LiveGameService {
     private final LiveGameRepo liveGameRepo;
     private final WebSocketUtil webSocketUtil;
     private final UserRepo userRepo;
+    private final SessionRepo sessionRepo;
     private final List<User> requestingDraw = new ArrayList<>();
     private final ConcurrentHashMap<String, LocalDateTime> lastRequests = new ConcurrentHashMap<>();
 
@@ -123,19 +126,33 @@ public class LiveGameService {
             }
         }
     }
-    @Scheduled(fixedDelay = 500)
+    @Scheduled(fixedDelay = 500) // zmen cas
     private void removeTempUsers(){
         List<User> users = userRepo.findAll();
         users.forEach((user ->  {
             if(user.getEmail() == null){
                 boolean delete = true;
-                for(LiveGame liveGame : liveGameRepo.findAllByPlayerOOrPlayerX(user,user)){
-                    if (!liveGame.getFinished()) {
+                List<LiveGame> liveGames = liveGameRepo.findAllByPlayerOOrPlayerX(user,user);
+                for(LiveGame liveGame : liveGames){
+
+                    if (liveGame.getFinished()) {
                         delete = false;
                         break;
                     }
                 }
-                if(delete) userRepo.delete(user);
+                if(delete){
+                    List<Session> sessions = sessionRepo.findByUser(user);
+                    sessionRepo.deleteAll(sessions);
+                    liveGames.forEach((liveGame -> {
+                        if(liveGame.getPlayerO().getUuid().equals(user.getUuid())){
+                            liveGame.setPlayerO(null);
+                        }
+                        else {
+                            liveGame.setPlayerX(null);
+                        }
+                    }));
+                    userRepo.delete(user);
+                }
             }
         }));
     }
