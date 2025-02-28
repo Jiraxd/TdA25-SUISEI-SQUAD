@@ -26,6 +26,18 @@ export default function GameOptions({ user }: GameOptionsProps) {
 
   const router = useRouter();
 
+  const directCancelQueue = async () => {
+    const loginToken = GetLoginCookie();
+    if (!loginToken) return;
+
+    await fetch(`/api/v1/matchmaking/cancel`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${loginToken}`,
+      },
+    });
+  };
+
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const client = new Client({
@@ -55,14 +67,16 @@ export default function GameOptions({ user }: GameOptionsProps) {
     });
 
     client.activate();
-
+    window.addEventListener("beforeunload", directCancelQueue);
     return () => {
+      window.removeEventListener("beforeunload", directCancelQueue);
       if (client.active) {
         client.deactivate();
       }
       handleCancelQueue();
     };
   }, []);
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (inQueue) {
