@@ -302,6 +302,7 @@ const translationsCZ: Record<string, string> = {
   TICTACTOE_GAME_NAME: "Piškvorky - Tic Tac Toe",
   PROFILE_LOBBY_META_DESCRIPTION: "Prohlédněte si profily hráčů Piškvorkek",
   PRIVATE_GAME_NOT_FOUND: "Soukromá hra nebyla nalezena",
+  SURRENDER_SENT: "Vzdání hry odesláno",
 };
 
 const translationsEN: Record<string, string> = {
@@ -583,6 +584,7 @@ const translationsEN: Record<string, string> = {
   TICTACTOE_GAME_NAME: "Tic Tac Toe",
   PROFILE_LOBBY_META_DESCRIPTION: "View player profiles and statistics",
   PRIVATE_GAME_NOT_FOUND: "Private game not found",
+  SURRENDER_SENT: "Surrender sent",
 };
 
 import Cookies from "js-cookie";
