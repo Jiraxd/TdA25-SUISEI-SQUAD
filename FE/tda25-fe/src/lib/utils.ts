@@ -281,6 +281,24 @@ const translationsCZ: Record<string, string> = {
   DRAW_ERROR: "Chyba při odesílání remízy",
   COPIED: "Zkopírováno!",
   DRAW_REJECT: "Remíza odmítnuta",
+  ONLINEGAME_PAGE_TITLE: "Online hra Piškvorky",
+  ONLINE_GAME_META_DESCRIPTION:
+    "Zahrajte si Piškvorky (Tic Tac Toe) online proti soupeřům. Proveďte strategické tahy a vyhrajte!",
+  ONLINE_LOBBY_META_DESCRIPTION:
+    "Připojte se k online zápasům Piškvorkek, podívejte se na žebříčky nebo vytvořte soukromé hry s přáteli.",
+  PROFILE_META_DESCRIPTION_PREFIX: "Hráčský profil uživatele",
+  PROFILE_META_DESCRIPTION_STATS: "Statistiky hráče",
+  PROFILE_META_DESCRIPTION_DEFAULT:
+    "Prohlédněte si profily hráčů Piškvorkek, statistiky, historii zápasů a informace o hodnocení.",
+  ONLINEGAME_META_KEYWORDS:
+    "piškvorky, tic tac toe, online hra, pro více hráčů, strategická hra, desková hra",
+  ONLINE_META_KEYWORDS:
+    "piškvorky lobby, vyhledávání zápasů, tic tac toe, online hráči, hodnocené hry, soukromé hry, žebříček",
+  PROFILE_META_KEYWORDS:
+    "piškvorky hráč, tic tac toe hráč, profil, statistiky, historie zápasů, elo hodnocení, úspěšnost výher, žebříček hráčů",
+  RANKED_MATCH: "Hodnocený zápas",
+  FRIENDLY_MATCH: "Přátelský zápas",
+  TICTACTOE_GAME_NAME: "Piškvorky - Tic Tac Toe",
 };
 
 const translationsEN: Record<string, string> = {
@@ -541,6 +559,24 @@ const translationsEN: Record<string, string> = {
   DRAW_ERROR: "Error sending draw request",
   COPIED: "Copied!",
   DRAW_REJECT: "Draw rejected",
+  ONLINEGAME_PAGE_TITLE: "Tic Tac Toe Online Game",
+  ONLINE_GAME_META_DESCRIPTION:
+    "Play Tic Tac Toe online against opponents. Make strategic moves and win!",
+  ONLINE_LOBBY_META_DESCRIPTION:
+    "Join online Tic Tac Toe matches, check leaderboards, or create private games with friends.",
+  PROFILE_META_DESCRIPTION_PREFIX: "Player profile of",
+  PROFILE_META_DESCRIPTION_STATS: "Player statistics",
+  PROFILE_META_DESCRIPTION_DEFAULT:
+    "View Tic Tac Toe player profiles, statistics, match history and ranking information.",
+  ONLINEGAME_META_KEYWORDS:
+    "tic tac toe, noughts and crosses, online game, multiplayer, strategy game, board game",
+  ONLINE_META_KEYWORDS:
+    "tic tac toe lobby, matchmaking, online players, ranked games, private games, leaderboard",
+  PROFILE_META_KEYWORDS:
+    "tic tac toe player, profile, statistics, match history, elo rating, win rate, player ranking",
+  RANKED_MATCH: "Ranked Match",
+  FRIENDLY_MATCH: "Friendly Match",
+  TICTACTOE_GAME_NAME: "Tic Tac Toe",
 };
 
 import Cookies from "js-cookie";

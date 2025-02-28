@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import SEOMetaTags from "@/components/online/SEOMetaTags";
 
 export default function OnlinePage() {
   const { language } = useLanguage();
@@ -96,7 +97,7 @@ export default function OnlinePage() {
 
   return (
     <>
-      <title>{TranslateText("ONLINE_PAGE_TITLE", language)}</title>
+      <SEOMetaTags type="online" />
       <div
         className="p-6 text-[#F6F6F6] font-dosis-regular min-w-full max-w-screen h-[calc(100vh-5rem)] max-w-[100vw]"
         style={{ backgroundColor: "var(--whitelessbright)" }}
