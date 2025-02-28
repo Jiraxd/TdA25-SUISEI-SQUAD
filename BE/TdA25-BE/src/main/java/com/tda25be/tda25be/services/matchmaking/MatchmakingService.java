@@ -30,7 +30,7 @@ public class MatchmakingService {
 
     public void leaveMatchmaking(User user) {
         if(!isUserMatchmaking(user)) return;
-        matchmakingUsers.removeIf(userWithTimeStamp -> userWithTimeStamp.user.equals(user));
+        matchmakingUsers.removeIf(userWithTimeStamp -> userWithTimeStamp.user.getUuid().equals(user.getUuid()));
     }
 
     public boolean isUserMatchmaking(User user) {
