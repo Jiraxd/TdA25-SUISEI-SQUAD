@@ -14,7 +14,13 @@ export const RANKS: Rank[] = [
   { name: "PLATINUM", minElo: 1200, maxElo: 1499, color: "#57b89f" },
   { name: "DIAMOND", minElo: 1500, maxElo: 1799, color: "#328bc5" },
   { name: "MASTER", minElo: 1800, maxElo: 1999, color: "#FF4069" },
-  { name: "GRANDMASTER", minElo: 2000, maxElo: Infinity, color: "#ca1c6b" },
+  { name: "GRANDMASTER", minElo: 2000, maxElo: 99999, color: "#ca1c6b" },
+  {
+    name: "---",
+    minElo: 100000,
+    maxElo: 1000000,
+    color: "#FF4069",
+  },
 ];
 
 export function getRankByElo(elo: number): Rank {
