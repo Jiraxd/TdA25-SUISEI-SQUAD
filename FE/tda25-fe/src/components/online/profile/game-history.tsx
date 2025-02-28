@@ -74,7 +74,12 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
     async function fetchData() {
       const data = await fetch(`/api/v1/liveGameByUserId/${userProfile?.uuid}`);
       const gamestmp: LiveGame[] = await data.json();
-      setGames(gamestmp.filter((f) => f.finished));
+
+      setGames(
+        gamestmp
+          .toSorted((a, b) => b.createdAt - a.createdAt)
+          .filter((f) => f.finished)
+      );
     }
     fetchData();
   }, [userProfile]);
