@@ -24,9 +24,9 @@ public class Session {
     private String deviceName;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     public User user;
+    @ReadOnlyProperty
     @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     public Session(){
         SecureRandom secureRandom = new SecureRandom();
