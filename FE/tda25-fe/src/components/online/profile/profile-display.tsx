@@ -14,8 +14,11 @@ export default function ProfileDisplay({ user }: ProfileDisplayProps) {
   if (!user) return null;
   const totalWonLostGames = user.wins + user.losses + user.draws;
   const winrate =
-    totalWonLostGames > 0
-      ? ((user.wins + user.draws / totalWonLostGames) * 100).toFixed(1)
+    user.wins + user.losses + user.draws > 0
+      ? (
+          ((user.wins + user.draws) / (user.wins + user.losses + user.draws)) *
+          100
+        ).toFixed(1)
       : "0.0";
 
   const currentRank = getRankByElo(user.elo);
