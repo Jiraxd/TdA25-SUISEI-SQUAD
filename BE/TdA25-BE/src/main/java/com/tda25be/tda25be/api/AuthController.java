@@ -88,7 +88,6 @@ public class AuthController {
 
     @GetMapping("/logout/{uuid}")
     public ResponseEntity<String> logoutBySessionId(@PathVariable String uuid) {
-
         if (!authService.logoutById(uuid)) {
             return ResponseEntity.badRequest().build();
         }
@@ -101,7 +100,6 @@ public class AuthController {
         if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         List<Session> sessions = new ArrayList<>();
         for(Session session : sessionRepo.findByUser((user))) {
-            session.setToken(null);
             session.setToken(null);
             sessions.add(session);
         }

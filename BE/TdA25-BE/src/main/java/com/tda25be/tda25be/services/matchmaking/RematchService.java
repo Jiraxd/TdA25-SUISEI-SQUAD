@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 @Service
@@ -23,6 +26,11 @@ public class RematchService {
         LiveGame liveGame = liveGameRepo.getReferenceById(uuid);
         if(opponent == null){
             requestingRematch.put(uuid, user);
+
+            webSocketUtil.sendMessageToUser(Objects.equals(liveGame.getPlayerX().getUuid(), user.getUuid())
+                    ? liveGame.getPlayerO().getUuid()
+                    : liveGame.getPlayerX().getUuid()
+                    ,  "/queue/game-updates", "RequestRematch", "", HttpStatus.OK);
         }
         else{
             requestingRematch.remove(uuid);
@@ -35,6 +43,7 @@ public class RematchService {
             liveGameRepo.saveAndFlush(newLiveGame);
             notifyPlayers(user, opponent, newLiveGame);
         }
+        return;
     }
     public void rejectRematch(User user, String uuid){
         if(user == null) return;

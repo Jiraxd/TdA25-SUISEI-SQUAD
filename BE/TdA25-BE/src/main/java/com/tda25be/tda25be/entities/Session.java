@@ -25,7 +25,7 @@ public class Session {
     private String uuid;
     private String token;
     private String deviceName;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     public User user;
     @ReadOnlyProperty
     @CreationTimestamp

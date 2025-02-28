@@ -46,9 +46,8 @@ public class MatchmakingController {
 
     @GetMapping("/cancel")
     public ResponseEntity<String> cancelMatchmaking(@RequestHeader("Authorization") String token){
-        Session session = sessionRepo.findByToken(token).orElse(null);
-        if(session == null || session.getUser() == null) return ResponseEntity.badRequest().build();
-        User user = session.getUser();
+        User user = authService.verify(token);
+        if(user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         matchmakingServiceUnranked.leaveMatchmaking(user);
         matchmakingServiceRanked.leaveMatchmaking(user);
         return ResponseEntity.ok("Matchmaking stopped");
