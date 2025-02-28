@@ -196,7 +196,7 @@ export default function OnlineGamePage() {
       connectHeaders: {
         Authorization: GetLoginCookie() || "",
       },
-      debug: (msg) => console.log("STOMP:", msg),
+     // debug: (msg) => console.log("STOMP:", msg),
       onConnect: () => {
         stompClient.subscribe("/user/queue/game-updates", async (message) => {
           const data = JSON.parse(message.body);
@@ -267,7 +267,7 @@ export default function OnlineGamePage() {
         });
       },
       onStompError: (error) => {
-        console.log(error);
+    //    console.log(error);
         updateErrorMessage(TranslateText("GAME_CONNECTION_ERROR", language));
       },
     });
@@ -303,7 +303,7 @@ export default function OnlineGamePage() {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
-      console.log(error);
+     // console.log(error);
       updateErrorMessage(TranslateText("MOVE_ERROR", language));
     }
   }

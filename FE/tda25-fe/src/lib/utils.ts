@@ -301,6 +301,7 @@ const translationsCZ: Record<string, string> = {
   FRIENDLY_MATCH: "Přátelský zápas",
   TICTACTOE_GAME_NAME: "Piškvorky - Tic Tac Toe",
   PROFILE_LOBBY_META_DESCRIPTION: "Prohlédněte si profily hráčů Piškvorkek",
+  PRIVATE_GAME_NOT_FOUND: "Soukromá hra nebyla nalezena",
 };
 
 const translationsEN: Record<string, string> = {
@@ -581,6 +582,7 @@ const translationsEN: Record<string, string> = {
   FRIENDLY_MATCH: "Friendly Match",
   TICTACTOE_GAME_NAME: "Tic Tac Toe",
   PROFILE_LOBBY_META_DESCRIPTION: "View player profiles and statistics",
+  PRIVATE_GAME_NOT_FOUND: "Private game not found",
 };
 
 import Cookies from "js-cookie";
