@@ -725,7 +725,7 @@ export default function OnlineGamePage() {
             <DialogContent
               onPointerDownOutside={(e) => e.preventDefault()}
               onEscapeKeyDown={(e) => e.preventDefault()}
-              className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden text-black font-dosis-bold"
+              className="bg-white border-2 border-darkshade shadow-darkshade shadow-md [&>button]:hidden text-black font-dosis-bold w-[95%] max-w-[550px] p-6"
             >
               <DialogHeader>
                 <DialogTitle className="text-2xl font-dosis-bold text-center">

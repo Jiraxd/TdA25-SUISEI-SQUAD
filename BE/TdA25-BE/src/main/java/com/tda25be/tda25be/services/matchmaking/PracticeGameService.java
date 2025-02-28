@@ -155,7 +155,7 @@ public class PracticeGameService {
     }
 
     public String getUuidFromCode(String code){
-        return codeAndUuidRelation.get(code);
+        return codeAndUuidRelation.getOrDefault(code, null);
     }
 
     @Scheduled(fixedDelay = 60000)

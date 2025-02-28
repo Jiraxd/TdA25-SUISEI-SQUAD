@@ -28,9 +28,21 @@ export default function EloDisplay({ userProfile, loading }: EloDisplayProps) {
   }
 
   const elo = userProfile?.elo ?? 0;
-  const nextRank = getNextRank(elo);
   const currentRank = getRankByElo(elo);
-  const progress = ((elo - 1000) / (nextRank?.minElo || 0 - 1000)) * 100;
+  const nextRank = getNextRank(elo);
+
+  const currentRankMinElo = currentRank?.minElo ?? 1000;
+  const nextRankMinElo = nextRank?.minElo ?? currentRankMinElo + 500;
+
+  const progress = Math.min(
+    100,
+    Math.max(
+      0,
+      ((elo - currentRankMinElo) / (nextRankMinElo - currentRankMinElo)) * 100
+    )
+  );
+
+  const pointsNeeded = nextRankMinElo - elo;
 
   return (
     <div className="mb-4 sm:mb-8 p-4 sm:p-6 border-2 border-darkshade rounded-lg shadow-md text-black">

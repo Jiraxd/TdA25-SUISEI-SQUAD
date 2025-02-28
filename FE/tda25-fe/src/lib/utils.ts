@@ -300,6 +300,7 @@ const translationsCZ: Record<string, string> = {
   RANKED_MATCH: "Hodnocený zápas",
   FRIENDLY_MATCH: "Přátelský zápas",
   TICTACTOE_GAME_NAME: "Piškvorky - Tic Tac Toe",
+  PROFILE_LOBBY_META_DESCRIPTION: "Prohlédněte si profily hráčů Piškvorkek",
 };
 
 const translationsEN: Record<string, string> = {
@@ -579,6 +580,7 @@ const translationsEN: Record<string, string> = {
   RANKED_MATCH: "Ranked Match",
   FRIENDLY_MATCH: "Friendly Match",
   TICTACTOE_GAME_NAME: "Tic Tac Toe",
+  PROFILE_LOBBY_META_DESCRIPTION: "View player profiles and statistics",
 };
 
 import Cookies from "js-cookie";
