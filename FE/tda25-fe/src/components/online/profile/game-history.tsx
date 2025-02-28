@@ -466,7 +466,10 @@ export default function GameHistory({ userProfile }: GameHistoryProps) {
                     <GameBoard board={selectedGame.board} disabled={true} />
                   </div>
                   <p className="text-center font-dosis-medium mt-4 text-darkshade">
-                    {(new Date(selectedGame.createdAt), "PPP").toLocaleDateString("cs-CZ")} -{" "}
+                    {new Date(selectedGame.createdAt).toLocaleDateString(
+                      "cs-CZ"
+                    )}{" "}
+                    -{" "}
                     {gameResult === "Draw"
                       ? TranslateText("GAME_ENDED_IN_DRAW", language)
                       : TranslateText("WINNER", language) +
