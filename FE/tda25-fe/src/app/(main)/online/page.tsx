@@ -22,6 +22,12 @@ import {
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import SEOMetaTags from "@/components/online/SEOMetaTags";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 export default function OnlinePage() {
   const { language } = useLanguage();
@@ -31,6 +37,11 @@ export default function OnlinePage() {
   const router = useRouter();
   const { updateErrorMessage } = useAlertContext();
   const [leaderboard, setLeaderboard] = useState<UserProfile[]>([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const entriesPerPage = 15;
+  const totalPages = Math.ceil(leaderboard.length / entriesPerPage);
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -95,6 +106,13 @@ export default function OnlinePage() {
     }
   };
 
+  const lastEntry = currentPage * entriesPerPage;
+  const firstEntry = lastEntry - entriesPerPage;
+  const currentEntries = leaderboard.slice(firstEntry, lastEntry);
+
+  const goToPage = (pageNumber: number) => {
+    setCurrentPage(Math.max(1, Math.min(pageNumber, totalPages)));
+  };
   return (
     <>
       <SEOMetaTags type="online" />
@@ -173,7 +191,7 @@ export default function OnlinePage() {
                         </TableCell>
                       </TableRow>
                     ))
-                  : leaderboard.map((user, index) => (
+                  : currentEntries.map((user, index) => (
                       <TableRow key={index}>
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.elo}</TableCell>
@@ -194,6 +212,53 @@ export default function OnlinePage() {
                     ))}
               </TableBody>
             </Table>
+
+            {!loading && totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-6">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => goToPage(1)}
+                  disabled={currentPage === 1}
+                  className="bg-white text-darkshade border-darkshade"
+                >
+                  <ChevronsLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="bg-white text-darkshade border-darkshade"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+
+                <div className="mx-2 text-darkshade">
+                  {TranslateText("PAGE", language)} {currentPage}{" "}
+                  {TranslateText("OF", language)} {totalPages}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="bg-white text-darkshade border-darkshade"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => goToPage(totalPages)}
+                  disabled={currentPage === totalPages}
+                  className="bg-white text-darkshade border-darkshade"
+                >
+                  <ChevronsRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
